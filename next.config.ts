@@ -2,12 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'export',  // Enable static export for GitHub Pages
+  trailingSlash: true,  // Required for GitHub Pages
   images: {
     unoptimized: true,  // Required for static export
   },
-  // Uncomment and set if using GitHub Pages project repo (not custom domain)
-  // basePath: '/repo-name',
-  // assetPrefix: '/repo-name',
+  // Using custom domain (trueinsightsai.com) so no basePath needed
 };
 
 export default nextConfig;
