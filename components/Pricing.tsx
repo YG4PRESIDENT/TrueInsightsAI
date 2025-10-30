@@ -129,7 +129,7 @@ export default function Pricing() {
             return (
               <motion.div
                 key={tier.name}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 30, scale: tier.name === "Advanced" ? 1.05 : 1 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -152,38 +152,38 @@ export default function Pricing() {
                   className={`relative w-full cursor-pointer`}
                   style={{ 
                     transformStyle: 'preserve-3d',
-                    minHeight: '350px'
+                    minHeight: '280px'
                   }}
                 >
                   {/* FRONT FACE */}
                   <div
-                    className="absolute inset-0 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-6 flex flex-col border-2 border-black"
+                    className="absolute inset-0 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 flex flex-col border-2 border-black"
                     style={{ 
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden'
                     }}
                   >
                     {/* Tier Name */}
-                    <div className="text-center mb-4">
-                      <h3 className="text-2xl font-bold text-black mb-1">{tier.name}</h3>
-                      <p className="text-sm font-medium text-gray-600">{tier.tagline}</p>
+                    <div className="text-center" style={{ marginBottom: '40px' }}>
+                      <h3 className="text-3xl font-bold text-black mb-2">{tier.name}</h3>
+                      <p className="text-base font-medium text-gray-600">{tier.tagline}</p>
                     </div>
 
                     {/* Price */}
-                    <div className="text-center mb-4">
+                    <div className="text-center" style={{ marginBottom: '40px' }}>
                       <div className="flex items-baseline justify-center">
-                        <span className="text-5xl font-bold text-black">${tier.price}</span>
-                        <span className="text-base text-gray-500 ml-1">/month</span>
+                        <span className="text-6xl font-bold text-black">${tier.price}</span>
+                        <span className="text-lg text-gray-500 ml-1">/month</span>
                       </div>
                     </div>
 
                     {/* Metaphor with explanation */}
-                    <div className="text-center mb-4 px-2">
+                    <div className="text-center" style={{ marginBottom: '40px' }}>
                       <p className="text-xs text-gray-500 italic mb-1">{tier.metaphor}</p>
-                      <p className="text-xs text-gray-400 leading-relaxed">
-                        {tier.name === "Basic" && "Quick external cleanup to get you visible"}
-                        {tier.name === "Advanced" && "Deep optimization inside and out"}
-                        {tier.name === "Premium" && "Complete white-glove service"}
+                      <p className="text-xs text-gray-400">
+                        {tier.name === "Basic" && "Quick visibility boost"}
+                        {tier.name === "Advanced" && "Deep optimization"}
+                        {tier.name === "Premium" && "White-glove service"}
                       </p>
                     </div>
 
@@ -203,7 +203,7 @@ export default function Pricing() {
 
                   {/* BACK FACE */}
                   <div
-                    className="absolute inset-0 bg-white rounded-2xl shadow-lg p-6 flex flex-col border-2 border-black"
+                    className="absolute inset-0 bg-white rounded-2xl shadow-lg p-8 flex flex-col border-2 border-black"
                     style={{ 
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden',
@@ -211,25 +211,25 @@ export default function Pricing() {
                     }}
                   >
                     {/* Tier Name */}
-                    <div className="text-center mb-4 pt-2">
-                      <h3 className="text-xl font-bold text-black mb-1">{tier.name}</h3>
-                      <p className="text-xs text-gray-500">What&apos;s Included</p>
+                    <div className="text-center mb-6">
+                      <h3 className="text-2xl font-bold text-black mb-1">{tier.name}</h3>
+                      <p className="text-sm text-gray-500">What&apos;s Included</p>
                     </div>
 
                     {/* Features Checklist */}
                     <div className="flex-grow">
-                      <ul className="space-y-3">
+                      <ul className="space-y-4">
                         {tier.features.map((feature, idx) => (
                           <li key={idx} className="flex items-start">
-                            <Check className="w-4 h-4 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                            <span className="text-gray-700 text-xs leading-relaxed">{feature}</span>
+                            <Check className="w-5 h-5 text-green-500 mr-3 flex-shrink-0 mt-0.5" />
+                            <span className="text-gray-700 text-sm leading-relaxed">{feature}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
 
                     {/* Flip Back hint */}
-                    <p className="text-center text-xs text-gray-400 mt-4">Click to flip back</p>
+                    <p className="text-center text-xs text-gray-400 mt-5">Click to flip back</p>
                   </div>
                 </motion.div>
               </motion.div>
