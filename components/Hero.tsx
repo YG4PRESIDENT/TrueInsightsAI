@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import { motion } from "framer-motion";
-import { isValidUrl } from "@/lib/utils";
 import Quiz from "./Quiz";
 
 // Custom hook for typewriter effect
