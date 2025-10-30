@@ -3,14 +3,13 @@
 import { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import { motion } from "framer-motion";
-import { CTA_ANALYZE } from "@/lib/constants";
-import { isValidUrl, cn } from "@/lib/utils";
+import { isValidUrl } from "@/lib/utils";
+import QuizModal from "./Quiz/QuizModal";
 
 // Custom hook for typewriter effect
 function useTypewriter(text: string, speed: number = 100) {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
     if (currentIndex < text.length) {
@@ -20,10 +19,10 @@ function useTypewriter(text: string, speed: number = 100) {
       }, speed);
 
       return () => clearTimeout(timeout);
-    } else if (currentIndex === text.length && !isComplete) {
-      setIsComplete(true);
     }
-  }, [currentIndex, text, speed, isComplete]);
+  }, [currentIndex, text, speed]);
+
+  const isComplete = currentIndex === text.length;
 
   return { displayText, isComplete };
 }
@@ -31,6 +30,8 @@ function useTypewriter(text: string, speed: number = 100) {
 export default function Hero() {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
+  const [isQuizOpen, setIsQuizOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   
   // Typewriter effect for headline
   const headlineText = "Get your free GEO SEO audit.";
@@ -50,9 +51,13 @@ export default function Hero() {
     }
     
     setError("");
-    // TODO: Handle form submission in Milestone 5
-    console.log("Analyzing:", url);
-    alert(`This will analyze: ${url}\n(Form submission coming in Milestone 5)`);
+    setIsLoading(true);
+    
+    // Simulate loading/analysis (3 seconds)
+    setTimeout(() => {
+      setIsLoading(false);
+      setIsQuizOpen(true);
+    }, 3000);
   };
 
   const platformLogos = [
@@ -158,11 +163,21 @@ export default function Hero() {
               />
               <button
                 type="submit"
-                className="bg-black text-white text-sm font-medium hover:bg-gray-900 transition-all duration-100 flex items-center gap-3 whitespace-nowrap rounded-full"
+                disabled={isLoading}
+                className="bg-black text-white text-sm font-medium hover:bg-gray-900 transition-all duration-100 flex items-center gap-3 whitespace-nowrap rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ paddingTop: '10px', paddingBottom: '10px', paddingLeft: '58px', paddingRight: '75px' }}
               >
-                <Search className="w-5 h-5" />
-                Analyze my website
+                {isLoading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Analyzing...
+                  </>
+                ) : (
+                  <>
+                    <Search className="w-5 h-5" />
+                    Analyze my website
+                  </>
+                )}
               </button>
             </div>
             {error && (
@@ -201,6 +216,13 @@ export default function Hero() {
           ))}
         </motion.div>
       </div>
+
+      {/* Quiz Modal */}
+      <QuizModal
+        isOpen={isQuizOpen}
+        onClose={() => setIsQuizOpen(false)}
+        websiteUrl={url}
+      />
     </section>
   );
 }
