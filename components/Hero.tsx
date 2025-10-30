@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import { motion } from "framer-motion";
 import { isValidUrl } from "@/lib/utils";
-import QuizModal from "./Quiz/QuizModal";
+import Quiz from "./Quiz";
 
 // Custom hook for typewriter effect
 function useTypewriter(text: string, speed: number = 100) {
@@ -28,37 +28,11 @@ function useTypewriter(text: string, speed: number = 100) {
 }
 
 export default function Hero() {
-  const [url, setUrl] = useState("");
-  const [error, setError] = useState("");
   const [isQuizOpen, setIsQuizOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   
   // Typewriter effect for headline
-  const headlineText = "Get your free GEO SEO audit.";
+  const headlineText = "Get your free AI visibility audit.";
   const { displayText: typedText, isComplete } = useTypewriter(headlineText, 80);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!url) {
-      setError("Please enter a website URL");
-      return;
-    }
-    
-    if (!isValidUrl(url)) {
-      setError("Please enter a valid URL");
-      return;
-    }
-    
-    setError("");
-    setIsLoading(true);
-    
-    // Simulate loading/analysis (3 seconds)
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsQuizOpen(true);
-    }, 3000);
-  };
 
   const platformLogos = [
     { 
@@ -130,10 +104,10 @@ export default function Hero() {
           className="text-xl text-gray-600 leading-relaxed max-w-3xl"
           style={{ marginBottom: '30px' }}
         >
-          Track, analyze, and grow your local search presence across Google, Bing, and Apple Maps.
+          See exactly where you rank in ChatGPT, Perplexity, and Google AI search results.
         </motion.p>
 
-        {/* URL Input Form */}
+        {/* CTA Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -141,49 +115,13 @@ export default function Hero() {
           className="flex justify-center"
           style={{ marginBottom: '30px' }}
         >
-          <form onSubmit={handleSubmit}>
-            <div className="flex items-center bg-white rounded-full shadow-lg border-2 border-gray-300 overflow-hidden hover:shadow-xl transition-all duration-300">
-              <input
-                type="text"
-                placeholder="Enter your website URL"
-                value={url}
-                onChange={(e) => {
-                  setUrl(e.target.value);
-                  setError("");
-                }}
-                className="w-80 pr-8 text-base text-gray-700 placeholder:text-gray-400 border-0 focus:outline-none focus:ring-0 bg-transparent"
-                style={{ 
-                  paddingTop: '10px', 
-                  paddingBottom: '10px', 
-                  paddingLeft: '40px', 
-                  outline: 'none', 
-                  boxShadow: 'none',
-                  caretColor: 'black'
-                }}
-              />
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="bg-black text-white text-sm font-medium hover:bg-gray-900 transition-all duration-100 flex items-center gap-3 whitespace-nowrap rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ paddingTop: '10px', paddingBottom: '10px', paddingLeft: '58px', paddingRight: '75px' }}
-              >
-                {isLoading ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <Search className="w-5 h-5" />
-                    Analyze my website
-                  </>
-                )}
-              </button>
-            </div>
-            {error && (
-              <p className="mt-2 text-sm text-red-600 text-center">{error}</p>
-            )}
-          </form>
+          <button
+            onClick={() => setIsQuizOpen(true)}
+            className="px-12 py-5 bg-black text-white text-lg font-semibold rounded-full hover:bg-gray-800 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-3"
+          >
+            <Search className="w-6 h-6" />
+            Get Your Free AI Audit
+          </button>
         </motion.div>
 
         {/* Disclaimer */}
@@ -194,7 +132,7 @@ export default function Hero() {
           className="text-base text-gray-500 text-center"
           style={{ marginBottom: '30px' }}
         >
-          Free GEO SEO audit. No credit card. No commitments. Just insights. Upgrade to a free trial anytime.
+          Free AI visibility audit. No credit card. No commitments. Just insights.
         </motion.p>
 
         {/* Platform Logos */}
@@ -218,11 +156,7 @@ export default function Hero() {
       </div>
 
       {/* Quiz Modal */}
-      <QuizModal
-        isOpen={isQuizOpen}
-        onClose={() => setIsQuizOpen(false)}
-        websiteUrl={url}
-      />
+      <Quiz isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
     </section>
   );
 }
