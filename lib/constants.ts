@@ -4,12 +4,9 @@ export const COMPANY_TAGLINE = "GEO SEO & Local Search Intelligence";
 
 // Navigation Links
 export const NAV_LINKS = [
-  { label: "Solutions", href: "#solutions" },
-  { label: "Features", href: "#features" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Blog", href: "#blog" },
-  { label: "Team", href: "#team" },
-  { label: "Resources", href: "#resources" },
+  { label: "Pricing", href: "#pricing", isScroll: true },
+  { label: "Blog", href: "/blog", isScroll: false },
+  { label: "Team", href: "/team", isScroll: false },
 ];
 
 // CTA Buttons

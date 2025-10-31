@@ -104,7 +104,7 @@ export default function Quiz() {
     }
   }, [isLoading]);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     // Save answer
     const newAnswer: QuizAnswer = {
       step: currentStep + 1,
@@ -112,7 +112,8 @@ export default function Quiz() {
       answer: currentQuestion.type === "slider" ? sliderValue : selectedAnswer
     };
     
-    setAnswers([...answers, newAnswer]);
+    const updatedAnswers = [...answers, newAnswer];
+    setAnswers(updatedAnswers);
     
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
@@ -121,6 +122,37 @@ export default function Quiz() {
     } else {
       // Quiz complete - show loading then completion
       setIsLoading(true);
+      
+      // Get the URL from sessionStorage
+      const websiteUrl = sessionStorage.getItem("auditUrl") || "";
+      
+      // Prepare data for Google Sheets
+      const submissionData = {
+        timestamp: new Date().toISOString(),
+        email: selectedAnswer,
+        websiteUrl: websiteUrl,
+        hasWebsite: updatedAnswers[0]?.answer || "",
+        hasProfiles: updatedAnswers[1]?.answer || "",
+        asksForReviews: updatedAnswers[2]?.answer || "",
+        onlinePresenceCare: updatedAnswers[3]?.answer || "",
+        goal: updatedAnswers[4]?.answer || "",
+        solution: updatedAnswers[5]?.answer || ""
+      };
+
+      // Send to Google Sheets
+      // Replace this URL with your Google Apps Script Web App URL or Sheet.best endpoint
+      try {
+        await fetch(process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEBHOOK || "", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(submissionData),
+        });
+      } catch (error) {
+        console.error("Error submitting to Google Sheets:", error);
+        // Continue anyway - don't block user experience
+      }
       
       // Simulate report generation (3 seconds)
       setTimeout(() => {
