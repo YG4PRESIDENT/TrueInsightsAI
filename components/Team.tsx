@@ -16,7 +16,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Elijah Leach",
     role: "Co-Founder & Sales",
-    bio: "Experienced in sales and digital marketing, Elijah has helped real estate brands and other ventures succeed. Now he's bringing that expertise to AI Search visibility.",
+    bio: "Sales and marketing pro who's helped real estate brands win big. Now applying that drive to AI search.",
     image: "/team/Elijah.JPG",
     linkedin: "https://www.linkedin.com/in/elijah-leach",
     email: "elijah@trueinsightsai.com"
@@ -24,7 +24,7 @@ const teamMembers: TeamMember[] = [
   {
     name: "Yahir Gonzalez",
     role: "Co-Founder & CTO",
-    bio: "AI search optimization expert specializing in helping businesses dominate AI-driven search results. Passionate about bridging the gap between traditional SEO and the emerging world of Generative Engine Optimization.",
+    bio: "AI search expert bridging traditional SEO and the new era of Generative Engine Optimization.",
     image: "/team/Yahir.png",
     linkedin: "https://www.linkedin.com/in/yahir-gonzalez",
     email: "yahir@trueinsightsai.com"
@@ -46,17 +46,7 @@ export default function Team() {
       </div>
       <div className="w-full flex flex-col items-center justify-center px-6 relative z-10">
         {/* Trust Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-20"
-        >
-          <p className="text-sm text-blue-600 italic text-center">
-            Trusted by local businesses to truly increase their AI visibility
-          </p>
-        </motion.div>
+        <div className="mb-20"></div>
 
         {/* Header Section */}
         <motion.div
@@ -70,9 +60,12 @@ export default function Team() {
             Meet the Team
           </h2>
           <p className="text-xl text-gray-600">
-            We're a team of AI optimization experts dedicated to helping businesses thrive in the age of AI-powered search.
+            Your True AI Presence Partner
           </p>
         </motion.div>
+
+        {/* Explicit spacing after header text */}
+        <div className="h-5"></div>
 
         {/* Team Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-5xl w-full">
@@ -110,6 +103,9 @@ export default function Team() {
           ))}
         </div>
 
+        {/* Explicit spacing before CTA */}
+        <div className="h-6"></div>
+
         {/* Centered CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -118,10 +114,9 @@ export default function Team() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center mt-24"
         >
-          <LetsChatButton size="large" />
+          <LetsChatButton calendlyUrl="https://calendly.com/trueinsightsai/30min" size="large" />
         </motion.div>
       </div>
     </section>
   );
 }
-

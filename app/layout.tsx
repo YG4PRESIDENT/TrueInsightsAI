@@ -13,6 +13,14 @@ export const metadata: Metadata = {
   description: "Track, analyze, and grow your local search presence across Google, Bing, and Apple Maps with TrueInsightsAI's powerful GEO SEO platform.",
   keywords: ["GEO SEO", "local SEO", "search visibility", "local search", "SEO analytics", "business intelligence"],
   authors: [{ name: "TrueInsightsAI" }],
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png?v=2", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png?v=2", sizes: "32x32", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico?v=2",
+    apple: "/apple-touch-icon.png?v=2",
+  },
   openGraph: {
     title: "TrueInsightsAI - GEO SEO & Local Search Intelligence",
     description: "Track, analyze, and grow your local search presence across Google, Bing, and Apple Maps.",

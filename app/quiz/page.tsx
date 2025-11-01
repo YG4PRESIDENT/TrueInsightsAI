@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Footer from "@/components/Footer";
+import { submitQuizToWeb3Forms } from "@/lib/quizSubmission";
 
 interface QuizAnswer {
   step: number;
@@ -60,7 +61,7 @@ const questions = [
     type: "multiple",
     options: [
       "Weekly analytics (see what you're missing)",
-      "Done-for-you, appear 1st in AI search in 90 days"
+      "Done-for-you, appear 1st in AI search results"
     ]
   },
   {
@@ -113,7 +114,7 @@ export default function Quiz() {
         setCountdown(prev => {
           if (prev <= 1) {
             // Redirect to Calendly
-            window.location.href = 'https://calendly.com/yahir-trueinsightsai/30min';
+            window.location.href = 'https://calendly.com/trueinsightsai/30min';
             return 0;
           }
           return prev - 1;
@@ -124,7 +125,7 @@ export default function Quiz() {
     }
   }, [isComplete]);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     // Save answer
     const newAnswer: QuizAnswer = {
       step: currentStep + 1,
@@ -132,17 +133,38 @@ export default function Quiz() {
       answer: currentQuestion.type === "slider" ? sliderValue : selectedAnswer
     };
     
-    setAnswers([...answers, newAnswer]);
+    const updatedAnswers = [...answers, newAnswer];
+    setAnswers(updatedAnswers);
     
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
       setSelectedAnswer("");
       setSliderValue(5);
     } else {
-      // Quiz complete - show loading then completion
+      // Quiz complete - show loading and submit data
       setIsLoading(true);
       
-      // Simulate report generation (3 seconds)
+      // Get the email from the answers (it's the last question)
+      const userEmail = selectedAnswer.toString();
+      
+      // Submit to Web3Forms
+      try {
+        const submissionResult = await submitQuizToWeb3Forms({
+          answers: updatedAnswers,
+          email: userEmail,
+          timestamp: new Date().toISOString(),
+        });
+        
+        if (!submissionResult.success) {
+          console.error("Failed to submit quiz data:", submissionResult.error);
+          // Still continue to completion screen - don't block user
+        }
+      } catch (error) {
+        console.error("Error during quiz submission:", error);
+        // Still continue to completion screen - don't block user
+      }
+      
+      // Show completion screen after 3 seconds (or when submission completes)
       setTimeout(() => {
         setIsLoading(false);
         setIsComplete(true);

@@ -36,10 +36,11 @@ export const CONTACT = {
   email: "trueinsightsai@gmail.com",
   supportEmail: "team@trueinsightsai.com",
   phone: "", // Optional
+  calendly: "https://calendly.com/trueinsightsai/30min",
 };
 
 // Footer Content
-export const FOOTER_DESCRIPTION = "The leading AI Search visibility platform helping brands optimize their presence across ChatGPT, Gemini, and Perplexity.";
+export const FOOTER_DESCRIPTION = "We are your one-stop AI presence partner to help your business succeed in the new age of search";
 
 export const FOOTER_LINKS = {
   resources: [
@@ -53,7 +54,7 @@ export const FOOTER_LINKS = {
     { label: "Pricing", href: "#pricing" },
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
-    { label: "Contact Us", href: "mailto:trueinsightsai@gmail.com" },
+    { label: "Contact Us", href: "https://calendly.com/trueinsightsai/30min" },
   ],
 };
 

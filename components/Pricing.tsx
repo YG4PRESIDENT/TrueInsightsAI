@@ -114,7 +114,7 @@ const tiers: PricingTier[] = [
     keyServices: [
       "Everything in Advanced + full monitoring stack",
       "Real-time visibility tracking across all major AI platforms",
-      "Dedicated GEO strategist managing your entire presence"
+      "Dedicated GEO manager for your entire AI presence."
     ]
   }
 ];
@@ -155,7 +155,7 @@ export default function Pricing() {
         </motion.div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-7xl mx-auto px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-5xl mx-auto px-8">
           {tiers.map((tier, index) => (
             <motion.div
               key={tier.name}
@@ -167,16 +167,30 @@ export default function Pricing() {
             >
               {/* Popular Badge */}
               {tier.badge && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-                  <span className={`${tier.badgeColor} text-white px-4 py-1 rounded-full text-xs font-semibold shadow-lg`}>
+                <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-10">
+                  <span 
+                    className="text-white rounded-full font-bold shadow-xl"
+                    style={{
+                      background: 'linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%)',
+                      paddingLeft: '24px',
+                      paddingRight: '24px',
+                      paddingTop: '10px',
+                      paddingBottom: '10px',
+                      fontSize: '11px',
+                      letterSpacing: '0.5px'
+                    }}
+                  >
                     {tier.badge}
                   </span>
                 </div>
               )}
 
               {/* Static Card */}
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-10 flex flex-col border-2 border-black h-full min-h-[900px]">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col border-2 border-black h-full min-h-[475px]">
                 
+                {/* Subtle Top Spacing */}
+                <div style={{ height: '12px' }}></div>
+
                 {/* Header Section */}
                 <div className="text-center px-6">
                   <h3 className="text-2xl font-bold text-black mb-2">{tier.name}</h3>
@@ -184,53 +198,57 @@ export default function Pricing() {
                   <p className="text-xs text-gray-500 leading-relaxed">{tier.description}</p>
                 </div>
 
-                {/* COMICALLY HUGE GAP #1 */}
-                <div className="h-12"></div>
+                {/* Gap */}
+                <div className="h-4"></div>
 
                 {/* Price Section */}
                 <div className="text-center px-6">
                   <div className="flex items-baseline justify-center">
-                    <span className="text-4xl font-bold text-black">${tier.price}</span>
+                    <span className="text-3xl font-bold text-black">${tier.price}</span>
                     <span className="text-xs text-gray-400 ml-2">/mo</span>
                   </div>
                 </div>
 
+                {/* Gap between Price and Models */}
                 <div className="h-8"></div>
 
                 {/* Metrics Section */}
-                <div className="px-8">
-                  <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-3 max-w-[280px] ml-auto mr-6">
+                <div className="px-12">
+                  <div className="grid grid-cols-[auto_auto] gap-x-8 gap-y-3 justify-center">
                     {/* Models */}
-                    <span className="text-xs text-gray-500 text-left">Models</span>
-                    <div className="flex gap-2 justify-end">
+                    <span className="text-xs text-gray-500 flex items-center">Models</span>
+                    <div className="flex gap-2 justify-end items-center">
                       {tier.aiModels.map((model, idx) => (
                         <AIModelLogo key={idx} model={model} />
                       ))}
+                      {tier.name === "Premium" && (
+                        <span className="text-sm font-bold text-black ml-1">+</span>
+                      )}
                     </div>
 
                     {/* Prompts */}
-                    <span className="text-xs text-gray-500 text-left">Prompts (per brand)</span>
+                    <span className="text-xs text-gray-500">Prompts (per brand)</span>
                     <span className="text-xs font-bold text-black text-right">{tier.prompts}</span>
 
                     {/* Tracking */}
-                    <span className="text-xs text-gray-500 text-left">Tracking</span>
+                    <span className="text-xs text-gray-500">Tracking</span>
                     <span className="text-xs font-bold text-black text-right">{tier.tracking}</span>
 
                     {/* Reports */}
-                    <span className="text-xs text-gray-500 text-left">Reports</span>
+                    <span className="text-xs text-gray-500">Reports</span>
                     <span className="text-xs font-bold text-black text-right">{tier.reports}</span>
 
                     {/* Support */}
-                    <span className="text-xs text-gray-500 text-left">Support</span>
+                    <span className="text-xs text-gray-500">Support</span>
                     <span className="text-xs font-bold text-black text-right">{tier.support}</span>
                   </div>
                 </div>
 
-                {/* Gap before Key Services */}
+                {/* Gap between Support and Key Services */}
                 <div className="h-8"></div>
 
                 {/* Key Services Section */}
-                <div className="mb-6 px-6">
+                <div className="mb-4 px-6">
                   <p className="text-xs text-gray-500 text-center font-semibold mb-4 uppercase tracking-wide">Key Services</p>
                   <div className="space-y-3">
                     {tier.keyServices.map((service, idx) => (
@@ -245,17 +263,32 @@ export default function Pricing() {
                 {/* Spacer */}
                 <div className="flex-grow"></div>
 
+                {/* Explicit Top Gap Before Button */}
+                <div style={{ height: '24px' }}></div>
+
                 {/* CTA Button */}
-                <div className="px-6">
+                <div className="px-6 flex justify-center">
                   <motion.a
-                    href="mailto:yahir@trueinsightsai.com,elijah@trueinsightsai.com"
+                    href="https://calendly.com/trueinsightsai/30min"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     whileHover={{ scale: 1.02 }}
-                    className="w-full bg-black text-white rounded-xl py-3.5 px-6 font-semibold text-xs transition-all duration-200 hover:bg-gray-800 hover:shadow-lg inline-flex items-center justify-center gap-2"
+                    style={{
+                      paddingLeft: '19px',
+                      paddingRight: '19px',
+                      paddingTop: '9px',
+                      paddingBottom: '9px',
+                      fontSize: '16px'
+                    }}
+                    className="group inline-flex items-center justify-center gap-6 bg-black text-white rounded-full font-bold transition-all duration-200 hover:bg-gray-800 hover:shadow-xl hover:shadow-blue-200"
                   >
-                    <Calendar className="w-4 h-4" />
-                    <span>{tier.cta}</span>
+                    <Calendar className="w-5 h-5 group-hover:text-blue-300 transition-colors duration-200" />
+                    <span style={{ fontSize: '16px' }}>{tier.cta}</span>
                   </motion.a>
                 </div>
+
+                {/* Explicit Bottom Gap After Button */}
+                <div style={{ height: '24px' }}></div>
               </div>
             </motion.div>
           ))}

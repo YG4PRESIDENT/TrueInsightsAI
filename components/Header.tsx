@@ -55,9 +55,9 @@ export default function Header() {
         <div className="absolute left-8">
           <a href="/" className="hover:opacity-80 transition-opacity duration-200">
             <img 
-              src="/images/Trueinsights official logo.png" 
+              src="/images/Official logo.png" 
               alt="True Insights AI" 
-              style={{ height: '80px' }}
+              className="h-[50px] lg:h-[50px]"
             />
           </a>
         </div>
@@ -79,7 +79,7 @@ export default function Header() {
 
         {/* CTA Button - Desktop */}
         <div className="hidden lg:block absolute right-8">
-          <LetsChatButton email={CONTACT.email} size="large" />
+          <LetsChatButton calendlyUrl={CONTACT.calendly} size="large" />
         </div>
 
         {/* Mobile Menu Button */}
@@ -106,7 +106,7 @@ export default function Header() {
               </button>
             ))}
             {/* Mobile CTA Button */}
-            <LetsChatButton email={CONTACT.email} className="w-full mt-4" />
+            <LetsChatButton calendlyUrl={CONTACT.calendly} className="w-full mt-4" />
           </div>
         </div>
       )}

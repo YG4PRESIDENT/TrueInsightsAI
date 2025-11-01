@@ -3,19 +3,21 @@
 import { Sparkles } from "lucide-react";
 
 interface LetsChatButtonProps {
-  email?: string;
+  calendlyUrl?: string;
   className?: string;
   size?: "default" | "large";
 }
 
 export default function LetsChatButton({ 
-  email = "yahir@trueinsightsai.com,elijah@trueinsightsai.com",
+  calendlyUrl = "https://calendly.com/trueinsightsai/30min",
   className = "",
   size = "default"
 }: LetsChatButtonProps) {
   return (
     <a
-      href={`mailto:${email}`}
+      href={calendlyUrl}
+      target="_blank"
+      rel="noopener noreferrer"
       style={{
         paddingLeft: '21px',
         paddingRight: '21px',

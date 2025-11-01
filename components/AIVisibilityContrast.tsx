@@ -136,13 +136,11 @@ export default function AIVisibilityContrast() {
               <h3 className="text-lg font-bold text-red-600 mb-1">
                 Your Reality Now
               </h3>
-              <p className="text-sm text-gray-500">
-                What AI platforms actually say
-              </p>
+              <div className="h-5"></div>
             </div>
 
             {/* AI Mockup - Sad/Desaturated */}
-            <div className="bg-white rounded-xl shadow-md border border-gray-300 overflow-hidden h-[450px] flex flex-col grayscale-[20%] opacity-90">
+            <div className="bg-white rounded-xl shadow-md border border-gray-300 overflow-hidden h-[380px] flex flex-col grayscale-[20%] opacity-90">
               {/* Animated Header */}
               <AnimatePresence mode="wait">
                 <motion.div
@@ -167,7 +165,7 @@ export default function AIVisibilityContrast() {
                 
                 {/* User Query */}
                 <div className="flex justify-end">
-                  <div className="bg-gray-200 text-gray-900 px-6 py-4 rounded-2xl rounded-tr-md text-[22px] max-w-[80%] font-medium leading-snug">
+                  <div className="bg-gray-200 text-gray-900 px-6 py-4 rounded-2xl rounded-tr-md text-[27px] max-w-[80%] font-medium leading-snug">
                     Best tax preparer in Austin?
                   </div>
                 </div>
@@ -265,7 +263,7 @@ export default function AIVisibilityContrast() {
             initial={{ opacity: 0, x: 30 }}
             animate={isVisible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.8 }}
-            className="relative flex flex-col w-full lg:w-[480px]"
+            className="relative flex flex-col w-full lg:w-[470px]"
           >
             {/* Subtle glow effect behind card */}
             <div className="absolute inset-0 bg-gradient-to-br from-green-200/30 via-emerald-200/20 to-blue-200/30 blur-3xl rounded-3xl -z-10" />
@@ -275,13 +273,11 @@ export default function AIVisibilityContrast() {
               <h3 className="text-lg font-bold text-green-600 mb-1">
                 Your Potential
               </h3>
-              <p className="text-sm text-gray-600">
-                What it looks like when you dominate
-              </p>
+              <div className="h-5"></div>
             </div>
 
             {/* AI Mockup - Vibrant/Successful - SAME HEIGHT AS LEFT */}
-            <div className="bg-white rounded-xl shadow-xl border-2 border-green-300 overflow-hidden h-[450px] flex flex-col ring-4 ring-green-100">
+            <div className="bg-white rounded-xl shadow-xl border-2 border-green-300 overflow-hidden h-[380px] flex flex-col ring-4 ring-green-100">
               {/* Animated Header */}
               <AnimatePresence mode="wait">
                 <motion.div
@@ -306,7 +302,7 @@ export default function AIVisibilityContrast() {
                 
                 {/* User Query */}
                 <div className="flex justify-end">
-                  <div className="bg-gray-200 text-gray-900 px-6 py-4 rounded-2xl rounded-tr-md text-[22px] max-w-[80%] font-medium leading-snug">
+                  <div className="bg-gray-200 text-gray-900 px-6 py-4 rounded-2xl rounded-tr-md text-[27px] max-w-[80%] font-medium leading-snug">
                     Best tax preparer in Austin?
                   </div>
                 </div>
@@ -320,7 +316,7 @@ export default function AIVisibilityContrast() {
                     <p className="text-[15px] text-gray-700 mb-8 leading-relaxed">
                       Based on local expertise and client reviews:
                     </p>
-                    <div className="space-y-5 text-[15px] mb-12">
+                    <div className="space-y-5 text-[15px] mb-12 bg-green-50/30 rounded-lg p-3 -mx-2">
                       <div className="bg-green-50/70 border-l-[3px] border-green-500 rounded-r-md py-4 px-4">
                         <div className="flex items-start gap-3">
                           <div className="flex-shrink-0 w-6 h-6 bg-green-600 rounded-full flex items-center justify-center mt-0.5">
