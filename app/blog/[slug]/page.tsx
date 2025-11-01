@@ -136,6 +136,13 @@ Track your Perplexity visibility score over time and correlate it with traffic a
   }
 };
 
+// Generate static params for all blog posts
+export function generateStaticParams() {
+  return Object.keys(blogPosts).map((slug) => ({
+    slug: slug,
+  }));
+}
+
 export default function BlogPost({ params }: { params: { slug: string } }) {
   const post = blogPosts[params.slug];
 
