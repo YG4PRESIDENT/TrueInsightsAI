@@ -2,43 +2,16 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-
-interface RelatedPost {
-  slug: string;
-  title: string;
-  date: string;
-  category: string;
-}
+import { blogPosts } from "@/lib/blogPosts";
 
 interface RelatedPostsProps {
   currentSlug: string;
 }
 
-// You'll expand this with actual related logic later
-const relatedPosts: RelatedPost[] = [
-  {
-    slug: "chatgpt-vs-google-search-differences",
-    title: "ChatGPT vs Google Search: The Key Differences",
-    date: "2024-01-10",
-    category: "AI Insights"
-  },
-  {
-    slug: "optimizing-for-perplexity-ai",
-    title: "How to Optimize Your Business for Perplexity AI",
-    date: "2024-01-05",
-    category: "Platform Guides"
-  },
-  {
-    slug: "what-is-geo-and-why-it-matters",
-    title: "What is GEO and Why It Matters",
-    date: "2024-01-15",
-    category: "GEO Basics"
-  }
-];
-
 export default function RelatedPosts({ currentSlug }: RelatedPostsProps) {
-  // Filter out current post
-  const posts = relatedPosts.filter(post => post.slug !== currentSlug).slice(0, 3);
+  // Get all posts except current one
+  const allPosts = Object.values(blogPosts);
+  const posts = allPosts.filter(post => post.slug !== currentSlug).slice(0, 3);
 
   return (
     <section className="mt-20 pt-12 border-t border-blue-100">
