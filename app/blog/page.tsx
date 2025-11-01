@@ -1,146 +1,176 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Calendar, Clock, ArrowRight } from "lucide-react";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Link from "next/link";
 
-// Placeholder blog posts - replace with actual content or CMS integration
-const blogPosts = [
+interface BlogPost {
+  slug: string;
+  title: string;
+  date: string;
+  thumbnail?: string;
+}
+
+// Featured blog posts
+const featuredPosts: BlogPost[] = [
   {
-    id: 1,
-    title: "The Future of AI Search: Why GEO is the New SEO",
-    excerpt: "Discover how generative engine optimization is revolutionizing the way businesses appear in AI-powered search results and what you need to do to stay ahead.",
-    date: "2025-10-15",
-    readTime: "5 min read",
-    category: "Industry Insights",
-    image: "/blog/geo-future.jpg",
-    slug: "future-of-ai-search-geo"
+    slug: "what-is-geo-and-why-it-matters",
+    title: "What is GEO and Why It Matters for Your Business",
+    date: "2024-01-15"
   },
   {
-    id: 2,
-    title: "10 Ways to Optimize Your Business for ChatGPT and Claude",
-    excerpt: "A comprehensive guide to ensuring your business appears in AI chatbot responses and captures the attention of your ideal customers.",
-    date: "2025-10-10",
-    readTime: "8 min read",
-    category: "How-To Guide",
-    image: "/blog/chatgpt-optimization.jpg",
-    slug: "optimize-business-chatgpt-claude"
+    slug: "chatgpt-vs-google-search-differences",
+    title: "ChatGPT vs Google Search: The Key Differences for Businesses",
+    date: "2024-01-10"
   },
   {
-    id: 3,
-    title: "Case Study: How We Increased AI Visibility by 400%",
-    excerpt: "Real results from a local business that dominated AI search results in just 90 days using our proven GEO strategies.",
-    date: "2025-10-05",
-    readTime: "6 min read",
-    category: "Case Study",
-    image: "/blog/case-study-400.jpg",
-    slug: "case-study-ai-visibility-400-percent"
+    slug: "optimizing-for-perplexity-ai",
+    title: "How to Optimize Your Business for Perplexity AI",
+    date: "2024-01-05"
+  }
+];
+
+// Latest blog posts
+const latestPosts: BlogPost[] = [
+  {
+    slug: "ai-visibility-best-practices",
+    title: "Best Alternatives to ChatGPT",
+    date: "2024-01-03"
+  },
+  {
+    slug: "local-search-ai-integration",
+    title: "Build AI Visibility Platforms in the United States",
+    date: "2024-01-02"
+  },
+  {
+    slug: "brand-mentions-ai-platforms",
+    title: "Build AI Analysis platform with semantic leads retention",
+    date: "2024-01-01"
+  },
+  {
+    slug: "geo-implementation-guide",
+    title: "How to use ChatGPT Canvas: Chatbot",
+    date: "2023-12-28"
+  },
+  {
+    slug: "ai-search-visibility-checklist",
+    title: "Best AI SEO Toolkit Review",
+    date: "2023-12-25"
+  },
+  {
+    slug: "perplexity-vs-chatgpt",
+    title: "How to know what your customers are thinking for AI",
+    date: "2023-12-20"
   }
 ];
 
 export default function BlogPage() {
+  const renderArticleCard = (post: BlogPost, index: number) => (
+    <motion.article
+      key={post.slug}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+    >
+      <Link href={`/blog/${post.slug}`} className="group block">
+        {/* Thumbnail */}
+        <div className="w-full h-36 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg mb-3 overflow-hidden shadow-md group-hover:shadow-xl group-hover:shadow-blue-200/50 transition-all duration-300 border border-blue-100 group-hover:border-blue-300">
+          <div className="w-full h-full flex items-center justify-center text-blue-300 text-xs font-medium">
+            {post.thumbnail || "Article"}
+          </div>
+        </div>
+
+        {/* Title */}
+        <h3 className="text-base font-semibold text-black mb-1.5 group-hover:text-blue-500 transition-colors leading-snug">
+          {post.title}
+        </h3>
+
+        {/* Date */}
+        <p className="text-xs text-gray-500">
+          {new Date(post.date).toLocaleDateString('en-US', { 
+            month: 'long', 
+            day: 'numeric', 
+            year: 'numeric' 
+          })}
+        </p>
+      </Link>
+    </motion.article>
+  );
+
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-white pt-32 pb-20">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Header */}
+      <main className="relative min-h-screen bg-white overflow-hidden">
+        {/* Atmospheric blue glow - like Hero */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div 
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-[100%]"
+            style={{
+              background: 'radial-gradient(ellipse at top, rgba(219, 234, 254, 0.5) 0%, rgba(219, 234, 254, 0.3) 25%, rgba(239, 246, 255, 0.15) 45%, transparent 70%)',
+              filter: 'blur(90px)'
+            }}
+          />
+        </div>
+
+        {/* Top spacing to clear navbar */}
+        <div className="h-24"></div>
+        
+        <div className="w-full flex flex-col items-center px-6 pb-20 relative z-10">
+          {/* Header Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center flex flex-col items-center max-w-4xl"
           >
             <h1 className="text-6xl font-bold text-black mb-6">
-              Insights & Resources
+              Tips, lessons and advice
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Stay ahead of the curve with the latest strategies, case studies, and insights on AI visibility and generative engine optimization.
+            <p className="text-xl text-gray-600 leading-relaxed">
+              Everything you need to know about dominating AI-powered search and growing your digital presence in the new age of search.
             </p>
           </motion.div>
 
-          {/* Blog Posts Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => (
-              <motion.article
-                key={post.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-purple-300 hover:shadow-xl transition-all duration-300 group"
-              >
-                {/* Featured Image */}
-                <div className="relative h-48 bg-gradient-to-br from-purple-100 via-pink-100 to-orange-100 overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                    <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                    </svg>
-                  </div>
-                </div>
+          {/* Large spacing gap */}
+          <div className="h-12"></div>
 
-                {/* Content */}
-                <div className="p-6">
-                  {/* Category */}
-                  <div className="mb-3">
-                    <span className="inline-block px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded-full">
-                      {post.category}
-                    </span>
-                  </div>
+          {/* Featured Articles Section */}
+          <section className="w-full max-w-5xl">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-3xl font-bold text-black mb-8"
+            >
+              Featured Articles
+            </motion.h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+              {featuredPosts.map((post, index) => renderArticleCard(post, index))}
+            </div>
+          </section>
 
-                  {/* Title */}
-                  <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors duration-200">
-                    {post.title}
-                  </h2>
+          <div className="h-14"></div>
 
-                  {/* Excerpt */}
-                  <p className="text-gray-600 mb-4 line-clamp-3">
-                    {post.excerpt}
-                  </p>
+          {/* Latest Articles Section */}
+          <section className="w-full max-w-5xl">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="text-3xl font-bold text-black mb-8"
+            >
+              Latest Articles
+            </motion.h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+              {latestPosts.map((post, index) => renderArticleCard(post, index))}
+            </div>
+          </section>
 
-                  {/* Meta Info */}
-                  <div className="flex items-center justify-between text-sm text-gray-500 mb-4 pb-4 border-b border-gray-100">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
-                      <span>{post.readTime}</span>
-                    </div>
-                  </div>
-
-                  {/* Read More Link */}
-                  <a
-                    href={`/blog/${post.slug}`}
-                    className="inline-flex items-center gap-2 text-purple-600 font-semibold hover:text-purple-700 transition-colors duration-200 group"
-                  >
-                    Read Article
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
-                  </a>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-
-          {/* Coming Soon Message */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-center mt-16 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-12"
-          >
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              More content coming soon!
-            </h3>
-            <p className="text-gray-600 mb-6">
-              We're constantly publishing new insights, guides, and case studies. Check back regularly or subscribe to our newsletter.
-            </p>
-            <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
-              Subscribe to Updates
-            </button>
-          </motion.div>
+          <div className="h-20"></div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

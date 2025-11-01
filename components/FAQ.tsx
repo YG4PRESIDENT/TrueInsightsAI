@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Minus } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 
 interface FAQItem {
   question: string;
   answer: string;
 }
 
-const faqs: FAQItem[] = [
+const faqData: FAQItem[] = [
   {
     question: "Can't I just do this myself?",
     answer: "You could, but it requires monitoring 20+ AI platforms, managing 50+ business profiles, implementing technical schema markup, and constantly adapting to new AI models. Most business owners find their time better spent serving clients."
@@ -24,187 +24,131 @@ const faqs: FAQItem[] = [
   },
   {
     question: "Why not just hire an SEO agency?",
-    answer: "Traditional SEO is about ranking on Google. GEO is about appearing in AI responses - different algorithms, different optimization strategies. AI models care more about structured data, external citations, and authority signals than backlinks."
+    answer: "Traditional SEO is about ranking on Google. GEO is about appearing in AI responses with different algorithms and different optimization strategies. AI models care more about structured data, external citations, and authority signals than backlinks."
   },
   {
     question: "How long until I see results?",
-    answer: "Most clients see initial improvements in AI visibility within 30-45 days. Significant ranking improvements typically occur within 60-90 days as our optimization strategies compound and AI models index the changes."
+    answer: "Most clients see their AI visibility score improve within 30 to 60 days. Quick wins include appearing in AI citations within weeks. Long-term positioning takes 3 to 6 months as AI models learn to recognize your authority signals."
   },
   {
-    question: "Do I need to change my website?",
-    answer: "We handle most optimizations externally through directories, content networks, and structured data. Some clients benefit from minor website updates like schema markup, but we can implement that for you if needed."
+    question: "What if I already work with an SEO agency?",
+    answer: "We're your one-stop AI presence partner. SEO agencies focus on Google rankings, but they don't track or fix your AI visibility. We diagnose how you're performing across ChatGPT, Claude, Perplexity, and other AI platforms, then we optimize and fix it for you. Think of us as your dedicated AI visibility team that handles everything AI-related."
   },
   {
-    question: "Can you track my competitors too?",
-    answer: "Absolutely! All plans include competitor tracking. We monitor where your competitors appear in AI search results and identify opportunities to outrank them."
-  },
-  {
-    question: "What if I don't have much online presence yet?",
-    answer: "Perfect timing! It's easier to build AI visibility from the ground up than to fix poor existing signals. We'll establish your presence across all key platforms and optimize from day one."
-  },
-  {
-    question: "Is there a contract or can I cancel anytime?",
-    answer: "No long-term contracts required. We offer month-to-month plans, and you can cancel anytime. We're confident you'll see the value and want to stay."
+    question: "Do I need technical knowledge to use your service?",
+    answer: "Not at all. We handle everything from technical implementation to ongoing optimization. You'll get clear reports showing your progress without needing to understand the technical details."
   },
   {
     question: "What's included in the free audit?",
-    answer: "Your free audit includes: current AI visibility score across major platforms (ChatGPT, Claude, Perplexity, Gemini), competitor analysis, missing optimization opportunities, and a customized roadmap to improve your rankings."
+    answer: "We analyze your current AI visibility across ChatGPT, Claude, Perplexity, and Gemini. You'll see exactly where you appear (or don't), how you compare to competitors, and our recommendations for improvement."
+  },
+  {
+    question: "Which AI platforms do you optimize for?",
+    answer: "We optimize for all major platforms: ChatGPT, Claude, Perplexity, Google's Gemini, Bing Chat, and emerging AI search engines. As new platforms launch, we add them automatically so you're always covered."
+  },
+  {
+    question: "How quickly can you get started?",
+    answer: "Immediately. Once you book a call, we can have your free audit completed within 48 hours. From there, we'll implement optimizations and start tracking your AI visibility right away. No long onboarding process, we get to work fast."
   }
 ];
 
-export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
+const leftColumnFAQs = faqData.slice(0, 5);
+const rightColumnFAQs = faqData.slice(5, 10);
 
-  const toggleFAQ = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
-  // Split FAQs into two columns
-  const leftColumn = faqs.slice(0, 5);
-  const rightColumn = faqs.slice(5, 10);
+function FAQItem({ faq, index }: { faq: FAQItem; index: number }) {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section className="relative bg-white py-24">
-      <div className="max-w-7xl mx-auto px-6">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className={`border-b border-gray-200 ${isOpen ? 'border-l-4 border-l-blue-300 pl-4' : ''} transition-all duration-300`}
+      style={{ paddingTop: '28px', paddingBottom: '28px' }}
+    >
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between text-left group"
+      >
+        <span className="text-lg font-semibold text-black group-hover:underline transition-all pr-4">
+          {faq.question}
+        </span>
+        <ChevronDown
+          className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${
+            isOpen ? "rotate-180 text-blue-400" : "text-gray-600 group-hover:text-blue-300"
+          }`}
+        />
+      </button>
+      
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <p className="mt-4 text-gray-700 leading-relaxed">
+              {faq.answer}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
+export default function FAQ() {
+  return (
+    <section id="faq" className="relative bg-white overflow-hidden" style={{ paddingTop: '120px', paddingBottom: '120px' }}>
+      {/* Gentle ambient wash - enhanced */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div 
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[120%] h-[50%]"
+          style={{
+            background: 'radial-gradient(ellipse, rgba(219, 234, 254, 0.4) 0%, rgba(239, 246, 255, 0.18) 40%, transparent 65%)',
+            filter: 'blur(75px)'
+          }}
+        />
+      </div>
+      <div className="w-full flex flex-col items-center justify-center px-6 relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center max-w-3xl"
         >
-          <h2 className="text-5xl font-bold text-black mb-6">
+          <h2 className="text-5xl font-bold text-black">
             Frequently Asked Questions
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Everything you need to know about AI visibility optimization and how we help you dominate search results.
+          <div style={{ height: '24px' }}></div>
+          <p className="text-xl text-gray-600">
+            Find answers to common questions about our products and services
           </p>
         </motion.div>
+        
+        <div style={{ height: '80px' }}></div>
 
-        {/* FAQ Grid - 2 Columns */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Two Column FAQ Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 max-w-7xl w-full">
           {/* Left Column */}
-          <div className="space-y-4">
-            {leftColumn.map((faq, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-purple-300 transition-all duration-300"
-              >
-                <button
-                  onClick={() => toggleFAQ(index)}
-                  className="w-full px-6 py-5 text-left flex items-start justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
-                >
-                  <span className="text-lg font-semibold text-gray-900 flex-1">
-                    {faq.question}
-                  </span>
-                  <span className="flex-shrink-0 mt-1">
-                    {openIndex === index ? (
-                      <Minus className="w-5 h-5 text-purple-600" />
-                    ) : (
-                      <Plus className="w-5 h-5 text-gray-400" />
-                    )}
-                  </span>
-                </button>
-                
-                <AnimatePresence>
-                  {openIndex === index && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-6 pb-5 pt-2">
-                        <p className="text-gray-600 leading-relaxed">
-                          {faq.answer}
-                        </p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
+          <div>
+            {leftColumnFAQs.map((faq, index) => (
+              <FAQItem key={index} faq={faq} index={index} />
             ))}
           </div>
 
           {/* Right Column */}
-          <div className="space-y-4">
-            {rightColumn.map((faq, index) => {
-              const actualIndex = index + 5;
-              return (
-                <motion.div
-                  key={actualIndex}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.05 }}
-                  className="bg-white border-2 border-gray-200 rounded-2xl overflow-hidden hover:border-purple-300 transition-all duration-300"
-                >
-                  <button
-                    onClick={() => toggleFAQ(actualIndex)}
-                    className="w-full px-6 py-5 text-left flex items-start justify-between gap-4 hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    <span className="text-lg font-semibold text-gray-900 flex-1">
-                      {faq.question}
-                    </span>
-                    <span className="flex-shrink-0 mt-1">
-                      {openIndex === actualIndex ? (
-                        <Minus className="w-5 h-5 text-purple-600" />
-                      ) : (
-                        <Plus className="w-5 h-5 text-gray-400" />
-                      )}
-                    </span>
-                  </button>
-                  
-                  <AnimatePresence>
-                    {openIndex === actualIndex && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-6 pb-5 pt-2">
-                          <p className="text-gray-600 leading-relaxed">
-                            {faq.answer}
-                          </p>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              );
-            })}
+          <div>
+            {rightColumnFAQs.map((faq, index) => (
+              <FAQItem key={index} faq={faq} index={index + 5} />
+            ))}
           </div>
         </div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center mt-16 bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-12"
-        >
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">
-            Still have questions?
-          </h3>
-          <p className="text-gray-600 mb-6">
-            We're here to help. Get in touch with our team and we'll answer any questions you have.
-          </p>
-          <a
-            href="mailto:hello@trueinsightsai.com"
-            className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            Contact Us
-          </a>
-        </motion.div>
       </div>
     </section>
   );

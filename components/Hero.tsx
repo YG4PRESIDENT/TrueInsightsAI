@@ -6,25 +6,59 @@ import { Search } from "lucide-react";
 import { motion } from "framer-motion";
 import { isValidUrl } from "@/lib/utils";
 
-// Custom hook for typewriter effect
-function useTypewriter(text: string, speed: number = 100) {
+// Custom hook for rotating typewriter effect with typing and deleting
+function useTypewriter(
+  texts: string[], 
+  typingSpeed: number = 80,
+  deletingSpeed: number = 40,
+  pauseAfterTyping: number = 2000,
+  pauseAfterDeleting: number = 500
+) {
   const [displayText, setDisplayText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [textIndex, setTextIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    if (currentIndex < text.length) {
-      const timeout = setTimeout(() => {
-        setDisplayText(prev => prev + text[currentIndex]);
-        setCurrentIndex(prev => prev + 1);
-      }, speed);
+    const currentText = texts[textIndex];
 
+    // Typing phase
+    if (!isDeleting && charIndex < currentText.length) {
+      const timeout = setTimeout(() => {
+        setDisplayText(currentText.substring(0, charIndex + 1));
+        setCharIndex(prev => prev + 1);
+      }, typingSpeed);
       return () => clearTimeout(timeout);
     }
-  }, [currentIndex, text, speed]);
 
-  const isComplete = currentIndex === text.length;
+    // Pause after typing completes, then start deleting
+    if (!isDeleting && charIndex === currentText.length) {
+      const timeout = setTimeout(() => {
+        setIsDeleting(true);
+      }, pauseAfterTyping);
+      return () => clearTimeout(timeout);
+    }
 
-  return { displayText, isComplete };
+    // Deleting phase
+    if (isDeleting && charIndex > 0) {
+      const timeout = setTimeout(() => {
+        setDisplayText(currentText.substring(0, charIndex - 1));
+        setCharIndex(prev => prev - 1);
+      }, deletingSpeed);
+      return () => clearTimeout(timeout);
+    }
+
+    // Move to next text after deleting completes
+    if (isDeleting && charIndex === 0) {
+      const timeout = setTimeout(() => {
+        setIsDeleting(false);
+        setTextIndex((prev) => (prev + 1) % texts.length);
+      }, pauseAfterDeleting);
+      return () => clearTimeout(timeout);
+    }
+  }, [charIndex, isDeleting, textIndex, texts, typingSpeed, deletingSpeed, pauseAfterTyping, pauseAfterDeleting]);
+
+  return { displayText };
 }
 
 export default function Hero() {
@@ -32,9 +66,14 @@ export default function Hero() {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
   
-  // Typewriter effect for headline
-  const headlineText = "Get your free GEO SEO audit.";
-  const { displayText: typedText, isComplete } = useTypewriter(headlineText, 80);
+  // Typewriter effect for headline with rotating texts
+  const headlineTexts = [
+    "Are you showing up in AI answers?",
+    "Get your free AI visibility report",
+    "Be the brand, be the business AI recommends first",
+    "Turn AI visibility into paying customers"
+  ];
+  const { displayText: typedText } = useTypewriter(headlineTexts);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +102,17 @@ export default function Hero() {
         <img 
           src="https://cdn.simpleicons.org/openai/000000" 
           alt="ChatGPT"
+          className="w-10 h-10"
+        />
+      ),
+      color: ""
+    },
+    { 
+      name: "Claude",
+      logo: (
+        <img 
+          src="https://cdn.simpleicons.org/anthropic/000000" 
+          alt="Claude"
           className="w-10 h-10"
         />
       ),
@@ -104,8 +154,18 @@ export default function Hero() {
   ];
 
   return (
-    <section className="relative bg-white min-h-screen flex items-center justify-center py-20">
-      <div className="flex flex-col items-center justify-center text-center">
+    <section className="relative bg-white min-h-screen flex items-center justify-center py-20 overflow-hidden">
+      {/* Atmospheric radial glow - more aggressive */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div 
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[160%] h-[110%]"
+          style={{
+            background: 'radial-gradient(ellipse at top, rgba(219, 234, 254, 0.6) 0%, rgba(219, 234, 254, 0.35) 25%, rgba(239, 246, 255, 0.2) 45%, transparent 70%)',
+            filter: 'blur(90px)'
+          }}
+        />
+      </div>
+      <div className="flex flex-col items-center justify-center text-center relative z-10">
         {/* Headline with Typewriter Effect */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -115,7 +175,7 @@ export default function Hero() {
           style={{ marginBottom: '30px' }}
         >
           {typedText}
-          {!isComplete && <span className="animate-pulse">|</span>}
+          <span className="animate-pulse text-blue-400">|</span>
         </motion.h1>
 
         {/* Subheadline */}
@@ -123,10 +183,10 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-xl text-gray-600 leading-relaxed max-w-3xl"
+          className="text-xl text-gray-600 leading-relaxed whitespace-nowrap"
           style={{ marginBottom: '30px' }}
         >
-          Track, analyze, and grow your local search presence across Google, Bing, and Apple Maps.
+          We optimize your visibility in AI-powered search and recommendations
         </motion.p>
 
         {/* URL Input Form */}
@@ -138,7 +198,7 @@ export default function Hero() {
           style={{ marginBottom: '30px' }}
         >
           <form onSubmit={handleSubmit}>
-            <div className="flex items-center bg-white rounded-full shadow-lg border-2 border-gray-300 overflow-hidden hover:shadow-xl transition-all duration-300">
+            <div className="flex items-center bg-white rounded-full shadow-lg border-2 border-gray-300 overflow-hidden hover:shadow-xl hover:border-blue-200 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-300">
               <input
                 type="text"
                 placeholder="Enter your website URL"
@@ -154,12 +214,12 @@ export default function Hero() {
                   paddingLeft: '40px', 
                   outline: 'none', 
                   boxShadow: 'none',
-                  caretColor: 'black'
+                  caretColor: '#60A5FA'
                 }}
               />
               <button
                 type="submit"
-                className="bg-black text-white text-sm font-medium hover:bg-gray-900 transition-all duration-100 flex items-center gap-3 whitespace-nowrap rounded-full"
+                className="bg-black text-white text-sm font-medium hover:bg-gray-900 hover:shadow-blue-200 hover:shadow-lg transition-all duration-100 flex items-center gap-3 whitespace-nowrap rounded-full"
                 style={{ paddingTop: '10px', paddingBottom: '10px', paddingLeft: '58px', paddingRight: '75px' }}
               >
                 <Search className="w-5 h-5" />
@@ -177,10 +237,10 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-base text-gray-500 text-center"
+          className="text-sm text-gray-400 text-center"
           style={{ marginBottom: '30px' }}
         >
-          Free GEO SEO audit. No credit card. No commitments. Just insights. Upgrade to a free trial anytime.
+          See if AI is recommending your competitors instead of you. Free personalized report.
         </motion.p>
 
         {/* Platform Logos */}

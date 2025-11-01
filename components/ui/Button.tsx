@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes, forwardRef } from "react";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "outline" | "ghost";
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -13,15 +13,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={cn(
           "inline-flex items-center justify-center font-medium transition-all duration-300",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300",
           "disabled:opacity-50 disabled:cursor-not-allowed",
           
           // Variants
           {
-            "bg-black text-white hover:bg-gray-800 active:scale-95": variant === "primary",
-            "bg-white text-black border border-gray-300 hover:bg-gray-50 active:scale-95": variant === "secondary",
-            "border-2 border-black text-black hover:bg-black hover:text-white": variant === "outline",
-            "text-gray-700 hover:text-black hover:bg-gray-100": variant === "ghost",
+            "bg-black text-white hover:bg-gray-800 hover:shadow-blue-200 hover:shadow-lg active:scale-95": variant === "primary",
+            "bg-blue-50 text-black border border-blue-200 hover:bg-blue-100 hover:border-blue-300 active:scale-95": variant === "secondary",
+            "border-2 border-blue-300 text-blue-600 hover:bg-blue-300 hover:text-white": variant === "outline",
+            "text-gray-700 hover:text-blue-600 hover:bg-blue-50": variant === "ghost",
           },
           
           // Sizes

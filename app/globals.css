@@ -10,7 +10,15 @@
   /* Accent Colors */
   --accent-purple: #8B5CF6;      /* Agencies */
   --accent-green: #10B981;       /* Brands */
-  --accent-blue: #3B82F6;        /* Links */
+  --accent-blue: #60A5FA;        /* Links - Updated to softer blue */
+
+  /* Blue Palette - Subtle Pastel Blues */
+  --blue-50: #EFF6FF;            /* Lightest blue tint */
+  --blue-100: #DBEAFE;           /* Very light pastel blue */
+  --blue-200: #BFDBFE;           /* Soft blue */
+  --blue-300: #93C5FD;           /* Medium blue */
+  --blue-400: #60A5FA;           /* Link blue */
+  --blue-500: #3B82F6;           /* Standard blue */
 
   /* Neutral Colors */
   --gray-50: #F9FAFB;
@@ -64,6 +72,11 @@
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
+/* Custom radial gradient utility for atmospheric effects */
+.bg-gradient-radial {
+  background-image: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -100,7 +113,7 @@ body {
 
 /* Focus visible styles */
 *:focus-visible {
-  outline: 2px solid var(--accent-blue);
+  outline: 2px solid var(--blue-300);
   outline-offset: 2px;
 }
 
@@ -110,16 +123,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--gray-100);
+  background: var(--blue-50);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--gray-400);
+  background: var(--blue-200);
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-500);
+  background: var(--blue-300);
 }
 
 /* Quiz slider styling */

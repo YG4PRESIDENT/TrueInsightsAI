@@ -4,9 +4,10 @@ export const COMPANY_TAGLINE = "GEO SEO & Local Search Intelligence";
 
 // Navigation Links
 export const NAV_LINKS = [
-  { label: "Pricing", href: "#pricing", isScroll: true },
-  { label: "Blog", href: "/blog", isScroll: false },
-  { label: "Team", href: "/team", isScroll: false },
+  { label: "Resources", href: "#faq" },
+  { label: "Pricing", href: "#pricing" },
+  { label: "Blog", href: "/blog" },
+  { label: "Team", href: "#team" },
 ];
 
 // CTA Buttons
@@ -23,17 +24,36 @@ export const PLATFORMS = [
   { name: "Google Maps", icon: "map" },
 ];
 
-// Social Media Links (placeholder - update with actual links)
+// Social Media Links
 export const SOCIAL_LINKS = {
-  linkedin: "#",
-  twitter: "#",
-  facebook: "#",
-  instagram: "#",
+  tiktok: "https://tiktok.com/@trueinsightsai",
+  linkedin: "https://linkedin.com/company/trueinsightsai",
+  email: "mailto:trueinsightsai@gmail.com",
 };
 
 // Contact Information
 export const CONTACT = {
-  email: "hello@trueinsightsai.com",
+  email: "trueinsightsai@gmail.com",
+  supportEmail: "team@trueinsightsai.com",
   phone: "", // Optional
+};
+
+// Footer Content
+export const FOOTER_DESCRIPTION = "The leading AI Search visibility platform helping brands optimize their presence across ChatGPT, Gemini, and Perplexity.";
+
+export const FOOTER_LINKS = {
+  resources: [
+    { label: "FAQ", href: "#faq" },
+    { label: "AI Crawlability Checker", href: "#tools" },
+    { label: "LLM.txt Generator", href: "#tools" },
+    { label: "Sentiment Checker", href: "#tools" },
+    { label: "Product Visibility", href: "#tools" },
+  ],
+  company: [
+    { label: "Pricing", href: "#pricing" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Contact Us", href: "mailto:trueinsightsai@gmail.com" },
+  ],
 };
 
