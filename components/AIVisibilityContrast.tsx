@@ -116,20 +116,20 @@ export default function AIVisibilityContrast() {
             initial={{ opacity: 0, y: 20 }}
             animate={isVisible ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-3xl lg:text-5xl font-bold text-gray-900 leading-tight text-center"
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight text-center px-4 sm:px-0"
           >
             When someone asks AI about your business...
           </motion.h2>
         </div>
 
         {/* Split Screen Container - Perfectly Centered */}
-        <div className="relative flex flex-col lg:flex-row items-center justify-center gap-0 mb-16 max-w-[1100px] mx-auto">
+        <div className="relative flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-0 mb-16 max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-0">
           {/* LEFT SIDE: Your Reality - Sadder styling */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isVisible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="relative flex flex-col w-full lg:w-[480px]"
+            className="relative flex flex-col w-full lg:w-[480px] max-w-md lg:max-w-none"
           >
             {/* Label */}
             <div className="mb-6 text-center">
@@ -140,7 +140,7 @@ export default function AIVisibilityContrast() {
             </div>
 
             {/* AI Mockup - Sad/Desaturated */}
-            <div className="bg-white rounded-xl shadow-md border border-gray-300 overflow-hidden h-[380px] flex flex-col grayscale-[20%] opacity-90">
+            <div className="bg-white rounded-xl shadow-md border border-gray-300 overflow-hidden h-[320px] sm:h-[380px] flex flex-col grayscale-[20%] opacity-90">
               {/* Animated Header */}
               <AnimatePresence mode="wait">
                 <motion.div
@@ -179,22 +179,22 @@ export default function AIVisibilityContrast() {
                     <p className="text-[15px] text-gray-700 mb-8 leading-relaxed">
                       Based on local expertise and client reviews:
                     </p>
-                    <div className="space-y-5 text-[15px] text-gray-800 mb-12">
+                    <div className="space-y-3 sm:space-y-5 text-sm sm:text-[15px] text-gray-800 mb-8 sm:mb-12">
                       <div>
                         <p className="font-semibold text-gray-900">1. Austin Tax Solutions</p>
-                        <p className="text-sm text-gray-500 mt-1.5">Full-service tax preparation and consulting</p>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1">Full-service tax preparation and consulting</p>
                       </div>
                       <div>
                         <p className="font-semibold text-gray-900">2. Capital CPA Group</p>
-                        <p className="text-sm text-gray-500 mt-1.5">Specializing in small business taxes</p>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1">Specializing in small business taxes</p>
                       </div>
                       <div>
                         <p className="font-semibold text-gray-900">3. Texas Tax Advisors</p>
-                        <p className="text-sm text-gray-500 mt-1.5">Personal and business tax services</p>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1">Personal and business tax services</p>
                       </div>
                       <div>
                         <p className="font-semibold text-gray-900">4. Lone Star CPA Firm</p>
-                        <p className="text-sm text-gray-500 mt-1.5">Tax planning and preparation services</p>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1">Tax planning and preparation services</p>
                       </div>
                     </div>
                   </div>
@@ -228,10 +228,10 @@ export default function AIVisibilityContrast() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={isVisible ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="flex items-center justify-center lg:mx-8 my-8 lg:my-0 z-10"
+            className="flex items-center justify-center lg:mx-8 my-6 lg:my-0 z-10"
           >
             <svg
-              className="w-32 h-24 lg:w-40 lg:h-28"
+              className="w-24 h-16 sm:w-32 sm:h-24 lg:w-40 lg:h-28"
               viewBox="0 0 200 100"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -263,7 +263,7 @@ export default function AIVisibilityContrast() {
             initial={{ opacity: 0, x: 30 }}
             animate={isVisible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.8 }}
-            className="relative flex flex-col w-full lg:w-[470px]"
+            className="relative flex flex-col w-full lg:w-[470px] max-w-md lg:max-w-none"
           >
             {/* Subtle glow effect behind card */}
             <div className="absolute inset-0 bg-gradient-to-br from-green-200/30 via-emerald-200/20 to-blue-200/30 blur-3xl rounded-3xl -z-10" />
@@ -277,7 +277,7 @@ export default function AIVisibilityContrast() {
             </div>
 
             {/* AI Mockup - Vibrant/Successful - SAME HEIGHT AS LEFT */}
-            <div className="bg-white rounded-xl shadow-xl border-2 border-green-300 overflow-hidden h-[380px] flex flex-col ring-4 ring-green-100">
+            <div className="bg-white rounded-xl shadow-xl border-2 border-green-300 overflow-hidden h-[320px] sm:h-[380px] flex flex-col ring-4 ring-green-100">
               {/* Animated Header */}
               <AnimatePresence mode="wait">
                 <motion.div
@@ -316,15 +316,15 @@ export default function AIVisibilityContrast() {
                     <p className="text-[15px] text-gray-700 mb-8 leading-relaxed">
                       Based on local expertise and client reviews:
                     </p>
-                    <div className="space-y-5 text-[15px] mb-12 bg-green-50/30 rounded-lg p-3 -mx-2">
-                      <div className="bg-green-50/70 border-l-[3px] border-green-500 rounded-r-md py-4 px-4">
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-6 h-6 bg-green-600 rounded-full flex items-center justify-center mt-0.5">
+                    <div className="space-y-3 sm:space-y-5 text-sm sm:text-[15px] mb-8 sm:mb-12 bg-green-50/30 rounded-lg p-2 sm:p-3 -mx-1 sm:-mx-2">
+                      <div className="bg-green-50/70 border-l-[3px] border-green-500 rounded-r-md py-2 sm:py-4 px-2 sm:px-4">
+                        <div className="flex items-start gap-2 sm:gap-3">
+                          <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-green-600 rounded-full flex items-center justify-center mt-0.5">
                             <span className="text-white text-xs font-bold">1</span>
                           </div>
                           <div className="flex-1">
-                            <p className="font-bold text-gray-900 text-[15px]">YOUR BUSINESS</p>
-                            <p className="text-sm text-gray-700 mt-2 leading-relaxed">
+                            <p className="font-bold text-gray-900 text-sm sm:text-[15px]">YOUR BUSINESS</p>
+                            <p className="text-xs sm:text-sm text-gray-700 mt-1 sm:mt-2 leading-relaxed">
                               Comprehensive tax preparation for individuals and businesses. Known for maximizing deductions and personalized service.
                             </p>
                           </div>
@@ -332,15 +332,15 @@ export default function AIVisibilityContrast() {
                       </div>
                       <div className="opacity-40">
                         <p className="font-semibold text-gray-900">2. Austin Tax Solutions</p>
-                        <p className="text-sm text-gray-500 mt-1.5">Full-service tax preparation and consulting</p>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1">Full-service tax preparation and consulting</p>
                       </div>
                       <div className="opacity-25">
                         <p className="font-semibold text-gray-900">3. Capital CPA Group</p>
-                        <p className="text-sm text-gray-500 mt-1.5">Specializing in small business taxes</p>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1">Specializing in small business taxes</p>
                       </div>
                       <div className="opacity-20">
                         <p className="font-semibold text-gray-900">4. Texas Tax Advisors</p>
-                        <p className="text-sm text-gray-500 mt-1.5">Personal and business tax services</p>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1">Personal and business tax services</p>
                       </div>
                     </div>
                   </div>
@@ -375,7 +375,7 @@ export default function AIVisibilityContrast() {
           initial={{ opacity: 0, y: 20 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 1.1 }}
-          className="text-center w-full flex justify-center"
+          className="text-center w-full flex justify-center px-4 sm:px-0"
         >
           <button
             onClick={() => {
@@ -384,18 +384,11 @@ export default function AIVisibilityContrast() {
                 heroSection.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            style={{
-              paddingLeft: '21px',
-              paddingRight: '21px',
-              paddingTop: '12px',
-              paddingBottom: '12px',
-              fontSize: '16px'
-            }}
-            className="inline-flex items-center justify-center gap-2 bg-black text-white rounded-full font-bold transition-all duration-200 hover:bg-gray-800 hover:shadow-xl hover:shadow-blue-200"
+            className="inline-flex items-center justify-center gap-2 bg-black text-white rounded-full font-bold transition-all duration-200 hover:bg-gray-800 hover:shadow-xl hover:shadow-blue-200 px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base min-h-[48px]"
           >
-            <span style={{ fontSize: '16px' }}>See where you rank now</span>
+            <span>See where you rank now</span>
             <svg
-              className="w-5 h-5"
+              className="w-4 h-4 sm:w-5 sm:h-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

@@ -145,17 +145,17 @@ export default function Pricing() {
           className="w-full flex flex-col items-center"
           style={{ marginBottom: '80px' }}
         >
-          <h2 className="text-5xl font-bold text-black flex justify-center items-center" style={{ marginBottom: '60px' }}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black flex justify-center items-center px-4 sm:px-0" style={{ marginBottom: '40px', lineHeight: '1.2' }}>
             <span>{typedText}</span>
             {!isComplete && <span className="animate-pulse ml-1">|</span>}
           </h2>
-          <p className="text-gray-600 max-w-2xl text-center px-8 leading-relaxed" style={{ fontSize: '16px' }}>
+          <p className="text-gray-600 max-w-2xl text-center px-6 sm:px-8 leading-relaxed text-base sm:text-lg">
             Choose the perfect plan to dominate AI search results and grow your digital presence
           </p>
         </motion.div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-5xl mx-auto px-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8">
           {tiers.map((tier, index) => (
             <motion.div
               key={tier.name}
@@ -186,14 +186,14 @@ export default function Pricing() {
               )}
 
               {/* Static Card */}
-              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 flex flex-col border-2 border-black h-full min-h-[475px]">
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 flex flex-col border-2 border-black h-full min-h-[450px] sm:min-h-[475px]">
                 
                 {/* Subtle Top Spacing */}
                 <div style={{ height: '12px' }}></div>
 
                 {/* Header Section */}
-                <div className="text-center px-6">
-                  <h3 className="text-2xl font-bold text-black mb-2">{tier.name}</h3>
+                <div className="text-center px-2 sm:px-6">
+                  <h3 className="text-xl sm:text-2xl font-bold text-black mb-2">{tier.name}</h3>
                   <p className="text-xs font-medium text-gray-600 mb-3">{tier.tagline}</p>
                   <p className="text-xs text-gray-500 leading-relaxed">{tier.description}</p>
                 </div>
@@ -202,9 +202,9 @@ export default function Pricing() {
                 <div className="h-4"></div>
 
                 {/* Price Section */}
-                <div className="text-center px-6">
+                <div className="text-center px-2 sm:px-6">
                   <div className="flex items-baseline justify-center">
-                    <span className="text-3xl font-bold text-black">${tier.price}</span>
+                    <span className="text-2xl sm:text-3xl font-bold text-black">${tier.price}</span>
                     <span className="text-xs text-gray-400 ml-2">/mo</span>
                   </div>
                 </div>
@@ -213,8 +213,8 @@ export default function Pricing() {
                 <div className="h-8"></div>
 
                 {/* Metrics Section */}
-                <div className="px-12">
-                  <div className="grid grid-cols-[auto_auto] gap-x-8 gap-y-3 justify-center">
+                <div className="px-4 sm:px-8 md:px-12">
+                  <div className="grid grid-cols-[auto_auto] gap-x-4 sm:gap-x-8 gap-y-3 justify-center text-xs sm:text-sm">
                     {/* Models */}
                     <span className="text-xs text-gray-500 flex items-center">Models</span>
                     <div className="flex gap-2 justify-end items-center">
@@ -248,12 +248,12 @@ export default function Pricing() {
                 <div className="h-8"></div>
 
                 {/* Key Services Section */}
-                <div className="mb-4 px-6">
+                <div className="mb-4 px-2 sm:px-6">
                   <p className="text-xs text-gray-500 text-center font-semibold mb-4 uppercase tracking-wide">Key Services</p>
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {tier.keyServices.map((service, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5">
-                        <span className="text-green-500 text-base flex-shrink-0 font-bold">✓</span>
+                      <div key={idx} className="flex items-start gap-2 sm:gap-2.5">
+                        <span className="text-green-500 text-sm sm:text-base flex-shrink-0 font-bold mt-0.5">✓</span>
                         <span className="text-xs text-gray-700 leading-relaxed">{service}</span>
                       </div>
                     ))}
@@ -267,23 +267,16 @@ export default function Pricing() {
                 <div style={{ height: '24px' }}></div>
 
                 {/* CTA Button */}
-                <div className="px-6 flex justify-center">
+                <div className="px-2 sm:px-6 flex justify-center">
                   <motion.a
                     href="https://calendly.com/trueinsightsai/30min"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.02 }}
-                    style={{
-                      paddingLeft: '19px',
-                      paddingRight: '19px',
-                      paddingTop: '9px',
-                      paddingBottom: '9px',
-                      fontSize: '16px'
-                    }}
-                    className="group inline-flex items-center justify-center gap-6 bg-black text-white rounded-full font-bold transition-all duration-200 hover:bg-gray-800 hover:shadow-xl hover:shadow-blue-200"
+                    className="group inline-flex items-center justify-center gap-3 sm:gap-4 bg-black text-white rounded-full font-bold transition-all duration-200 hover:bg-gray-800 hover:shadow-xl hover:shadow-blue-200 px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base min-h-[48px] w-full sm:w-auto"
                   >
-                    <Calendar className="w-5 h-5 group-hover:text-blue-300 transition-colors duration-200" />
-                    <span style={{ fontSize: '16px' }}>{tier.cta}</span>
+                    <Calendar className="w-4 h-4 sm:w-5 sm:h-5 group-hover:text-blue-300 transition-colors duration-200" />
+                    <span>{tier.cta}</span>
                   </motion.a>
                 </div>
 
