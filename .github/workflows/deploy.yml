@@ -29,6 +29,8 @@ jobs:
       run: npm ci
       
     - name: Build Next.js app
+      env:
+        NEXT_PUBLIC_WEB3FORMS_KEY: ${{ secrets.NEXT_PUBLIC_WEB3FORMS_KEY }}
       run: npm run build
       
     - name: Setup Pages

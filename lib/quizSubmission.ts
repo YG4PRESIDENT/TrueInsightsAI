@@ -15,9 +15,9 @@ export async function submitQuizToWeb3Forms(
 ): Promise<{ success: boolean; error?: string }> {
   const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
-  if (!accessKey) {
-    console.error("Web3Forms access key not found");
-    return { success: false, error: "Configuration error" };
+  if (!accessKey || accessKey === 'your_web3forms_access_key_here') {
+    console.error("Web3Forms access key not found or not configured. Please set NEXT_PUBLIC_WEB3FORMS_KEY in .env.local");
+    return { success: false, error: "Configuration error: API key not set" };
   }
 
   // Format the quiz answers into a readable string
