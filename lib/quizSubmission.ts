@@ -15,8 +15,14 @@ export async function submitQuizToWeb3Forms(
 ): Promise<{ success: boolean; error?: string }> {
   const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
+  console.log("🔍 Quiz Submission Debug:");
+  console.log("- API Key exists:", !!accessKey);
+  console.log("- API Key (first 10 chars):", accessKey?.substring(0, 10));
+  console.log("- Email:", data.email);
+  console.log("- Answers count:", data.answers.length);
+
   if (!accessKey || accessKey === 'your_web3forms_access_key_here') {
-    console.error("Web3Forms access key not found or not configured. Please set NEXT_PUBLIC_WEB3FORMS_KEY in .env.local");
+    console.error("❌ Web3Forms access key not found or not configured. Please set NEXT_PUBLIC_WEB3FORMS_KEY in .env.local");
     return { success: false, error: "Configuration error: API key not set" };
   }
 
@@ -52,6 +58,7 @@ This submission was captured from: https://trueinsightsai.com/quiz
   };
 
   try {
+    console.log("📤 Sending to Web3Forms...");
     const response = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
       headers: {
@@ -62,15 +69,17 @@ This submission was captured from: https://trueinsightsai.com/quiz
     });
 
     const result = await response.json();
+    console.log("📥 Web3Forms Response:", result);
 
     if (result.success) {
+      console.log("✅ Quiz submission successful!");
       return { success: true };
     } else {
-      console.error("Web3Forms submission failed:", result);
+      console.error("❌ Web3Forms submission failed:", result);
       return { success: false, error: result.message || "Submission failed" };
     }
   } catch (error) {
-    console.error("Error submitting to Web3Forms:", error);
+    console.error("❌ Error submitting to Web3Forms:", error);
     return { success: false, error: "Network error" };
   }
 }
