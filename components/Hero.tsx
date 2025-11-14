@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { motion } from "framer-motion";
 import { isValidUrl } from "@/lib/utils";
+import FloatingNotifications from "@/components/FloatingNotifications";
 
 // Custom hook for rotating typewriter effect with typing and deleting
 function useTypewriter(
@@ -165,6 +166,10 @@ export default function Hero() {
           }}
         />
       </div>
+
+      {/* Floating Notifications - Behind main content */}
+      <FloatingNotifications />
+
       <div className="flex flex-col items-center justify-center text-center relative z-10">
         {/* Headline with Typewriter Effect */}
         <motion.h1
