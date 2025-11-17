@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Notification {
@@ -53,13 +53,30 @@ const getDesktopZones = (): Zone[] => [
   { id: 6, centerX: 12, centerY: 78, available: true },   // Zone 6: Bottom Left
 ];
 
-// Define zones for mobile (simpler 4-zone layout)
+// Define zones for mobile (4 slim vertical tiers)
 const getMobileZones = (): Zone[] => [
-  { id: 1, centerX: 12, centerY: 15, available: true },   // Top Left
-  { id: 2, centerX: 88, centerY: 15, available: true },   // Top Right
-  { id: 3, centerX: 88, centerY: 82, available: true },   // Bottom Right
-  { id: 4, centerX: 12, centerY: 82, available: true },   // Bottom Left
+  { id: 1, centerX: 14, centerY: 18, available: true },   // Top Left
+  { id: 2, centerX: 86, centerY: 32, available: true },   // Upper Right
+  { id: 3, centerX: 86, centerY: 78, available: true },   // Bottom Right
+  { id: 4, centerX: 18, centerY: 86, available: true },   // Bottom Left
 ];
+
+const desktopConfig = {
+  visibleDuration: 3500,
+  fadeOutDuration: 1500,
+  gapBetweenWaves: 1000,
+  minPerWave: 4,
+  maxPerWave: 5,
+  staggerRange: 1500,
+};
+
+const mobileConfig = {
+  visibleDuration: 2600,
+  restAfterComplete: 700,
+  minDelayBetweenSpawns: 900,
+  maxDelayBetweenSpawns: 1500,
+  maxConcurrent: 2,
+};
 
 // Add small random offset within zone for variety
 const addRandomOffset = (center: number, range: number = 3): number => {
@@ -68,15 +85,26 @@ const addRandomOffset = (center: number, range: number = 3): number => {
 
 export default function FloatingNotifications() {
   const [notifications, setNotifications] = useState<Map<string, Notification>>(new Map());
-  const [zones, setZones] = useState<Zone[]>([]);
   const [isMobile, setIsMobile] = useState(false);
+  const [zoneResetKey, setZoneResetKey] = useState(0);
+  const zonesRef = useRef<Zone[]>([]);
+  const lastModeRef = useRef<boolean | null>(null);
 
   // Detect mobile viewport and initialize zones
   useEffect(() => {
+    const applyZones = (mobile: boolean) => {
+      zonesRef.current = mobile ? getMobileZones() : getDesktopZones();
+      setZoneResetKey((prev) => prev + 1);
+      setNotifications(new Map());
+    };
+
     const checkMobile = () => {
       const mobile = window.innerWidth < 640;
       setIsMobile(mobile);
-      setZones(mobile ? getMobileZones() : getDesktopZones());
+      if (lastModeRef.current === null || lastModeRef.current !== mobile) {
+        lastModeRef.current = mobile;
+        applyZones(mobile);
+      }
     };
     
     checkMobile();
@@ -86,76 +114,91 @@ export default function FloatingNotifications() {
 
   // Mark zone as available/occupied
   const updateZoneAvailability = useCallback((zoneId: number, available: boolean) => {
-    setZones(prev => prev.map(zone => 
+    zonesRef.current = zonesRef.current.map(zone =>
       zone.id === zoneId ? { ...zone, available } : zone
-    ));
+    );
   }, []);
 
   // Create a notification in a specific zone
-  const createNotification = useCallback((zone: Zone): Notification => {
+  const createNotification = useCallback((zone: Zone, mobile: boolean): Notification => {
     const id = `notification-${Date.now()}-${Math.random()}`;
     
     return {
       id,
       companyName: generateCompanyName(),
       percentage: Math.floor(Math.random() * 45) + 1,
-      x: addRandomOffset(zone.centerX),
-      y: addRandomOffset(zone.centerY),
+      x: addRandomOffset(zone.centerX, mobile ? 2 : 3),
+      y: addRandomOffset(zone.centerY, mobile ? 2 : 3),
       zoneId: zone.id
     };
   }, []);
 
   // Spawn a notification in a specific zone
-  const spawnNotification = useCallback((zone: Zone, visibleDuration: number) => {
-    const notification = createNotification(zone);
+  const spawnNotification = useCallback(
+    (zone: Zone, visibleDuration: number, onComplete?: () => void) => {
+      const notification = createNotification(zone, isMobile);
     
-    // Mark zone as occupied
-    updateZoneAvailability(zone.id, false);
+      // Mark zone as occupied
+      updateZoneAvailability(zone.id, false);
     
-    // Add notification
-    setNotifications(prev => {
-      const newMap = new Map(prev);
-      newMap.set(notification.id, notification);
-      return newMap;
-    });
-
-    // Remove after duration and free the zone
-    setTimeout(() => {
-      setNotifications(current => {
-        const updatedMap = new Map(current);
-        updatedMap.delete(notification.id);
-        return updatedMap;
+      // Add notification
+      setNotifications(prev => {
+        const newMap = new Map(prev);
+        newMap.set(notification.id, notification);
+        return newMap;
       });
+
+      // Remove after duration and free the zone
+      const timeoutId = setTimeout(() => {
+        setNotifications(current => {
+          const updatedMap = new Map(current);
+          updatedMap.delete(notification.id);
+          return updatedMap;
+        });
       
-      // Mark zone as available again
-      updateZoneAvailability(zone.id, true);
-    }, visibleDuration);
-  }, [createNotification, updateZoneAvailability]);
+        // Mark zone as available again
+        updateZoneAvailability(zone.id, true);
+        onComplete?.();
+      }, visibleDuration);
 
-  // Wave-based spawning with zone assignment
+      return timeoutId;
+    },
+    [createNotification, updateZoneAvailability, isMobile]
+  );
+
+  // Desktop wave-based spawning
   useEffect(() => {
-    if (zones.length === 0) return;
+    if (isMobile || zonesRef.current.length === 0) return;
 
-    // Use subset of zones per wave for variety (4-5 on desktop, 3 on mobile)
-    const notificationCount = isMobile ? 3 : Math.floor(Math.random() * 2) + 4; // 4-5 on desktop
-    const visibleDuration = 3500; // 3.5 seconds visible
-    const fadeOutDuration = 1500; // 1.5 seconds to fade out
-    const gapBetweenWaves = 1000; // 1 second gap
+    const {
+      visibleDuration,
+      fadeOutDuration,
+      gapBetweenWaves,
+      minPerWave,
+      maxPerWave,
+      staggerRange,
+    } = desktopConfig;
     
     const spawnWave = () => {
       const timers: NodeJS.Timeout[] = [];
       
       // Get available zones
-      const availableZones = zones.filter(z => z.available);
+      const availableZones = zonesRef.current.filter(z => z.available);
+
+      if (availableZones.length === 0) {
+        return timers;
+      }
       
       // Randomly select zones for this wave
+      const perWaveCount =
+        Math.floor(Math.random() * (maxPerWave - minPerWave + 1)) + minPerWave;
       const selectedZones = [...availableZones]
         .sort(() => Math.random() - 0.5)
-        .slice(0, Math.min(notificationCount, availableZones.length));
+        .slice(0, Math.min(perWaveCount, availableZones.length));
       
       // Spawn notifications in selected zones with random staggered timing for fluid feel
       selectedZones.forEach((zone, index) => {
-        const staggerDelay = Math.random() * 1500; // Random 0-1.5s stagger for fluid appearance
+        const staggerDelay = Math.random() * staggerRange;
         const timer = setTimeout(() => {
           spawnNotification(zone, visibleDuration);
         }, staggerDelay);
@@ -169,18 +212,88 @@ export default function FloatingNotifications() {
     let timers = spawnWave();
     
     // Calculate total wave cycle time
-    const waveCycle = visibleDuration + fadeOutDuration + gapBetweenWaves; // ~6 seconds total
+    const waveCycle = visibleDuration + fadeOutDuration + gapBetweenWaves;
     
     // Schedule subsequent waves
     const waveInterval = setInterval(() => {
-      timers = spawnWave();
+      timers = [...timers, ...spawnWave()];
     }, waveCycle);
 
     return () => {
       timers.forEach(timer => clearTimeout(timer));
       clearInterval(waveInterval);
     };
-  }, [zones, isMobile, spawnNotification]);
+  }, [zoneResetKey, isMobile, spawnNotification]);
+
+  // Mobile sequential scheduler
+  useEffect(() => {
+    if (!isMobile || zonesRef.current.length === 0) return;
+
+    const {
+      visibleDuration,
+      restAfterComplete,
+      minDelayBetweenSpawns,
+      maxDelayBetweenSpawns,
+      maxConcurrent,
+    } = mobileConfig;
+
+    let activeCount = 0;
+    let cancelled = false;
+    const timers: NodeJS.Timeout[] = [];
+    const zoneOrder = zonesRef.current.map(zone => zone.id);
+    let zonePointer = 0;
+
+    const getNextAvailableZone = (): Zone | null => {
+      for (let i = 0; i < zoneOrder.length; i++) {
+        const candidateId = zoneOrder[(zonePointer + i) % zoneOrder.length];
+        const zone = zonesRef.current.find(z => z.id === candidateId);
+        if (zone && zone.available) {
+          zonePointer = (zonePointer + i + 1) % zoneOrder.length;
+          return zone;
+        }
+      }
+      return null;
+    };
+
+    const scheduleNext = () => {
+      if (cancelled) return;
+      if (activeCount >= maxConcurrent) return;
+
+      const zone = getNextAvailableZone();
+
+      if (!zone) {
+        const waitTimer = setTimeout(scheduleNext, restAfterComplete);
+        timers.push(waitTimer);
+        return;
+      }
+
+      activeCount += 1;
+
+      spawnNotification(zone, visibleDuration, () => {
+        activeCount = Math.max(0, activeCount - 1);
+        if (!cancelled) {
+          const restTimer = setTimeout(scheduleNext, restAfterComplete);
+          timers.push(restTimer);
+        }
+      });
+
+      const delay =
+        minDelayBetweenSpawns +
+        Math.random() * (maxDelayBetweenSpawns - minDelayBetweenSpawns);
+      const delayTimer = setTimeout(scheduleNext, delay);
+      timers.push(delayTimer);
+    };
+
+    // Kick off initial schedules
+    const initialTimer = setTimeout(scheduleNext, 300);
+    const secondTimer = setTimeout(scheduleNext, 900);
+    timers.push(initialTimer, secondTimer);
+
+    return () => {
+      cancelled = true;
+      timers.forEach(timer => clearTimeout(timer));
+    };
+  }, [zoneResetKey, isMobile, spawnNotification]);
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -201,12 +314,22 @@ export default function FloatingNotifications() {
               top: `${notification.y}%`,
             }}
           >
-            <div className="bg-gradient-to-br from-blue-50/[0.05] to-blue-100/[0.06] backdrop-blur-md rounded-md px-5 py-2.5 sm:px-8 sm:py-4 shadow-lg shadow-blue-100/10">
+            <div
+              className={
+                isMobile
+                  ? "bg-gradient-to-br from-blue-50/[0.04] to-blue-100/[0.05] backdrop-blur-md rounded-md px-3 py-1.5 shadow-md shadow-blue-100/20"
+                  : "bg-gradient-to-br from-blue-50/[0.05] to-blue-100/[0.06] backdrop-blur-md rounded-md px-5 py-2.5 sm:px-8 sm:py-4 shadow-lg shadow-blue-100/10"
+              }
+            >
               {/* Tinted Glass Company Name - Heavily Obscured */}
               <div 
-                className="text-base sm:text-lg md:text-xl font-medium text-blue-300/60 mb-1 tracking-wider"
+                className={
+                  isMobile
+                    ? "text-sm font-medium text-blue-300/70 mb-0.5 tracking-wide"
+                    : "text-base sm:text-lg md:text-xl font-medium text-blue-300/60 mb-1 tracking-wider"
+                }
                 style={{ 
-                  filter: 'blur(3px)',
+                  filter: isMobile ? 'blur(2.4px)' : 'blur(3px)',
                   userSelect: 'none',
                   WebkitUserSelect: 'none',
                 }}
@@ -215,7 +338,13 @@ export default function FloatingNotifications() {
               </div>
               
               {/* Visibility Score - Clear and Vibrant */}
-              <div className="text-sm sm:text-base font-semibold text-blue-400">
+              <div
+                className={
+                  isMobile
+                    ? "text-xs font-semibold text-blue-400"
+                    : "text-sm sm:text-base font-semibold text-blue-400"
+                }
+              >
                 +{notification.percentage}% visibility score
               </div>
             </div>
