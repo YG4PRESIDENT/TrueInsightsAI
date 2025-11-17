@@ -85,9 +85,10 @@ const desktopConfig = {
 };
 
 const mobileConfig = {
-  visibleDuration: 3500, // Visible duration
-  fadeOutDuration: 800, // Faster fade out
-  delayBetweenSpawns: 1200, // 1.2 seconds between spawns for natural rhythm
+  visibleDuration: 3000, // Visible duration (reduced to compensate for longer fades)
+  fadeInDuration: 1400, // Slower, gentler fade in
+  fadeOutDuration: 1400, // Slower, gentler fade out
+  delayBetweenSpawns: 1000, // 1 second between spawns (reduced from 1.2s)
   maxConcurrent: 2, // Allow 2 concurrent for more consistent flow
 };
 
@@ -211,7 +212,7 @@ export default function FloatingNotifications() {
           if (element) {
             element.classList.add('notification-fade-out');
           }
-        }, visibleDuration - 800);
+        }, visibleDuration - mobileConfig.fadeOutDuration);
       }
 
       // Remove after duration and free the zone
@@ -409,10 +410,10 @@ export default function FloatingNotifications() {
               }
             }
             .notification-fade-in {
-              animation: fadeInMobile 0.8s ease-out forwards;
+              animation: fadeInMobile 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             }
             .notification-fade-out {
-              animation: fadeOutMobile 0.8s ease-in forwards;
+              animation: fadeOutMobile 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             }
           `}</style>
         </>
