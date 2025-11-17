@@ -53,11 +53,13 @@ const getDesktopZones = (): Zone[] => [
   { id: 6, centerX: 12, centerY: 78, available: true },   // Zone 6: Bottom Left
 ];
 
-// Define zones for mobile (3 zones for cleaner layout)
+// Define zones for mobile (4 zones in safe areas only - top and bottom margins)
+// Content area (y: 20-80%) is completely avoided
 const getMobileZones = (): Zone[] => [
-  { id: 1, centerX: 15, centerY: 20, available: true },   // Top Left
-  { id: 2, centerX: 85, centerY: 50, available: true },   // Middle Right
-  { id: 3, centerX: 15, centerY: 80, available: true },   // Bottom Left
+  { id: 1, centerX: 12, centerY: 12, available: true },   // Top Left Safe Area
+  { id: 2, centerX: 88, centerY: 12, available: true },   // Top Right Safe Area
+  { id: 3, centerX: 12, centerY: 88, available: true },   // Bottom Left Safe Area
+  { id: 4, centerX: 88, centerY: 88, available: true },   // Bottom Right Safe Area
 ];
 
 const desktopConfig = {
@@ -121,12 +123,28 @@ export default function FloatingNotifications() {
   const createNotification = useCallback((zone: Zone, mobile: boolean): Notification => {
     const id = `notification-${Date.now()}-${Math.random()}`;
     
+    // For mobile, use smaller offset and ensure we stay in safe zones
+    const offsetRange = mobile ? 1.5 : 3;
+    let x = addRandomOffset(zone.centerX, offsetRange);
+    let y = addRandomOffset(zone.centerY, offsetRange);
+    
+    // Mobile safe zone enforcement: ensure y stays in top (5-18%) or bottom (82-95%) areas
+    if (mobile) {
+      if (y > 18 && y < 82) {
+        // If somehow in content area, push to nearest safe zone
+        y = zone.centerY < 50 ? 12 : 88;
+      }
+      // Clamp x to stay within screen bounds
+      x = Math.max(5, Math.min(95, x));
+      y = Math.max(5, Math.min(95, y));
+    }
+    
     return {
       id,
       companyName: generateCompanyName(),
       percentage: Math.floor(Math.random() * 45) + 1,
-      x: addRandomOffset(zone.centerX, mobile ? 2 : 3),
-      y: addRandomOffset(zone.centerY, mobile ? 2 : 3),
+      x,
+      y,
       zoneId: zone.id
     };
   }, []);
