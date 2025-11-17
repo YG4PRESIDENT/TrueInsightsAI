@@ -49,7 +49,7 @@ export default function Footer() {
             <div className="hidden lg:block lg:w-12"></div>
             
             {/* Left Column - Logo, Description, Social Icons, Contact Button */}
-            <div className="lg:max-w-md text-center lg:text-left">
+            <div className="lg:max-w-md text-left">
               <a href="/" className="inline-block hover:opacity-80 transition-opacity duration-200 mb-4">
                 <img 
                   src="/images/Official logo.png" 
@@ -58,11 +58,11 @@ export default function Footer() {
                 />
               </a>
               
-              <p className="text-sm text-gray-600 leading-relaxed mb-6">
+              <p className="text-sm text-gray-600 leading-relaxed mb-5">
                 {FOOTER_DESCRIPTION}
               </p>
               
-              <div className="flex items-center justify-center lg:justify-start gap-6 mb-6">
+              <div className="flex items-center gap-4 mb-5">
                 {/* TikTok */}
                 <a 
                   href={SOCIAL_LINKS.tiktok}
@@ -101,7 +101,7 @@ export default function Footer() {
                 href="https://calendly.com/trueinsightsai/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative inline-flex items-center justify-center gap-3 sm:gap-4 bg-black text-white rounded-full font-bold transition-all duration-200 hover:bg-gray-800 hover:shadow-xl hover:shadow-blue-200 px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base min-h-[48px] mb-6"
+                className="group relative inline-flex items-center justify-center gap-3 sm:gap-4 bg-black text-white rounded-full font-bold transition-all duration-200 hover:bg-gray-800 hover:shadow-xl hover:shadow-blue-200 px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base min-h-[48px] mb-6 lg:mb-0"
               >
                 <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 group-hover:text-blue-300 transition-colors duration-200" />
                 <span>Contact Us</span>
@@ -112,15 +112,15 @@ export default function Footer() {
             <div className="flex-1"></div>
             
             {/* Right Side - Resources and Company */}
-            <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-center lg:text-left">
+            <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 text-left">
             {/* Resources Column */}
             <div>
-              <h3 className="text-sm font-semibold text-black mb-4">Resources</h3>
-              <ul className="space-y-3">
+              <h3 className="text-sm font-semibold text-black mb-3">Resources</h3>
+              <ul className="space-y-2">
                 <li>
                   <button
                     onClick={() => handleNavClick("#faq")}
-                    className="text-sm text-gray-600 hover:text-black transition-colors duration-200 min-h-[44px] px-4 py-2 flex items-center justify-center sm:justify-start"
+                    className="text-sm text-gray-600 hover:text-black transition-colors duration-200 py-1"
                   >
                     FAQ
                   </button>
@@ -128,7 +128,7 @@ export default function Footer() {
                 <li>
                   <button
                     onClick={() => handleNavClick("/blog")}
-                    className="text-sm text-gray-600 hover:text-black transition-colors duration-200 min-h-[44px] px-4 py-2 flex items-center justify-center sm:justify-start"
+                    className="text-sm text-gray-600 hover:text-black transition-colors duration-200 py-1"
                   >
                     Blog
                   </button>
@@ -138,13 +138,13 @@ export default function Footer() {
             
             {/* Company Column */}
             <div>
-              <h3 className="text-sm font-semibold text-black mb-4">Company</h3>
-              <ul className="space-y-3">
+              <h3 className="text-sm font-semibold text-black mb-3">Company</h3>
+              <ul className="space-y-2">
                 {FOOTER_LINKS.company.map((link) => (
                   <li key={link.href}>
                     <button
                       onClick={() => handleNavClick(link.href)}
-                      className="text-sm text-gray-600 hover:text-black transition-colors duration-200 min-h-[44px] px-4 py-2 flex items-center justify-center sm:justify-start"
+                      className="text-sm text-gray-600 hover:text-black transition-colors duration-200 py-1"
                     >
                       {link.label}
                     </button>
@@ -160,24 +160,24 @@ export default function Footer() {
       {/* Horizontal Divider - OUTSIDE constrained container */}
       <div className="border-t border-gray-200 relative z-10"></div>
       
-      {/* Comical top spacing */}
-      <div className="h-11 relative z-10"></div>
+      {/* Top spacing */}
+      <div className="h-6 sm:h-11 relative z-10"></div>
       
       {/* Bottom Section - Centered Copyright - OUTSIDE constrained container */}
-      <div className="py-8 sm:py-12 relative z-10 px-4 sm:px-6">
+      <div className="py-6 sm:py-12 relative z-10 px-4 sm:px-6">
         <div className="flex flex-col items-center justify-center text-center space-y-4">
-          <p className="text-xs text-gray-500 leading-relaxed max-w-4xl">
+          <p className="text-xs text-gray-500 leading-relaxed max-w-4xl px-2">
             TrueInsights AI is the leading AI Search visibility partner that helps businesses identify, fix, and optimize their presence across ChatGPT, Gemini, and Perplexity. Get insights into competitor performance, citation sources, and actionable recommendations to improve your AI Search rankings.
           </p>
-          <div className="h-4 sm:h-6"></div>
+          <div className="h-2 sm:h-6"></div>
           <p className="text-xs text-gray-400">
             © 2025 {COMPANY_NAME}. All rights reserved.
           </p>
         </div>
       </div>
       
-      {/* Comical bottom spacing */}
-      <div className="h-11 relative z-10"></div>
+      {/* Bottom spacing */}
+      <div className="h-6 sm:h-11 relative z-10"></div>
     </footer>
   );
 }
