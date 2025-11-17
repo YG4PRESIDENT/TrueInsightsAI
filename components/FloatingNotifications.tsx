@@ -53,15 +53,26 @@ const getDesktopZones = (): Zone[] => [
   { id: 6, centerX: 12, centerY: 78, available: true },   // Zone 6: Bottom Left
 ];
 
-// Define zones for mobile (4 zones in safe areas only - top and bottom margins)
-// Content area (y: 30-70%) is protected with 8% safe space above and below
-// Added padding from screen edges (x: 20-80%) to prevent cutoff
-// Very close to center content with minimal 8% buffer
+// Define zones for mobile - notifications allowed everywhere EXCEPT center content area
+// Center content area (yellow box in user's image) is protected
+// Multiple zones around the content: top, left side, right side, bottom
+// Edge padding (x: 20-80%) to prevent cutoff
 const getMobileZones = (): Zone[] => [
-  { id: 1, centerX: 25, centerY: 22, available: true },   // Top Left (8% above content safe zone)
-  { id: 2, centerX: 75, centerY: 22, available: true },   // Top Right (8% above content safe zone)
-  { id: 3, centerX: 25, centerY: 78, available: true },   // Bottom Left (8% below content safe zone)
-  { id: 4, centerX: 75, centerY: 78, available: true },   // Bottom Right (8% below content safe zone)
+  // Top area zones (above content)
+  { id: 1, centerX: 25, centerY: 15, available: true },   // Top Left
+  { id: 2, centerX: 50, centerY: 15, available: true },   // Top Center
+  { id: 3, centerX: 75, centerY: 15, available: true },   // Top Right
+  
+  // Left side zones
+  { id: 4, centerX: 25, centerY: 35, available: true },   // Middle Left (beside content)
+  
+  // Right side zones
+  { id: 5, centerX: 75, centerY: 35, available: true },   // Middle Right (beside content)
+  
+  // Bottom area zones (below content)
+  { id: 6, centerX: 25, centerY: 85, available: true },   // Bottom Left
+  { id: 7, centerX: 50, centerY: 85, available: true },   // Bottom Center
+  { id: 8, centerX: 75, centerY: 85, available: true },   // Bottom Right
 ];
 
 const desktopConfig = {
@@ -130,21 +141,40 @@ export default function FloatingNotifications() {
     let x = addRandomOffset(zone.centerX, offsetRange);
     let y = addRandomOffset(zone.centerY, offsetRange);
     
-    // Mobile safe zone enforcement: ensure y stays in top (18-26%) or bottom (74-82%) areas
-    // Content area (y: 30-70%) is protected with 8% safe space above and below
-    // Also ensure x stays away from edges (20-80%) to prevent cutoff
+    // Mobile safe zone enforcement: protect center content area (yellow box)
+    // Content area roughly y: 25-75%, x: 15-85% (where headline, input, logos are)
+    // Notifications can appear anywhere else with edge padding
     if (mobile) {
-      if (y > 26 && y < 74) {
-        // If somehow in content area or too close, push to nearest safe zone
-        y = zone.centerY < 50 ? 22 : 78;
-      }
-      // Clamp x to stay away from edges (20-80%) to prevent cutoff
-      x = Math.max(20, Math.min(80, x));
-      // Clamp y to stay in safe zones with 8% buffer
-      if (y <= 26) {
-        y = Math.max(18, Math.min(26, y)); // Top safe zone (8% above content)
-      } else {
-        y = Math.max(74, Math.min(82, y)); // Bottom safe zone (8% below content)
+      // Clamp x to stay away from edges (18-82%) to prevent cutoff
+      x = Math.max(18, Math.min(82, x));
+      y = Math.max(10, Math.min(90, y));
+      
+      // Check if notification would overlap with center content area
+      // Center content is roughly: x: 15-85%, y: 25-75%
+      const inContentX = x > 15 && x < 85;
+      const inContentY = y > 25 && y < 75;
+      
+      if (inContentX && inContentY) {
+        // Notification would overlap with content, push to nearest safe area
+        // Determine which edge is closest
+        const distanceToTop = y - 25;
+        const distanceToBottom = 75 - y;
+        const distanceToLeft = x - 15;
+        const distanceToRight = 85 - x;
+        
+        const minDistance = Math.min(distanceToTop, distanceToBottom, distanceToLeft, distanceToRight);
+        
+        if (minDistance === distanceToTop) {
+          y = 20; // Push to top area
+        } else if (minDistance === distanceToBottom) {
+          y = 80; // Push to bottom area
+        } else if (minDistance === distanceToLeft) {
+          x = 25; // Push to left side
+          y = 35; // Keep in middle vertically
+        } else {
+          x = 75; // Push to right side
+          y = 35; // Keep in middle vertically
+        }
       }
     }
     
