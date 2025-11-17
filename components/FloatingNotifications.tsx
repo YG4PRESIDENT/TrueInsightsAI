@@ -54,14 +54,14 @@ const getDesktopZones = (): Zone[] => [
 ];
 
 // Define zones for mobile (4 zones in safe areas only - top and bottom margins)
-// Content area (y: 30-70%) is completely avoided with very small buffer
+// Content area (y: 30-70%) is protected with 8% safe space above and below
 // Added padding from screen edges (x: 20-80%) to prevent cutoff
-// Very close to center content while maintaining minimal safe zone
+// Very close to center content with minimal 8% buffer
 const getMobileZones = (): Zone[] => [
-  { id: 1, centerX: 25, centerY: 25, available: true },   // Top Left Safe Area (very close to content)
-  { id: 2, centerX: 75, centerY: 25, available: true },   // Top Right Safe Area (very close to content)
-  { id: 3, centerX: 25, centerY: 75, available: true },   // Bottom Left Safe Area (very close to content)
-  { id: 4, centerX: 75, centerY: 75, available: true },   // Bottom Right Safe Area (very close to content)
+  { id: 1, centerX: 25, centerY: 22, available: true },   // Top Left (8% above content safe zone)
+  { id: 2, centerX: 75, centerY: 22, available: true },   // Top Right (8% above content safe zone)
+  { id: 3, centerX: 25, centerY: 78, available: true },   // Bottom Left (8% below content safe zone)
+  { id: 4, centerX: 75, centerY: 78, available: true },   // Bottom Right (8% below content safe zone)
 ];
 
 const desktopConfig = {
@@ -130,21 +130,21 @@ export default function FloatingNotifications() {
     let x = addRandomOffset(zone.centerX, offsetRange);
     let y = addRandomOffset(zone.centerY, offsetRange);
     
-    // Mobile safe zone enforcement: ensure y stays in top (20-30%) or bottom (70-80%) areas
-    // Very small buffer zone (y: 30-70%) is protected - content area
+    // Mobile safe zone enforcement: ensure y stays in top (18-26%) or bottom (74-82%) areas
+    // Content area (y: 30-70%) is protected with 8% safe space above and below
     // Also ensure x stays away from edges (20-80%) to prevent cutoff
     if (mobile) {
-      if (y > 30 && y < 70) {
-        // If somehow in content area, push to nearest safe zone
-        y = zone.centerY < 50 ? 25 : 75;
+      if (y > 26 && y < 74) {
+        // If somehow in content area or too close, push to nearest safe zone
+        y = zone.centerY < 50 ? 22 : 78;
       }
       // Clamp x to stay away from edges (20-80%) to prevent cutoff
       x = Math.max(20, Math.min(80, x));
-      // Clamp y to stay in safe zones with minimal buffer
-      if (y <= 30) {
-        y = Math.max(20, Math.min(30, y)); // Top safe zone
+      // Clamp y to stay in safe zones with 8% buffer
+      if (y <= 26) {
+        y = Math.max(18, Math.min(26, y)); // Top safe zone (8% above content)
       } else {
-        y = Math.max(70, Math.min(80, y)); // Bottom safe zone
+        y = Math.max(74, Math.min(82, y)); // Bottom safe zone (8% below content)
       }
     }
     
