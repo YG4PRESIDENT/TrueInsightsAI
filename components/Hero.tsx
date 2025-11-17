@@ -154,8 +154,17 @@ export default function Hero() {
     },
   ];
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
-    <section className="relative bg-white min-h-screen flex items-center justify-center py-12 sm:py-16 md:py-20 overflow-hidden">
+    <section className="relative bg-white min-h-screen flex items-center justify-center py-8 sm:py-12 md:py-16 lg:py-20 overflow-hidden">
       {/* Atmospheric radial glow - more aggressive */}
       <div className="absolute inset-0 pointer-events-none">
         <div 
@@ -170,112 +179,184 @@ export default function Hero() {
       {/* Floating Notifications - Behind main content */}
       <FloatingNotifications />
 
-      <div className="flex flex-col items-center justify-center text-center relative z-10">
+      <div className="flex flex-col items-center justify-center text-center relative z-10 w-full px-4 sm:px-0">
         {/* Headline with Typewriter Effect */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-black leading-tight px-4 sm:px-0"
-          style={{ marginBottom: '20px' }}
-        >
-          {typedText}
-          <span className="animate-pulse text-blue-400">|</span>
-        </motion.h1>
+        {isMobile ? (
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-black leading-tight mb-4 sm:mb-5">
+            {typedText}
+            <span className="animate-pulse text-blue-400">|</span>
+          </h1>
+        ) : (
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-black leading-tight mb-5"
+          >
+            {typedText}
+            <span className="animate-pulse text-blue-400">|</span>
+          </motion.h1>
+        )}
 
         {/* Subheadline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed px-4 sm:px-0 text-center sm:whitespace-nowrap"
-          style={{ marginBottom: '24px' }}
-        >
-          We optimize your visibility in AI-powered search and recommendations
-        </motion.p>
+        {isMobile ? (
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 leading-relaxed text-center mb-6 sm:mb-8">
+            We optimize your visibility in AI-powered search and recommendations
+          </p>
+        ) : (
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed text-center sm:whitespace-nowrap mb-6 sm:mb-8"
+          >
+            We optimize your visibility in AI-powered search and recommendations
+          </motion.p>
+        )}
 
         {/* URL Input Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex justify-center px-4 sm:px-0 w-full max-w-lg sm:max-w-none"
-          style={{ marginBottom: '20px' }}
-        >
-          <form onSubmit={handleSubmit} className="w-full sm:w-auto">
-            <div className="flex flex-col sm:flex-row items-center bg-white rounded-full shadow-lg border-2 border-gray-300 overflow-hidden hover:shadow-xl hover:border-blue-200 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-300">
-              <input
-                type="text"
-                placeholder="Enter your website URL"
-                value={url}
-                onChange={(e) => {
-                  setUrl(e.target.value);
-                  setError("");
-                }}
-                className="w-full sm:w-80 pr-4 sm:pr-8 text-sm sm:text-base text-gray-700 placeholder:text-gray-400 border-0 focus:outline-none focus:ring-0 bg-transparent"
-                style={{ 
-                  paddingTop: '10px', 
-                  paddingBottom: '10px', 
-                  paddingLeft: '20px', 
-                  outline: 'none', 
-                  boxShadow: 'none',
-                  caretColor: '#60A5FA'
-                }}
-              />
-              <button
-                type="submit"
-                className="bg-black text-white text-xs sm:text-sm font-medium hover:bg-gray-900 hover:shadow-blue-200 hover:shadow-lg transition-all duration-100 flex items-center justify-center gap-2 whitespace-nowrap rounded-full w-full sm:w-auto mt-2 sm:mt-0"
-                style={{ 
-                  paddingTop: '10px', 
-                  paddingBottom: '10px', 
-                  paddingLeft: '20px', 
-                  paddingRight: '20px',
-                  minHeight: '44px'
-                }}
-              >
-                <Search className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">Analyze my website</span>
-                <span className="sm:hidden">Analyze</span>
-              </button>
-            </div>
-            {error && (
-              <p className="mt-2 text-sm text-red-600 text-center">{error}</p>
-            )}
-          </form>
-        </motion.div>
+        {isMobile ? (
+          <div className="flex justify-center w-full max-w-lg sm:max-w-none mb-5 sm:mb-6">
+            <form onSubmit={handleSubmit} className="w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-center bg-white rounded-full shadow-lg border-2 border-gray-300 overflow-hidden hover:shadow-xl hover:border-blue-200 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-300">
+                <input
+                  type="text"
+                  placeholder="Enter your website URL"
+                  value={url}
+                  onChange={(e) => {
+                    setUrl(e.target.value);
+                    setError("");
+                  }}
+                  className="w-full sm:w-80 pr-4 sm:pr-8 text-sm sm:text-base text-gray-700 placeholder:text-gray-400 border-0 focus:outline-none focus:ring-0 bg-transparent"
+                  style={{ 
+                    paddingTop: '10px', 
+                    paddingBottom: '10px', 
+                    paddingLeft: '20px', 
+                    outline: 'none', 
+                    boxShadow: 'none',
+                    caretColor: '#60A5FA'
+                  }}
+                />
+                <button
+                  type="submit"
+                  className="bg-black text-white text-xs sm:text-sm font-medium hover:bg-gray-900 hover:shadow-blue-200 hover:shadow-lg transition-all duration-100 flex items-center justify-center gap-2 whitespace-nowrap rounded-full w-full sm:w-auto mt-2 sm:mt-0"
+                  style={{ 
+                    paddingTop: '10px', 
+                    paddingBottom: '10px', 
+                    paddingLeft: '20px', 
+                    paddingRight: '20px',
+                    minHeight: '44px'
+                  }}
+                >
+                  <Search className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden sm:inline">Analyze my website</span>
+                  <span className="sm:hidden">Analyze</span>
+                </button>
+              </div>
+              {error && (
+                <p className="mt-2 text-sm text-red-600 text-center">{error}</p>
+              )}
+            </form>
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex justify-center w-full max-w-lg sm:max-w-none mb-5 sm:mb-6"
+          >
+            <form onSubmit={handleSubmit} className="w-full sm:w-auto">
+              <div className="flex flex-col sm:flex-row items-center bg-white rounded-full shadow-lg border-2 border-gray-300 overflow-hidden hover:shadow-xl hover:border-blue-200 focus-within:border-blue-300 focus-within:ring-2 focus-within:ring-blue-100 transition-all duration-300">
+                <input
+                  type="text"
+                  placeholder="Enter your website URL"
+                  value={url}
+                  onChange={(e) => {
+                    setUrl(e.target.value);
+                    setError("");
+                  }}
+                  className="w-full sm:w-80 pr-4 sm:pr-8 text-sm sm:text-base text-gray-700 placeholder:text-gray-400 border-0 focus:outline-none focus:ring-0 bg-transparent"
+                  style={{ 
+                    paddingTop: '10px', 
+                    paddingBottom: '10px', 
+                    paddingLeft: '20px', 
+                    outline: 'none', 
+                    boxShadow: 'none',
+                    caretColor: '#60A5FA'
+                  }}
+                />
+                <button
+                  type="submit"
+                  className="bg-black text-white text-xs sm:text-sm font-medium hover:bg-gray-900 hover:shadow-blue-200 hover:shadow-lg transition-all duration-100 flex items-center justify-center gap-2 whitespace-nowrap rounded-full w-full sm:w-auto mt-2 sm:mt-0"
+                  style={{ 
+                    paddingTop: '10px', 
+                    paddingBottom: '10px', 
+                    paddingLeft: '20px', 
+                    paddingRight: '20px',
+                    minHeight: '44px'
+                  }}
+                >
+                  <Search className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden sm:inline">Analyze my website</span>
+                  <span className="sm:hidden">Analyze</span>
+                </button>
+              </div>
+              {error && (
+                <p className="mt-2 text-sm text-red-600 text-center">{error}</p>
+              )}
+            </form>
+          </motion.div>
+        )}
 
         {/* Disclaimer */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-xs sm:text-sm text-gray-400 text-center px-4 sm:px-0"
-          style={{ marginBottom: '20px' }}
-        >
-          See if AI is recommending your competitors instead of you. Free personalized report.
-        </motion.p>
+        {isMobile ? (
+          <p className="text-xs sm:text-sm text-gray-400 text-center mb-5 sm:mb-6">
+            See if AI is recommending your competitors instead of you. Free personalized report.
+          </p>
+        ) : (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-xs sm:text-sm text-gray-400 text-center mb-5 sm:mb-6"
+          >
+            See if AI is recommending your competitors instead of you. Free personalized report.
+          </motion.p>
+        )}
 
         {/* Platform Logos */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex justify-center items-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 px-4 sm:px-0 flex-wrap"
-        >
-          {platformLogos.map(({ name, logo }, index) => (
-            <motion.div
-              key={name}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
-              className="flex-shrink-0"
-            >
-              <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10">
-                {logo}
+        {isMobile ? (
+          <div className="flex justify-center items-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 flex-wrap">
+            {platformLogos.map(({ name, logo }) => (
+              <div key={name} className="flex-shrink-0">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10">
+                  {logo}
+                </div>
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
+            ))}
+          </div>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="flex justify-center items-center gap-4 sm:gap-6 md:gap-8 lg:gap-12 flex-wrap"
+          >
+            {platformLogos.map(({ name, logo }, index) => (
+              <motion.div
+                key={name}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
+                className="flex-shrink-0"
+              >
+                <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10">
+                  {logo}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   );

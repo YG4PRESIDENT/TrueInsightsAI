@@ -53,12 +53,11 @@ const getDesktopZones = (): Zone[] => [
   { id: 6, centerX: 12, centerY: 78, available: true },   // Zone 6: Bottom Left
 ];
 
-// Define zones for mobile (4 slim vertical tiers)
+// Define zones for mobile (3 zones for cleaner layout)
 const getMobileZones = (): Zone[] => [
-  { id: 1, centerX: 14, centerY: 18, available: true },   // Top Left
-  { id: 2, centerX: 86, centerY: 32, available: true },   // Upper Right
-  { id: 3, centerX: 86, centerY: 78, available: true },   // Bottom Right
-  { id: 4, centerX: 18, centerY: 86, available: true },   // Bottom Left
+  { id: 1, centerX: 15, centerY: 20, available: true },   // Top Left
+  { id: 2, centerX: 85, centerY: 50, available: true },   // Middle Right
+  { id: 3, centerX: 15, centerY: 80, available: true },   // Bottom Left
 ];
 
 const desktopConfig = {
@@ -71,11 +70,10 @@ const desktopConfig = {
 };
 
 const mobileConfig = {
-  visibleDuration: 2600,
-  restAfterComplete: 700,
-  minDelayBetweenSpawns: 900,
-  maxDelayBetweenSpawns: 1500,
-  maxConcurrent: 2,
+  visibleDuration: 4000, // Longer visible duration for less frantic feel
+  fadeOutDuration: 800, // Faster fade out
+  delayBetweenSpawns: 2500, // 2.5 seconds between spawns
+  maxConcurrent: 1, // Only one at a time for smoother feel
 };
 
 // Add small random offset within zone for variety
@@ -147,6 +145,17 @@ export default function FloatingNotifications() {
         newMap.set(notification.id, notification);
         return newMap;
       });
+
+      // For mobile, add fade-out class before removing
+      if (isMobile) {
+        // Start fade out slightly before removal
+        setTimeout(() => {
+          const element = document.querySelector(`[data-notification-id="${notification.id}"]`);
+          if (element) {
+            element.classList.add('notification-fade-out');
+          }
+        }, visibleDuration - 800);
+      }
 
       // Remove after duration and free the zone
       const timeoutId = setTimeout(() => {
@@ -225,69 +234,48 @@ export default function FloatingNotifications() {
     };
   }, [zoneResetKey, isMobile, spawnNotification]);
 
-  // Mobile sequential scheduler
+  // Mobile simplified scheduler - one notification at a time
   useEffect(() => {
     if (!isMobile || zonesRef.current.length === 0) return;
 
     const {
       visibleDuration,
-      restAfterComplete,
-      minDelayBetweenSpawns,
-      maxDelayBetweenSpawns,
-      maxConcurrent,
+      fadeOutDuration,
+      delayBetweenSpawns,
     } = mobileConfig;
 
-    let activeCount = 0;
     let cancelled = false;
+    let currentZoneIndex = 0;
     const timers: NodeJS.Timeout[] = [];
-    const zoneOrder = zonesRef.current.map(zone => zone.id);
-    let zonePointer = 0;
 
-    const getNextAvailableZone = (): Zone | null => {
-      for (let i = 0; i < zoneOrder.length; i++) {
-        const candidateId = zoneOrder[(zonePointer + i) % zoneOrder.length];
-        const zone = zonesRef.current.find(z => z.id === candidateId);
-        if (zone && zone.available) {
-          zonePointer = (zonePointer + i + 1) % zoneOrder.length;
-          return zone;
-        }
-      }
-      return null;
-    };
-
-    const scheduleNext = () => {
+    const spawnNext = () => {
       if (cancelled) return;
-      if (activeCount >= maxConcurrent) return;
 
-      const zone = getNextAvailableZone();
-
-      if (!zone) {
-        const waitTimer = setTimeout(scheduleNext, restAfterComplete);
-        timers.push(waitTimer);
+      const availableZones = zonesRef.current.filter(z => z.available);
+      
+      if (availableZones.length === 0) {
+        // Wait and try again
+        const retryTimer = setTimeout(spawnNext, delayBetweenSpawns);
+        timers.push(retryTimer);
         return;
       }
 
-      activeCount += 1;
+      // Cycle through zones
+      const zone = availableZones[currentZoneIndex % availableZones.length];
+      currentZoneIndex = (currentZoneIndex + 1) % availableZones.length;
 
       spawnNotification(zone, visibleDuration, () => {
-        activeCount = Math.max(0, activeCount - 1);
+        // After notification fades out, wait then spawn next
         if (!cancelled) {
-          const restTimer = setTimeout(scheduleNext, restAfterComplete);
-          timers.push(restTimer);
+          const nextTimer = setTimeout(spawnNext, delayBetweenSpawns);
+          timers.push(nextTimer);
         }
       });
-
-      const delay =
-        minDelayBetweenSpawns +
-        Math.random() * (maxDelayBetweenSpawns - minDelayBetweenSpawns);
-      const delayTimer = setTimeout(scheduleNext, delay);
-      timers.push(delayTimer);
     };
 
-    // Kick off initial schedules
-    const initialTimer = setTimeout(scheduleNext, 300);
-    const secondTimer = setTimeout(scheduleNext, 900);
-    timers.push(initialTimer, secondTimer);
+    // Start first notification after initial delay
+    const initialTimer = setTimeout(spawnNext, 1000);
+    timers.push(initialTimer);
 
     return () => {
       cancelled = true;
@@ -297,60 +285,106 @@ export default function FloatingNotifications() {
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      <AnimatePresence>
-        {Array.from(notifications.values()).map(notification => (
-          <motion.div
-            key={notification.id}
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            transition={{ 
-              duration: 1.5,
-              ease: "easeInOut"
-            }}
-            className="absolute"
-            style={{
-              left: `${notification.x}%`,
-              top: `${notification.y}%`,
-            }}
-          >
+      {isMobile ? (
+        // Mobile: Simple CSS transitions for better performance
+        <>
+          {Array.from(notifications.values()).map(notification => (
             <div
-              className={
-                isMobile
-                  ? "bg-gradient-to-br from-blue-50/[0.04] to-blue-100/[0.05] backdrop-blur-md rounded-md px-3 py-1.5 shadow-md shadow-blue-100/20"
-                  : "bg-gradient-to-br from-blue-50/[0.05] to-blue-100/[0.06] backdrop-blur-md rounded-md px-5 py-2.5 sm:px-8 sm:py-4 shadow-lg shadow-blue-100/10"
-              }
+              key={notification.id}
+              data-notification-id={notification.id}
+              className="absolute notification-fade-in"
+              style={{
+                left: `${notification.x}%`,
+                top: `${notification.y}%`,
+                willChange: 'opacity',
+              }}
             >
-              {/* Tinted Glass Company Name - Heavily Obscured */}
-              <div 
-                className={
-                  isMobile
-                    ? "text-sm font-medium text-blue-300/70 mb-0.5 tracking-wide"
-                    : "text-base sm:text-lg md:text-xl font-medium text-blue-300/60 mb-1 tracking-wider"
-                }
-                style={{ 
-                  filter: isMobile ? 'blur(2.4px)' : 'blur(3px)',
-                  userSelect: 'none',
-                  WebkitUserSelect: 'none',
-                }}
-              >
-                {notification.companyName}
-              </div>
-              
-              {/* Visibility Score - Clear and Vibrant */}
-              <div
-                className={
-                  isMobile
-                    ? "text-xs font-semibold text-blue-400"
-                    : "text-sm sm:text-base font-semibold text-blue-400"
-                }
-              >
-                +{notification.percentage}% visibility score
+              <div className="bg-gradient-to-br from-blue-50/[0.02] to-blue-100/[0.03] backdrop-blur-sm rounded-md px-2 py-1 shadow-sm shadow-blue-100/10">
+                {/* Tinted Glass Company Name - More Subtle */}
+                <div 
+                  className="text-xs font-medium text-blue-300/50 mb-0.5 tracking-wide"
+                  style={{ 
+                    filter: 'blur(1.5px)',
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none',
+                  }}
+                >
+                  {notification.companyName}
+                </div>
+                
+                {/* Visibility Score - Clear and Vibrant */}
+                <div className="text-[10px] font-semibold text-blue-400/90">
+                  +{notification.percentage}% visibility score
+                </div>
               </div>
             </div>
-          </motion.div>
-        ))}
-      </AnimatePresence>
+          ))}
+          <style jsx global>{`
+            @keyframes fadeInMobile {
+              from {
+                opacity: 0;
+              }
+              to {
+                opacity: 1;
+              }
+            }
+            @keyframes fadeOutMobile {
+              from {
+                opacity: 1;
+              }
+              to {
+                opacity: 0;
+              }
+            }
+            .notification-fade-in {
+              animation: fadeInMobile 0.8s ease-out forwards;
+            }
+            .notification-fade-out {
+              animation: fadeOutMobile 0.8s ease-in forwards;
+            }
+          `}</style>
+        </>
+      ) : (
+        // Desktop: Framer Motion for smooth animations
+        <AnimatePresence>
+          {Array.from(notifications.values()).map(notification => (
+            <motion.div
+              key={notification.id}
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -10 }}
+              transition={{ 
+                duration: 1.5,
+                ease: "easeInOut"
+              }}
+              className="absolute"
+              style={{
+                left: `${notification.x}%`,
+                top: `${notification.y}%`,
+              }}
+            >
+              <div className="bg-gradient-to-br from-blue-50/[0.05] to-blue-100/[0.06] backdrop-blur-md rounded-md px-5 py-2.5 sm:px-8 sm:py-4 shadow-lg shadow-blue-100/10">
+                {/* Tinted Glass Company Name - Heavily Obscured */}
+                <div 
+                  className="text-base sm:text-lg md:text-xl font-medium text-blue-300/60 mb-1 tracking-wider"
+                  style={{ 
+                    filter: 'blur(3px)',
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none',
+                  }}
+                >
+                  {notification.companyName}
+                </div>
+                
+                {/* Visibility Score - Clear and Vibrant */}
+                <div className="text-sm sm:text-base font-semibold text-blue-400">
+                  +{notification.percentage}% visibility score
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      )}
     </div>
   );
 }
