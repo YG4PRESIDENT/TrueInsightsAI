@@ -55,11 +55,12 @@ const getDesktopZones = (): Zone[] => [
 
 // Define zones for mobile (4 zones in safe areas only - top and bottom margins)
 // Content area (y: 20-80%) is completely avoided
+// Added padding from screen edges (x: 20-80%) to prevent cutoff
 const getMobileZones = (): Zone[] => [
-  { id: 1, centerX: 12, centerY: 12, available: true },   // Top Left Safe Area
-  { id: 2, centerX: 88, centerY: 12, available: true },   // Top Right Safe Area
-  { id: 3, centerX: 12, centerY: 88, available: true },   // Bottom Left Safe Area
-  { id: 4, centerX: 88, centerY: 88, available: true },   // Bottom Right Safe Area
+  { id: 1, centerX: 25, centerY: 12, available: true },   // Top Left Safe Area (padded from edge)
+  { id: 2, centerX: 75, centerY: 12, available: true },   // Top Right Safe Area (padded from edge)
+  { id: 3, centerX: 25, centerY: 88, available: true },   // Bottom Left Safe Area (padded from edge)
+  { id: 4, centerX: 75, centerY: 88, available: true },   // Bottom Right Safe Area (padded from edge)
 ];
 
 const desktopConfig = {
@@ -72,10 +73,10 @@ const desktopConfig = {
 };
 
 const mobileConfig = {
-  visibleDuration: 4000, // Longer visible duration for less frantic feel
+  visibleDuration: 3500, // Visible duration
   fadeOutDuration: 800, // Faster fade out
-  delayBetweenSpawns: 2500, // 2.5 seconds between spawns
-  maxConcurrent: 1, // Only one at a time for smoother feel
+  delayBetweenSpawns: 1200, // 1.2 seconds between spawns for natural rhythm
+  maxConcurrent: 2, // Allow 2 concurrent for more consistent flow
 };
 
 // Add small random offset within zone for variety
@@ -129,13 +130,14 @@ export default function FloatingNotifications() {
     let y = addRandomOffset(zone.centerY, offsetRange);
     
     // Mobile safe zone enforcement: ensure y stays in top (5-18%) or bottom (82-95%) areas
+    // Also ensure x stays away from edges (20-80%) to prevent cutoff
     if (mobile) {
       if (y > 18 && y < 82) {
         // If somehow in content area, push to nearest safe zone
         y = zone.centerY < 50 ? 12 : 88;
       }
-      // Clamp x to stay within screen bounds
-      x = Math.max(5, Math.min(95, x));
+      // Clamp x to stay away from edges (20-80%) to prevent cutoff
+      x = Math.max(20, Math.min(80, x));
       y = Math.max(5, Math.min(95, y));
     }
     
@@ -252,7 +254,7 @@ export default function FloatingNotifications() {
     };
   }, [zoneResetKey, isMobile, spawnNotification]);
 
-  // Mobile simplified scheduler - one notification at a time
+  // Mobile scheduler - natural rhythm with up to 2 concurrent notifications
   useEffect(() => {
     if (!isMobile || zonesRef.current.length === 0) return;
 
@@ -260,14 +262,22 @@ export default function FloatingNotifications() {
       visibleDuration,
       fadeOutDuration,
       delayBetweenSpawns,
+      maxConcurrent,
     } = mobileConfig;
 
     let cancelled = false;
     let currentZoneIndex = 0;
+    let activeCount = 0;
     const timers: NodeJS.Timeout[] = [];
 
     const spawnNext = () => {
       if (cancelled) return;
+      if (activeCount >= maxConcurrent) {
+        // Wait a bit and try again
+        const retryTimer = setTimeout(spawnNext, delayBetweenSpawns);
+        timers.push(retryTimer);
+        return;
+      }
 
       const availableZones = zonesRef.current.filter(z => z.available);
       
@@ -278,21 +288,28 @@ export default function FloatingNotifications() {
         return;
       }
 
-      // Cycle through zones
+      // Cycle through zones for natural distribution
       const zone = availableZones[currentZoneIndex % availableZones.length];
       currentZoneIndex = (currentZoneIndex + 1) % availableZones.length;
 
+      activeCount += 1;
+
       spawnNotification(zone, visibleDuration, () => {
-        // After notification fades out, wait then spawn next
+        activeCount = Math.max(0, activeCount - 1);
+        // Continue the rhythm after fade out
         if (!cancelled) {
           const nextTimer = setTimeout(spawnNext, delayBetweenSpawns);
           timers.push(nextTimer);
         }
       });
+
+      // Schedule next spawn for continuous flow
+      const nextTimer = setTimeout(spawnNext, delayBetweenSpawns);
+      timers.push(nextTimer);
     };
 
     // Start first notification after initial delay
-    const initialTimer = setTimeout(spawnNext, 1000);
+    const initialTimer = setTimeout(spawnNext, 800);
     timers.push(initialTimer);
 
     return () => {
