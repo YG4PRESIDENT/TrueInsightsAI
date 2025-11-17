@@ -299,10 +299,10 @@ export default function FloatingNotifications() {
                 willChange: 'opacity',
               }}
             >
-              <div className="bg-gradient-to-br from-blue-50/[0.02] to-blue-100/[0.03] backdrop-blur-sm rounded-md px-2 py-1 shadow-sm shadow-blue-100/10">
+              <div className="bg-gradient-to-br from-blue-50/[0.035] to-blue-100/[0.045] backdrop-blur-sm rounded-md px-2.5 py-1.5 shadow-sm shadow-blue-100/15">
                 {/* Tinted Glass Company Name - More Subtle */}
                 <div 
-                  className="text-xs font-medium text-blue-300/50 mb-0.5 tracking-wide"
+                  className="text-xs font-medium text-blue-300/60 mb-0.5 tracking-wide"
                   style={{ 
                     filter: 'blur(1.5px)',
                     userSelect: 'none',
@@ -313,7 +313,7 @@ export default function FloatingNotifications() {
                 </div>
                 
                 {/* Visibility Score - Clear and Vibrant */}
-                <div className="text-[10px] font-semibold text-blue-400/90">
+                <div className="text-[11px] font-semibold text-blue-400">
                   +{notification.percentage}% visibility score
                 </div>
               </div>
