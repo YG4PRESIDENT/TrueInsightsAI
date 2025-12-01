@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Notification {
@@ -35,7 +35,7 @@ const generateCompanyName = () => {
   ];
 
   const useThreeWords = Math.random() > 0.4;
-  
+
   if (useThreeWords) {
     return `${prefixes[Math.floor(Math.random() * prefixes.length)]}${middles[Math.floor(Math.random() * middles.length)]} ${suffixes[Math.floor(Math.random() * suffixes.length)]}`;
   } else {
@@ -54,42 +54,36 @@ const getDesktopZones = (): Zone[] => [
 ];
 
 // Define zones for mobile - notifications allowed everywhere EXCEPT center content area
-// Center content area (yellow box in user's image) is protected
-// Multiple zones around the content: top, left side, right side, bottom
+// Center content area (yellow box in user's image) is protected: roughly y: 30-75%
+// Multiple zones around the content: top and bottom only (removed side zones to prevent overlap)
 // Edge padding (x: 20-80%) to prevent cutoff
 const getMobileZones = (): Zone[] => [
-  // Top area zones (above content)
-  { id: 1, centerX: 25, centerY: 15, available: true },   // Top Left
-  { id: 2, centerX: 50, centerY: 15, available: true },   // Top Center
-  { id: 3, centerX: 75, centerY: 15, available: true },   // Top Right
-  
-  // Left side zones
-  { id: 4, centerX: 25, centerY: 35, available: true },   // Middle Left (beside content)
-  
-  // Right side zones
-  { id: 5, centerX: 75, centerY: 35, available: true },   // Middle Right (beside content)
-  
-  // Bottom area zones (below content)
-  { id: 6, centerX: 25, centerY: 85, available: true },   // Bottom Left
-  { id: 7, centerX: 50, centerY: 85, available: true },   // Bottom Center
-  { id: 8, centerX: 75, centerY: 85, available: true },   // Bottom Right
+  // Top area zones (above content) - y: 15-22% (safe above content)
+  { id: 1, centerX: 25, centerY: 18, available: true },   // Top Left
+  { id: 2, centerX: 50, centerY: 18, available: true },   // Top Center
+  { id: 3, centerX: 75, centerY: 18, available: true },   // Top Right
+
+  // Bottom area zones (below content) - y: 78-85% (safe below content)
+  { id: 4, centerX: 25, centerY: 82, available: true },   // Bottom Left
+  { id: 5, centerX: 50, centerY: 82, available: true },   // Bottom Center
+  { id: 6, centerX: 75, centerY: 82, available: true },   // Bottom Right
 ];
 
 const desktopConfig = {
-  visibleDuration: 3500,
+  visibleDuration: 4000, // Increased from 3500ms
   fadeOutDuration: 1500,
-  gapBetweenWaves: 1000,
-  minPerWave: 4,
-  maxPerWave: 5,
-  staggerRange: 1500,
+  gapBetweenWaves: 1500, // Increased from 1000ms for less frequency
+  minPerWave: 2, // Reduced from 4 for less clutter
+  maxPerWave: 3, // Reduced from 5 for less clutter
+  staggerRange: 2000, // Increased from 1500ms
 };
 
 const mobileConfig = {
-  visibleDuration: 3000, // Visible duration (reduced to compensate for longer fades)
-  fadeInDuration: 1400, // Slower, gentler fade in
-  fadeOutDuration: 1400, // Slower, gentler fade out
-  delayBetweenSpawns: 1000, // 1 second between spawns (reduced from 1.2s)
-  maxConcurrent: 2, // Allow 2 concurrent for more consistent flow
+  visibleDuration: 3500, // Increased from 3000ms
+  fadeInDuration: 1400,
+  fadeOutDuration: 1400,
+  delayBetweenSpawns: 2500, // Increased from 1000ms for less frequency
+  maxConcurrent: 1, // Reduced from 2 for better performance
 };
 
 // Add small random offset within zone for variety
@@ -101,6 +95,7 @@ export default function FloatingNotifications() {
   const [notifications, setNotifications] = useState<Map<string, Notification>>(new Map());
   const [isMobile, setIsMobile] = useState(false);
   const [zoneResetKey, setZoneResetKey] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
   const zonesRef = useRef<Zone[]>([]);
   const lastModeRef = useRef<boolean | null>(null);
 
@@ -120,10 +115,20 @@ export default function FloatingNotifications() {
         applyZones(mobile);
       }
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Pause animations when page is not visible (tab switch, minimize)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsVisible(!document.hidden);
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
   // Mark zone as available/occupied
@@ -136,49 +141,33 @@ export default function FloatingNotifications() {
   // Create a notification in a specific zone
   const createNotification = useCallback((zone: Zone, mobile: boolean): Notification => {
     const id = `notification-${Date.now()}-${Math.random()}`;
-    
+
     // For mobile, use smaller offset and ensure we stay in safe zones
     const offsetRange = mobile ? 1.5 : 3;
     let x = addRandomOffset(zone.centerX, offsetRange);
     let y = addRandomOffset(zone.centerY, offsetRange);
-    
+
     // Mobile safe zone enforcement: protect center content area (yellow box)
-    // Content area roughly y: 25-75%, x: 15-85% (where headline, input, logos are)
-    // Notifications can appear anywhere else with edge padding
+    // Content area: y: 30-75% (where headline, input, logos are)
+    // Notifications only in top (y: 15-25%) or bottom (y: 78-88%)
     if (mobile) {
-      // Clamp x to stay away from edges (18-82%) to prevent cutoff
-      x = Math.max(18, Math.min(82, x));
-      y = Math.max(10, Math.min(90, y));
-      
-      // Check if notification would overlap with center content area
-      // Center content is roughly: x: 15-85%, y: 25-75%
-      const inContentX = x > 15 && x < 85;
-      const inContentY = y > 25 && y < 75;
-      
-      if (inContentX && inContentY) {
-        // Notification would overlap with content, push to nearest safe area
-        // Determine which edge is closest
-        const distanceToTop = y - 25;
-        const distanceToBottom = 75 - y;
-        const distanceToLeft = x - 15;
-        const distanceToRight = 85 - x;
-        
-        const minDistance = Math.min(distanceToTop, distanceToBottom, distanceToLeft, distanceToRight);
-        
-        if (minDistance === distanceToTop) {
-          y = 20; // Push to top area
-        } else if (minDistance === distanceToBottom) {
-          y = 80; // Push to bottom area
-        } else if (minDistance === distanceToLeft) {
-          x = 25; // Push to left side
-          y = 35; // Keep in middle vertically
-        } else {
-          x = 75; // Push to right side
-          y = 35; // Keep in middle vertically
-        }
+      // Clamp x to stay away from edges (20-80%) to prevent cutoff
+      x = Math.max(20, Math.min(80, x));
+
+      // Strict y enforcement - only top or bottom areas
+      if (y > 25 && y < 78) {
+        // In or near content area - push to nearest safe zone
+        y = zone.centerY < 50 ? 18 : 82;
+      }
+
+      // Final clamp to ensure we stay in safe zones
+      if (y <= 25) {
+        y = Math.max(15, Math.min(25, y)); // Top safe zone
+      } else {
+        y = Math.max(78, Math.min(88, y)); // Bottom safe zone
       }
     }
-    
+
     return {
       id,
       companyName: generateCompanyName(),
@@ -193,10 +182,10 @@ export default function FloatingNotifications() {
   const spawnNotification = useCallback(
     (zone: Zone, visibleDuration: number, onComplete?: () => void) => {
       const notification = createNotification(zone, isMobile);
-    
+
       // Mark zone as occupied
       updateZoneAvailability(zone.id, false);
-    
+
       // Add notification
       setNotifications(prev => {
         const newMap = new Map(prev);
@@ -222,7 +211,7 @@ export default function FloatingNotifications() {
           updatedMap.delete(notification.id);
           return updatedMap;
         });
-      
+
         // Mark zone as available again
         updateZoneAvailability(zone.id, true);
         onComplete?.();
@@ -235,7 +224,7 @@ export default function FloatingNotifications() {
 
   // Desktop wave-based spawning
   useEffect(() => {
-    if (isMobile || zonesRef.current.length === 0) return;
+    if (isMobile || zonesRef.current.length === 0 || !isVisible) return;
 
     const {
       visibleDuration,
@@ -245,24 +234,24 @@ export default function FloatingNotifications() {
       maxPerWave,
       staggerRange,
     } = desktopConfig;
-    
+
     const spawnWave = () => {
       const timers: NodeJS.Timeout[] = [];
-      
+
       // Get available zones
       const availableZones = zonesRef.current.filter(z => z.available);
 
       if (availableZones.length === 0) {
         return timers;
       }
-      
+
       // Randomly select zones for this wave
       const perWaveCount =
         Math.floor(Math.random() * (maxPerWave - minPerWave + 1)) + minPerWave;
       const selectedZones = [...availableZones]
         .sort(() => Math.random() - 0.5)
         .slice(0, Math.min(perWaveCount, availableZones.length));
-      
+
       // Spawn notifications in selected zones with random staggered timing for fluid feel
       selectedZones.forEach((zone, index) => {
         const staggerDelay = Math.random() * staggerRange;
@@ -271,16 +260,16 @@ export default function FloatingNotifications() {
         }, staggerDelay);
         timers.push(timer);
       });
-      
+
       return timers;
     };
-    
+
     // Start first wave
     let timers = spawnWave();
-    
+
     // Calculate total wave cycle time
     const waveCycle = visibleDuration + fadeOutDuration + gapBetweenWaves;
-    
+
     // Schedule subsequent waves
     const waveInterval = setInterval(() => {
       timers = [...timers, ...spawnWave()];
@@ -292,9 +281,9 @@ export default function FloatingNotifications() {
     };
   }, [zoneResetKey, isMobile, spawnNotification]);
 
-  // Mobile scheduler - natural rhythm with up to 2 concurrent notifications
+  // Mobile scheduler - natural rhythm with 1 concurrent notification for better performance
   useEffect(() => {
-    if (!isMobile || zonesRef.current.length === 0) return;
+    if (!isMobile || zonesRef.current.length === 0 || !isVisible) return;
 
     const {
       visibleDuration,
@@ -318,7 +307,7 @@ export default function FloatingNotifications() {
       }
 
       const availableZones = zonesRef.current.filter(z => z.available);
-      
+
       if (availableZones.length === 0) {
         // Wait and try again
         const retryTimer = setTimeout(spawnNext, delayBetweenSpawns);
@@ -374,9 +363,9 @@ export default function FloatingNotifications() {
             >
               <div className="bg-gradient-to-br from-blue-50/[0.035] to-blue-100/[0.045] backdrop-blur-sm rounded-md px-2.5 py-1.5 shadow-sm shadow-blue-100/15">
                 {/* Tinted Glass Company Name - More Subtle */}
-                <div 
+                <div
                   className="text-xs font-medium text-blue-300/60 mb-0.5 tracking-wide"
-                  style={{ 
+                  style={{
                     filter: 'blur(1.5px)',
                     userSelect: 'none',
                     WebkitUserSelect: 'none',
@@ -384,7 +373,7 @@ export default function FloatingNotifications() {
                 >
                   {notification.companyName}
                 </div>
-                
+
                 {/* Visibility Score - Clear and Vibrant */}
                 <div className="text-[11px] font-semibold text-blue-400">
                   +{notification.percentage}% visibility score
@@ -426,7 +415,7 @@ export default function FloatingNotifications() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -10 }}
-              transition={{ 
+              transition={{
                 duration: 1.5,
                 ease: "easeInOut"
               }}
@@ -438,9 +427,9 @@ export default function FloatingNotifications() {
             >
               <div className="bg-gradient-to-br from-blue-50/[0.05] to-blue-100/[0.06] backdrop-blur-md rounded-md px-5 py-2.5 sm:px-8 sm:py-4 shadow-lg shadow-blue-100/10">
                 {/* Tinted Glass Company Name - Heavily Obscured */}
-                <div 
+                <div
                   className="text-base sm:text-lg md:text-xl font-medium text-blue-300/60 mb-1 tracking-wider"
-                  style={{ 
+                  style={{
                     filter: 'blur(3px)',
                     userSelect: 'none',
                     WebkitUserSelect: 'none',
@@ -448,7 +437,7 @@ export default function FloatingNotifications() {
                 >
                   {notification.companyName}
                 </div>
-                
+
                 {/* Visibility Score - Clear and Vibrant */}
                 <div className="text-sm sm:text-base font-semibold text-blue-400">
                   +{notification.percentage}% visibility score

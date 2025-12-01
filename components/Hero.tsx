@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 import { motion } from "framer-motion";
 import { isValidUrl } from "@/lib/utils";
 import FloatingNotifications from "@/components/FloatingNotifications";
 
-// Custom hook for rotating typewriter effect with typing and deleting
+// Optimized typewriter hook with batched updates for better performance
 function useTypewriter(
-  texts: string[], 
+  texts: string[],
   typingSpeed: number = 80,
   deletingSpeed: number = 40,
   pauseAfterTyping: number = 2000,
@@ -19,44 +19,71 @@ function useTypewriter(
   const [textIndex, setTextIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  const lastUpdateRef = useRef(0);
+  const frameRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const currentText = texts[textIndex];
+    let isCancelled = false;
 
-    // Typing phase
-    if (!isDeleting && charIndex < currentText.length) {
-      const timeout = setTimeout(() => {
-        setDisplayText(currentText.substring(0, charIndex + 1));
-        setCharIndex(prev => prev + 1);
-      }, typingSpeed);
-      return () => clearTimeout(timeout);
-    }
+    const animate = (timestamp: number) => {
+      if (isCancelled) return;
 
-    // Pause after typing completes, then start deleting
-    if (!isDeleting && charIndex === currentText.length) {
-      const timeout = setTimeout(() => {
-        setIsDeleting(true);
-      }, pauseAfterTyping);
-      return () => clearTimeout(timeout);
-    }
+      const elapsed = timestamp - lastUpdateRef.current;
 
-    // Deleting phase
-    if (isDeleting && charIndex > 0) {
-      const timeout = setTimeout(() => {
-        setDisplayText(currentText.substring(0, charIndex - 1));
-        setCharIndex(prev => prev - 1);
-      }, deletingSpeed);
-      return () => clearTimeout(timeout);
-    }
+      // Typing phase
+      if (!isDeleting && charIndex < currentText.length) {
+        if (elapsed >= typingSpeed) {
+          setDisplayText(currentText.substring(0, charIndex + 1));
+          setCharIndex(prev => prev + 1);
+          lastUpdateRef.current = timestamp;
+        }
+        frameRef.current = requestAnimationFrame(animate);
+        return;
+      }
 
-    // Move to next text after deleting completes
-    if (isDeleting && charIndex === 0) {
-      const timeout = setTimeout(() => {
-        setIsDeleting(false);
-        setTextIndex((prev) => (prev + 1) % texts.length);
-      }, pauseAfterDeleting);
-      return () => clearTimeout(timeout);
-    }
+      // Pause after typing completes
+      if (!isDeleting && charIndex === currentText.length) {
+        if (elapsed >= pauseAfterTyping) {
+          setIsDeleting(true);
+          lastUpdateRef.current = timestamp;
+        }
+        frameRef.current = requestAnimationFrame(animate);
+        return;
+      }
+
+      // Deleting phase
+      if (isDeleting && charIndex > 0) {
+        if (elapsed >= deletingSpeed) {
+          setDisplayText(currentText.substring(0, charIndex - 1));
+          setCharIndex(prev => prev - 1);
+          lastUpdateRef.current = timestamp;
+        }
+        frameRef.current = requestAnimationFrame(animate);
+        return;
+      }
+
+      // Move to next text after deleting completes
+      if (isDeleting && charIndex === 0) {
+        if (elapsed >= pauseAfterDeleting) {
+          setIsDeleting(false);
+          setTextIndex((prev) => (prev + 1) % texts.length);
+          lastUpdateRef.current = timestamp;
+        }
+        frameRef.current = requestAnimationFrame(animate);
+        return;
+      }
+    };
+
+    lastUpdateRef.current = performance.now();
+    frameRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      isCancelled = true;
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
+      }
+    };
   }, [charIndex, isDeleting, textIndex, texts, typingSpeed, deletingSpeed, pauseAfterTyping, pauseAfterDeleting]);
 
   return { displayText };
@@ -66,7 +93,7 @@ export default function Hero() {
   const router = useRouter();
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
-  
+
   // Typewriter effect for headline with rotating texts
   const headlineTexts = [
     "Are you showing up in AI answers?",
@@ -78,76 +105,81 @@ export default function Hero() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!url) {
       setError("Please enter a website URL");
       return;
     }
-    
+
     if (!isValidUrl(url)) {
       setError("Please enter a valid URL");
       return;
     }
-    
+
     setError("");
-    
+
     // Store URL in sessionStorage and navigate to quiz
-    sessionStorage.setItem("auditUrl", url);
+    sessionStorage.setItem("websiteUrl", url);
     router.push("/quiz");
   };
 
   const platformLogos = [
-    { 
+    {
       name: "ChatGPT",
       logo: (
-        <img 
-          src="https://cdn.simpleicons.org/openai/000000" 
+        <img
+          src="/logos/chatgpt.svg"
           alt="ChatGPT"
           className="w-10 h-10"
+          loading="eager"
         />
       ),
       color: ""
     },
-    { 
+    {
       name: "Claude",
       logo: (
-        <img 
-          src="https://cdn.simpleicons.org/anthropic/000000" 
+        <img
+          src="/logos/claude.svg"
           alt="Claude"
           className="w-10 h-10"
+          loading="eager"
         />
       ),
       color: ""
     },
-    { 
+    {
       name: "Gemini",
       logo: (
-        <img 
-          src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg" 
+        <img
+          src="/logos/gemini.svg"
           alt="Gemini"
           className="w-10 h-10"
+          loading="eager"
         />
       ),
       color: ""
     },
-    { 
+    {
       name: "Perplexity",
       logo: (
-        <img 
-          src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/perplexity-ai-icon.png" 
+        <img
+          src="/logos/perplexity.png"
           alt="Perplexity"
           className="w-10 h-10"
+          loading="eager"
         />
       ),
       color: ""
     },
-    { 
+    {
       name: "Google",
       logo: (
-        <img 
-          src="https://www.google.com/images/branding/googleg/1x/googleg_standard_color_128dp.png" 
+        <img
+          src="/logos/google.png"
           alt="Google"
           className="w-10 h-10"
+          loading="eager"
         />
       ),
       color: ""
@@ -167,7 +199,7 @@ export default function Hero() {
     <section className="relative bg-white min-h-screen flex items-center justify-center py-8 sm:py-12 md:py-16 lg:py-20 overflow-hidden">
       {/* Atmospheric radial glow - more aggressive */}
       <div className="absolute inset-0 pointer-events-none">
-        <div 
+        <div
           className="absolute top-0 left-1/2 -translate-x-1/2 w-[160%] h-[110%]"
           style={{
             background: 'radial-gradient(ellipse at top, rgba(219, 234, 254, 0.6) 0%, rgba(219, 234, 254, 0.35) 25%, rgba(239, 246, 255, 0.2) 45%, transparent 70%)',
@@ -228,11 +260,11 @@ export default function Hero() {
                     setError("");
                   }}
                   className="w-full sm:w-80 pr-4 sm:pr-8 text-sm sm:text-base text-gray-700 placeholder:text-gray-400 border-0 focus:outline-none focus:ring-0 bg-transparent"
-                  style={{ 
-                    paddingTop: '10px', 
-                    paddingBottom: '10px', 
-                    paddingLeft: '20px', 
-                    outline: 'none', 
+                  style={{
+                    paddingTop: '10px',
+                    paddingBottom: '10px',
+                    paddingLeft: '20px',
+                    outline: 'none',
                     boxShadow: 'none',
                     caretColor: '#60A5FA'
                   }}
@@ -240,10 +272,10 @@ export default function Hero() {
                 <button
                   type="submit"
                   className="bg-black text-white text-xs sm:text-sm font-medium hover:bg-gray-900 hover:shadow-blue-200 hover:shadow-lg transition-all duration-100 flex items-center justify-center gap-2 whitespace-nowrap rounded-full w-full sm:w-auto mt-2 sm:mt-0"
-                  style={{ 
-                    paddingTop: '10px', 
-                    paddingBottom: '10px', 
-                    paddingLeft: '20px', 
+                  style={{
+                    paddingTop: '10px',
+                    paddingBottom: '10px',
+                    paddingLeft: '20px',
                     paddingRight: '20px',
                     minHeight: '44px'
                   }}
@@ -276,11 +308,11 @@ export default function Hero() {
                     setError("");
                   }}
                   className="w-full sm:w-80 pr-4 sm:pr-8 text-sm sm:text-base text-gray-700 placeholder:text-gray-400 border-0 focus:outline-none focus:ring-0 bg-transparent"
-                  style={{ 
-                    paddingTop: '10px', 
-                    paddingBottom: '10px', 
-                    paddingLeft: '20px', 
-                    outline: 'none', 
+                  style={{
+                    paddingTop: '10px',
+                    paddingBottom: '10px',
+                    paddingLeft: '20px',
+                    outline: 'none',
                     boxShadow: 'none',
                     caretColor: '#60A5FA'
                   }}
@@ -288,10 +320,10 @@ export default function Hero() {
                 <button
                   type="submit"
                   className="bg-black text-white text-xs sm:text-sm font-medium hover:bg-gray-900 hover:shadow-blue-200 hover:shadow-lg transition-all duration-100 flex items-center justify-center gap-2 whitespace-nowrap rounded-full w-full sm:w-auto mt-2 sm:mt-0"
-                  style={{ 
-                    paddingTop: '10px', 
-                    paddingBottom: '10px', 
-                    paddingLeft: '20px', 
+                  style={{
+                    paddingTop: '10px',
+                    paddingBottom: '10px',
+                    paddingLeft: '20px',
                     paddingRight: '20px',
                     minHeight: '44px'
                   }}

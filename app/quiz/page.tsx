@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Footer from "@/components/Footer";
 import { submitQuizToWeb3Forms } from "@/lib/quizSubmission";
+import { startOnboarding, saveQuizAnswer, captureEmail, mapQuizAnswer } from "@/lib/toolApi";
 
 interface QuizAnswer {
   step: number;
@@ -82,6 +83,11 @@ export default function Quiz() {
   const [loadingStep, setLoadingStep] = useState(0);
   const [countdown, setCountdown] = useState(5);
 
+  // Tool API integration states
+  const [sessionToken, setSessionToken] = useState<string | null>(null);
+  const [toolApiEnabled, setToolApiEnabled] = useState(true); // Try tool API first, fallback if fails
+  const [analysisStarted, setAnalysisStarted] = useState(false);
+
   const currentQuestion = questions[currentStep];
   const totalSteps = questions.length;
   const progress = ((currentStep + 1) / totalSteps) * 100;
@@ -120,10 +126,44 @@ export default function Quiz() {
           return prev - 1;
         });
       }, 1000);
-      
+
       return () => clearInterval(timer);
     }
   }, [isComplete]);
+
+  // Initialize tool API session
+  useEffect(() => {
+    const initializeSession = async () => {
+      // Get website URL from sessionStorage (set by Hero component)
+      const websiteUrl = sessionStorage.getItem('websiteUrl');
+
+      console.log('=== SESSION INIT DEBUG ===');
+      console.log('websiteUrl from sessionStorage:', websiteUrl);
+      console.log('sessionToken:', sessionToken);
+      console.log('toolApiEnabled:', toolApiEnabled);
+      console.log('=========================');
+
+      if (websiteUrl && !sessionToken && toolApiEnabled) {
+        try {
+          console.log('Initializing onboarding session...');
+          const response = await startOnboarding(websiteUrl);
+
+          if (response && response.sessionToken) {
+            setSessionToken(response.sessionToken);
+            console.log('Session initialized:', response.sessionToken);
+          } else {
+            console.warn('Failed to initialize session, falling back to Web3Forms');
+            setToolApiEnabled(false);
+          }
+        } catch (error) {
+          console.error('Error initializing session:', error);
+          setToolApiEnabled(false); // Fallback to Web3Forms
+        }
+      }
+    };
+
+    initializeSession();
+  }, []);
 
   const handleNext = async () => {
     // Save answer
@@ -132,39 +172,91 @@ export default function Quiz() {
       question: currentQuestion.question,
       answer: currentQuestion.type === "slider" ? sliderValue : selectedAnswer
     };
-    
+
     const updatedAnswers = [...answers, newAnswer];
     setAnswers(updatedAnswers);
-    
+
+    // Save answer to tool API if session is active
+    if (sessionToken && toolApiEnabled && currentStep < totalSteps - 1) {
+      try {
+        const currentAnswer = currentQuestion.type === "slider" ? sliderValue : selectedAnswer;
+        const { questionId, apiAnswer } = await mapQuizAnswer(currentStep + 1, currentAnswer);
+
+        await saveQuizAnswer(sessionToken, questionId, apiAnswer);
+        console.log(`Saved answer for Q${currentStep + 1}:`, questionId);
+
+        // After question 5, analysis starts automatically via API
+        if (currentStep + 1 === 5 && !analysisStarted) {
+          setAnalysisStarted(true);
+          console.log('Analysis started in background...');
+        }
+      } catch (error) {
+        console.error('Error saving quiz answer:', error);
+        // Continue anyway - don't block user experience
+      }
+    }
+
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
       setSelectedAnswer("");
       setSliderValue(5);
     } else {
-      // Quiz complete - show loading and submit data
+      // Quiz complete - show loading
       setIsLoading(true);
-      
-      // Get the email from the answers (it's the last question)
+
+      // Get the email from the last question
       const userEmail = selectedAnswer.toString();
-      
-      // Submit to Web3Forms
+
+      // DEBUG: Log current state
+      console.log('=== QUIZ COMPLETION DEBUG ===');
+      console.log('sessionToken:', sessionToken);
+      console.log('toolApiEnabled:', toolApiEnabled);
+      console.log('userEmail:', userEmail);
+      console.log('============================');
+
+      // Try tool API first for email capture + redirect
+      if (sessionToken && toolApiEnabled) {
+        try {
+          console.log('Capturing email via tool API...');
+          const response = await captureEmail(sessionToken, userEmail);
+
+          if (response && response.previewUrl) {
+            // Success! Redirect to tool preview after 3 seconds
+            console.log('Email captured, redirecting to:', response.previewUrl);
+
+            setTimeout(() => {
+              window.location.href = response.previewUrl;
+            }, 3000);
+            return; // Exit early - don't show completion screen
+          } else {
+            console.warn('Tool API email capture failed, falling back to Web3Forms');
+            setToolApiEnabled(false);
+          }
+        } catch (error) {
+          console.error('Error capturing email via tool API:', error);
+          setToolApiEnabled(false);
+        }
+      } else {
+        console.log('SKIPPING TOOL API - sessionToken:', sessionToken, 'toolApiEnabled:', toolApiEnabled);
+      }
+
+      // Fallback: Submit to Web3Forms + Calendly redirect
+      console.log('Falling back to Web3Forms + Calendly...');
       try {
         const submissionResult = await submitQuizToWeb3Forms({
           answers: updatedAnswers,
           email: userEmail,
           timestamp: new Date().toISOString(),
         });
-        
+
         if (!submissionResult.success) {
           console.error("Failed to submit quiz data:", submissionResult.error);
-          // Still continue to completion screen - don't block user
         }
       } catch (error) {
         console.error("Error during quiz submission:", error);
-        // Still continue to completion screen - don't block user
       }
-      
-      // Show completion screen after 3 seconds (or when submission completes)
+
+      // Show completion screen with Calendly redirect
       setTimeout(() => {
         setIsLoading(false);
         setIsComplete(true);
@@ -190,6 +282,10 @@ export default function Quiz() {
   const canProceed = () => {
     if (currentQuestion.type === "email") {
       return selectedAnswer.toString().includes("@");
+    }
+    if (currentQuestion.type === "zipcode") {
+      const zip = selectedAnswer.toString();
+      return zip.length === 5 && /^\d+$/.test(zip);
     }
     if (currentQuestion.type === "slider") {
       return true;
@@ -436,6 +532,23 @@ export default function Quiz() {
                         <span>Very much</span>
                       </div>
                     </div>
+                  </div>
+                )}
+
+                {/* ZIP Code Input */}
+                {currentQuestion.type === "zipcode" && (
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="12345"
+                      value={selectedAnswer}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '').slice(0, 5);
+                        setSelectedAnswer(value);
+                      }}
+                      maxLength={5}
+                      className="w-full p-5 rounded-2xl border-2 border-gray-200 focus:border-blue-300 focus:ring-4 focus:ring-blue-100 focus:outline-none text-lg text-center font-medium transition-all"
+                    />
                   </div>
                 )}
 

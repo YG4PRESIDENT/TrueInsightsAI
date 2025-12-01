@@ -36,7 +36,7 @@ export default function Team() {
     <section id="team" className="relative bg-white overflow-hidden" style={{ paddingTop: '120px', paddingBottom: '160px' }}>
       {/* Soft ambient glow - more present */}
       <div className="absolute inset-0 pointer-events-none">
-        <div 
+        <div
           className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[130%] h-[60%]"
           style={{
             background: 'radial-gradient(ellipse, rgba(219, 234, 254, 0.4) 0%, rgba(239, 246, 255, 0.18) 45%, transparent 70%)',
@@ -84,6 +84,7 @@ export default function Team() {
                   src={member.image}
                   alt={member.name}
                   className="w-40 h-40 rounded-full object-cover shadow-lg ring-4 ring-transparent group-hover:ring-blue-200 transition-all duration-300"
+                  loading="lazy"
                 />
               </div>
 

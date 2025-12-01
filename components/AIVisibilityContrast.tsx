@@ -8,40 +8,44 @@ const AI_PLATFORMS = [
   {
     name: "ChatGPT",
     logo: (
-      <img 
-        src="https://cdn.simpleicons.org/openai/000000" 
+      <img
+        src="/logos/chatgpt.svg"
         alt="ChatGPT"
         className="w-6 h-6"
+        loading="lazy"
       />
     ),
   },
   {
     name: "Claude",
     logo: (
-      <img 
-        src="https://cdn.simpleicons.org/anthropic/000000" 
+      <img
+        src="/logos/claude.svg"
         alt="Claude"
         className="w-6 h-6"
+        loading="lazy"
       />
     ),
   },
   {
     name: "Gemini",
     logo: (
-      <img 
-        src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg" 
+      <img
+        src="/logos/gemini.svg"
         alt="Gemini"
         className="w-6 h-6"
+        loading="lazy"
       />
     ),
   },
   {
     name: "Perplexity",
     logo: (
-      <img 
-        src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/perplexity-ai-icon.png" 
+      <img
+        src="/logos/perplexity.png"
         alt="Perplexity"
         className="w-6 h-6"
+        loading="lazy"
       />
     ),
   },
@@ -93,7 +97,7 @@ export default function AIVisibilityContrast() {
     >
       {/* Atmospheric glow - more visible */}
       <div className="absolute inset-0 pointer-events-none">
-        <div 
+        <div
           className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[140%] h-[70%]"
           style={{
             background: 'radial-gradient(ellipse, rgba(219, 234, 254, 0.45) 0%, rgba(239, 246, 255, 0.25) 35%, transparent 65%)',
@@ -162,7 +166,7 @@ export default function AIVisibilityContrast() {
               <div className="px-6 bg-gray-100 flex-1">
                 {/* MASSIVE SPACER ABOVE */}
                 <div className="h-8"></div>
-                
+
                 {/* User Query */}
                 <div className="flex justify-end">
                   <div className="bg-gray-200 text-gray-900 px-6 py-4 rounded-2xl rounded-tr-md text-[27px] max-w-[80%] font-medium leading-snug">
@@ -245,7 +249,7 @@ export default function AIVisibilityContrast() {
                 strokeLinejoin="round"
                 fill="none"
               />
-              
+
               {/* Arrowhead */}
               <path
                 d="M165 42 L180 48 L165 54"
@@ -267,7 +271,7 @@ export default function AIVisibilityContrast() {
           >
             {/* Subtle glow effect behind card */}
             <div className="absolute inset-0 bg-gradient-to-br from-green-200/30 via-emerald-200/20 to-blue-200/30 blur-3xl rounded-3xl -z-10" />
-            
+
             {/* Label */}
             <div className="mb-6 text-center">
               <h3 className="text-lg font-bold text-green-600 mb-1">
@@ -299,7 +303,7 @@ export default function AIVisibilityContrast() {
               <div className="px-6 bg-gradient-to-br from-green-50 to-emerald-50 flex-1">
                 {/* MASSIVE SPACER ABOVE */}
                 <div className="h-8"></div>
-                
+
                 {/* User Query */}
                 <div className="flex justify-end">
                   <div className="bg-gray-200 text-gray-900 px-6 py-4 rounded-2xl rounded-tr-md text-[27px] max-w-[80%] font-medium leading-snug">
