@@ -15,8 +15,8 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TrueInsights - AI Visibility & GEO Platform",
-  description: "The Search Console for the AI Era. Track, optimize, and dominate your brand's presence on ChatGPT, Claude, and Gemini.",
+  title: "TrueInsightsAI - Dominate AI Search",
+  description: "The Search Console for the AI Era. Audit your visibility on ChatGPT, Claude, and Gemini for free.",
 };
 
 export default function RootLayout({

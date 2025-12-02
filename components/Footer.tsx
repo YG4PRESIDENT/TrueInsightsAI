@@ -52,7 +52,7 @@ export default function Footer() {
               <img
                 src="/images/Official logo.png"
                 alt="True Insights AI"
-                className="h-10 brightness-0 invert"
+                className="h-10 w-auto brightness-0 invert"
               />
             </a>
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
@@ -120,9 +120,10 @@ export default function Footer() {
             <div className="mt-8">
               <Button 
                 onClick={handleRunAudit}
-                className="w-full bg-white text-slate-950 hover:bg-slate-200 font-bold"
+                variant="primary"
+                className="w-full"
               >
-                Run Free Audit <ArrowRight className="ml-2 w-4 h-4" />
+                Run Free Audit <ArrowRight className="ml-2 w-4 h-4 text-white/80" />
               </Button>
             </div>
           </div>

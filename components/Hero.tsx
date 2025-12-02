@@ -17,11 +17,9 @@ export default function Hero() {
       return
     }
 
-    // Redirect to the Tool App
-    // In production: https://tool.trueinsightsai.com
-    // In dev: http://localhost:3001 (assuming tool runs there)
-    const toolBaseUrl = process.env.NEXT_PUBLIC_TOOL_URL || 'http://localhost:3001'
-    window.location.href = `${toolBaseUrl}/?url=${encodeURIComponent(url)}`
+    // Redirect to the Quiz Page (on the Main Site)
+    // The quiz page will then redirect to the Tool App after completion
+    window.location.href = `/quiz?url=${encodeURIComponent(url)}`;
   }
 
   return (
@@ -76,7 +74,6 @@ export default function Hero() {
               <Button 
                 type="submit"
                 className="w-full h-12 text-lg"
-                disabled={!url}
               >
                 Start Audit
               </Button>
@@ -87,7 +84,7 @@ export default function Hero() {
         {/* Footer / Trust */}
         <div className="text-center">
           <p className="text-xs text-slate-500 uppercase tracking-widest mb-6">Powered By</p>
-          <div className="flex justify-center items-center gap-8 opacity-50 hover:opacity-100 transition-all duration-500">
+          <div className="flex justify-center items-center gap-8">
             <div className="flex items-center gap-2">
                <BrandLogo platform="chatgpt" size={24} />
                <span className="text-sm font-medium text-slate-300">OpenAI</span>

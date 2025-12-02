@@ -39,6 +39,11 @@
     from { transform: translateY(20px); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
   }
+  @keyframes shimmer {
+    0% { background-position: 100% 0; }
+    100% { background-position: -100% 0; }
+  }
+  --animate-shimmer: shimmer 8s linear infinite;
 }
 
 /* Base Styles - Using CSS Variables instead of @apply to avoid lookup errors */
