@@ -5,7 +5,6 @@ export const COMPANY_TAGLINE = "GEO SEO & Local Search Intelligence";
 // Navigation Links
 export const NAV_LINKS = [
   { label: "Resources", href: "#faq" },
-  { label: "Pricing", href: "#pricing" },
   { label: "Blog", href: "/blog" },
   { label: "Team", href: "#team" },
 ];
@@ -51,7 +50,6 @@ export const FOOTER_LINKS = {
     { label: "Product Visibility", href: "#tools" },
   ],
   company: [
-    { label: "Pricing", href: "#pricing" },
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
     { label: "Contact Us", href: "https://calendly.com/trueinsightsai/30min" },

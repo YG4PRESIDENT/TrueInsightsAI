@@ -153,7 +153,7 @@ export default function AIVisibilityContrast() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-white px-5 py-3.5 flex items-center gap-3 border-b border-gray-200"
+                  className="bg-white px-12 sm:px-16 py-3.5 flex items-center gap-3 border-b border-gray-200"
                 >
                   <div className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center p-1">
                     {platform.logo}
@@ -163,7 +163,7 @@ export default function AIVisibilityContrast() {
               </AnimatePresence>
 
               {/* Chat Content */}
-              <div className="px-6 bg-gray-100 flex-1">
+              <div className="px-12 sm:px-16 bg-gray-100 flex-1">
                 {/* MASSIVE SPACER ABOVE */}
                 <div className="h-8"></div>
 
@@ -179,7 +179,7 @@ export default function AIVisibilityContrast() {
 
                 {/* AI Response - Plain text format like ChatGPT */}
                 <div className="flex justify-start">
-                  <div className="max-w-full pr-4">
+                  <div className="w-full">
                     <p className="text-[15px] text-gray-700 mb-8 leading-relaxed">
                       Based on local expertise and client reviews:
                     </p>
@@ -290,7 +290,7 @@ export default function AIVisibilityContrast() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-white px-5 py-3.5 flex items-center gap-3 border-b border-gray-200"
+                  className="bg-white px-8 sm:px-12 py-3.5 flex items-center gap-3 border-b border-gray-200"
                 >
                   <div className="w-7 h-7 bg-gray-100 rounded-lg flex items-center justify-center p-1">
                     {platform.logo}
@@ -300,7 +300,7 @@ export default function AIVisibilityContrast() {
               </AnimatePresence>
 
               {/* Chat Content */}
-              <div className="px-6 bg-gradient-to-br from-green-50 to-emerald-50 flex-1">
+              <div className="px-12 sm:px-16 bg-gradient-to-br from-green-50 to-emerald-50 flex-1">
                 {/* MASSIVE SPACER ABOVE */}
                 <div className="h-8"></div>
 
@@ -316,11 +316,11 @@ export default function AIVisibilityContrast() {
 
                 {/* AI Response - Plain text format like ChatGPT */}
                 <div className="flex justify-start">
-                  <div className="max-w-full pr-4">
+                  <div className="w-full">
                     <p className="text-[15px] text-gray-700 mb-8 leading-relaxed">
                       Based on local expertise and client reviews:
                     </p>
-                    <div className="space-y-3 sm:space-y-5 text-sm sm:text-[15px] mb-8 sm:mb-12 bg-green-50/30 rounded-lg p-2 sm:p-3 -mx-1 sm:-mx-2">
+                    <div className="space-y-3 sm:space-y-5 text-sm sm:text-[15px] mb-8 sm:mb-12 bg-green-50/30 rounded-lg p-2 sm:p-3">
                       <div className="bg-green-50/70 border-l-[3px] border-green-500 rounded-r-md py-2 sm:py-4 px-2 sm:px-4">
                         <div className="flex items-start gap-2 sm:gap-3">
                           <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-green-600 rounded-full flex items-center justify-center mt-0.5">
@@ -379,7 +379,7 @@ export default function AIVisibilityContrast() {
           initial={{ opacity: 0, y: 20 }}
           animate={isVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 1.1 }}
-          className="text-center w-full flex justify-center px-4 sm:px-0"
+          className="text-center w-full flex justify-center px-4 sm:px-0 mt-12"
         >
           <button
             onClick={() => {
@@ -388,7 +388,7 @@ export default function AIVisibilityContrast() {
                 heroSection.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            className="inline-flex items-center justify-center gap-2 bg-black text-white rounded-full font-bold transition-all duration-200 hover:bg-gray-800 hover:shadow-xl hover:shadow-blue-200 px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base min-h-[48px]"
+            className="inline-flex items-center justify-center gap-4 bg-black text-white rounded-full font-bold transition-all duration-200 hover:bg-gray-800 hover:shadow-xl hover:shadow-blue-200 px-12 sm:px-14 py-3 sm:py-4 text-sm sm:text-base min-h-[48px]"
           >
             <span>See where you rank now</span>
             <svg
