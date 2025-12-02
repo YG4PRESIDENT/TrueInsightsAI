@@ -75,19 +75,20 @@ export default function BlogPage() {
     >
       <Link href={`/blog/${post.slug}`} className="group block">
         {/* Thumbnail */}
-        <div className="w-full h-36 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg mb-3 overflow-hidden shadow-md group-hover:shadow-xl group-hover:shadow-blue-200/50 transition-all duration-300 border border-blue-100 group-hover:border-blue-300">
-          <div className="w-full h-full flex items-center justify-center text-blue-300 text-xs font-medium">
+        <div className="w-full h-48 bg-slate-900 border border-slate-800 rounded-2xl mb-4 overflow-hidden relative group-hover:border-blue-500/50 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-800/50 to-slate-900/50 opacity-50" />
+          <div className="absolute inset-0 flex items-center justify-center text-slate-500 text-xs font-medium uppercase tracking-widest group-hover:text-blue-400 transition-colors">
             {post.thumbnail || "Article"}
           </div>
         </div>
 
         {/* Title */}
-        <h3 className="text-base font-semibold text-black mb-1.5 group-hover:text-blue-500 transition-colors leading-snug">
+        <h3 className="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors leading-tight">
           {post.title}
         </h3>
 
         {/* Date */}
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-slate-500 font-mono">
           {new Date(post.date).toLocaleDateString('en-US', { 
             month: 'long', 
             day: 'numeric', 
@@ -101,20 +102,20 @@ export default function BlogPage() {
   return (
     <>
       <Header />
-      <main className="relative min-h-screen bg-white overflow-hidden">
-        {/* Atmospheric blue glow - like Hero */}
+      <main className="relative min-h-screen bg-slate-950 overflow-hidden">
+        {/* Atmospheric glow */}
         <div className="absolute inset-0 pointer-events-none">
           <div 
             className="absolute top-0 left-1/2 -translate-x-1/2 w-[150%] h-[100%]"
             style={{
-              background: 'radial-gradient(ellipse at top, rgba(219, 234, 254, 0.5) 0%, rgba(219, 234, 254, 0.3) 25%, rgba(239, 246, 255, 0.15) 45%, transparent 70%)',
-              filter: 'blur(90px)'
+              background: 'radial-gradient(ellipse at top, rgba(59, 130, 246, 0.15) 0%, rgba(15, 23, 42, 0) 70%)',
+              filter: 'blur(100px)'
             }}
           />
         </div>
 
         {/* Top spacing to clear navbar */}
-        <div className="h-24"></div>
+        <div className="h-32"></div>
         
         <div className="w-full flex flex-col items-center px-6 pb-20 relative z-10">
           {/* Header Section */}
@@ -124,45 +125,50 @@ export default function BlogPage() {
             transition={{ duration: 0.6 }}
             className="text-center flex flex-col items-center max-w-4xl"
           >
-            <h1 className="text-6xl font-bold text-black mb-6">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-medium font-mono mb-6">
+              INSIGHTS & INTELLIGENCE
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">
               Tips, lessons and advice
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl text-slate-400 leading-relaxed max-w-2xl">
               Everything you need to know about dominating AI-powered search and growing your digital presence in the new age of search.
             </p>
           </motion.div>
 
           {/* Large spacing gap */}
-          <div className="h-12"></div>
+          <div className="h-20"></div>
 
           {/* Featured Articles Section */}
-          <section className="w-full max-w-5xl">
+          <section className="w-full max-w-6xl">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-3xl font-bold text-black mb-8"
+              className="text-2xl font-bold text-white mb-10 flex items-center gap-3"
             >
               Featured Articles
+              <div className="h-px flex-1 bg-slate-800" />
             </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
               {featuredPosts.map((post, index) => renderArticleCard(post, index))}
             </div>
           </section>
 
-          <div className="h-14"></div>
+          <div className="h-24"></div>
 
           {/* Latest Articles Section */}
-          <section className="w-full max-w-5xl">
+          <section className="w-full max-w-6xl">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
-              className="text-3xl font-bold text-black mb-8"
+              className="text-2xl font-bold text-white mb-10 flex items-center gap-3"
             >
               Latest Articles
+              <div className="h-px flex-1 bg-slate-800" />
             </motion.h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
               {latestPosts.map((post, index) => renderArticleCard(post, index))}
             </div>
           </section>
@@ -174,4 +180,3 @@ export default function BlogPage() {
     </>
   );
 }
-

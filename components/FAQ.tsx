@@ -64,19 +64,19 @@ function FAQItem({ faq, index }: { faq: FAQItem; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className={`border-b border-gray-200 ${isOpen ? 'border-l-4 border-l-blue-300 pl-4' : ''} transition-all duration-300`}
+      className={`border-b border-slate-800 ${isOpen ? 'border-l-2 border-l-blue-500 pl-4' : ''} transition-all duration-300`}
       style={{ paddingTop: '28px', paddingBottom: '28px' }}
     >
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between text-left group min-h-[48px] py-2"
       >
-        <span className="text-base sm:text-lg font-semibold text-black group-hover:underline transition-all pr-4 leading-tight">
+        <span className={`text-base sm:text-lg font-medium transition-all pr-4 leading-tight ${isOpen ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>
           {faq.question}
         </span>
         <ChevronDown
           className={`w-5 h-5 flex-shrink-0 transition-all duration-300 ${
-            isOpen ? "rotate-180 text-blue-400" : "text-gray-600 group-hover:text-blue-300"
+            isOpen ? "rotate-180 text-blue-400" : "text-slate-600 group-hover:text-blue-400"
           }`}
         />
       </button>
@@ -90,7 +90,7 @@ function FAQItem({ faq, index }: { faq: FAQItem; index: number }) {
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <p className="mt-3 sm:mt-4 text-sm sm:text-base text-gray-700 leading-relaxed">
+            <p className="mt-3 sm:mt-4 text-sm sm:text-base text-slate-400 leading-relaxed">
               {faq.answer}
             </p>
           </motion.div>
@@ -102,39 +102,28 @@ function FAQItem({ faq, index }: { faq: FAQItem; index: number }) {
 
 export default function FAQ() {
   return (
-    <section id="faq" className="relative bg-white overflow-hidden" style={{ paddingTop: '120px', paddingBottom: '120px' }}>
-      {/* Gentle ambient wash - enhanced */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div 
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[120%] h-[50%]"
-          style={{
-            background: 'radial-gradient(ellipse, rgba(219, 234, 254, 0.4) 0%, rgba(239, 246, 255, 0.18) 40%, transparent 65%)',
-            filter: 'blur(75px)'
-          }}
-        />
-      </div>
+    <section id="faq" className="relative bg-slate-950 py-32 overflow-hidden border-t border-slate-800">
+      {/* Subtle Transition Gradient */}
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-slate-900/50 to-transparent pointer-events-none" />
+
       <div className="w-full flex flex-col items-center justify-center px-6 relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl"
+          className="text-center max-w-3xl mb-20"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black px-4 sm:px-0">
-            Frequently Asked Questions
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6">
+            FAQ
           </h2>
-          <div style={{ height: '24px' }}></div>
-          <p className="text-lg sm:text-xl text-gray-600 px-4 sm:px-0">
-            Find answers to common questions about our products and services
+          <p className="text-lg sm:text-xl text-slate-400">
+            Common questions about AI Visibility Optimization.
           </p>
         </motion.div>
         
-        <div style={{ height: '80px' }}></div>
-
         {/* Two Column FAQ Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 lg:gap-x-16 max-w-7xl w-full px-4 sm:px-6 lg:px-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 max-w-7xl w-full">
           {/* Left Column */}
           <div>
             {leftColumnFAQs.map((faq, index) => (
@@ -153,4 +142,3 @@ export default function FAQ() {
     </section>
   );
 }
-

@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Button from "./ui/Button";
-import LetsChatButton from "./LetsChatButton";
-import { COMPANY_NAME, NAV_LINKS, CTA_PRIMARY, CTA_SECONDARY, CONTACT } from "@/lib/constants";
+import { Button } from "./ui/Button";
+import { COMPANY_NAME, NAV_LINKS, CONTACT } from "@/lib/constants";
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -21,72 +20,73 @@ export default function Header() {
 
   const handleNavClick = (href: string) => {
     if (href.startsWith("#")) {
-      // Check if we're on the home page
       const isHomePage = window.location.pathname === '/';
-      
       if (isHomePage) {
-        // On home page: scroll to section
         const element = document.querySelector(href);
         if (element) {
           element.scrollIntoView({ behavior: "smooth" });
           setIsMobileMenuOpen(false);
         }
       } else {
-        // On another page: navigate to home page with hash
         window.location.href = `/${href}`;
       }
     } else {
-      // Navigate to different page
       window.location.href = href;
     }
   };
 
+  const handleBookCall = () => {
+    window.open("https://calendly.com/trueinsightsai/30min", "_blank", "noopener,noreferrer");
+  }
+
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b",
         isScrolled 
-          ? "shadow-md border-blue-100/50 bg-white backdrop-blur-md" 
-          : "border-transparent bg-transparent backdrop-blur-none"
+          ? "bg-slate-950/80 backdrop-blur-md border-slate-800/50" 
+          : "bg-transparent border-transparent"
       )}
     >
-      <div className="flex items-center justify-center h-20 px-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
         {/* Logo */}
-        <div className="absolute left-8">
-          <a href="/" className="hover:opacity-80 transition-opacity duration-200">
-            <img 
-              src="/images/Official logo.png" 
-              alt="True Insights AI" 
-              className="h-[50px] lg:h-[50px]"
-            />
-          </a>
-        </div>
+        <a href="/" className="flex-shrink-0 flex items-center gap-2 hover:opacity-80 transition-opacity">
+          <img 
+            src="/images/Official logo.png" 
+            alt="True Insights AI" 
+            className="h-10 w-auto brightness-0 invert" 
+          />
+        </a>
 
-        {/* Desktop Navigation - Centered */}
+        {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
             <button
               key={link.href}
               onClick={() => handleNavClick(link.href)}
-              className="text-gray-700 hover:text-black transition-colors duration-200 font-medium relative group"
-              style={{ fontSize: '17px' }}
+              className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
             >
               {link.label}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-300 transition-all duration-200 group-hover:w-full"></span>
             </button>
           ))}
         </nav>
 
         {/* CTA Button - Desktop */}
-        <div className="hidden lg:block absolute right-8">
-          <LetsChatButton calendlyUrl={CONTACT.calendly} size="large" />
+        <div className="hidden lg:block">
+          <Button 
+            onClick={handleBookCall}
+            variant="primary"
+          >
+            <Sparkles className="w-4 h-4 mr-2 text-white/70" />
+            Book Strategy Call
+          </Button>
         </div>
 
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="lg:hidden p-2 text-gray-700 hover:text-black absolute right-8"
-          aria-label="Toggle menu"
+          className="lg:hidden p-2 text-slate-300 hover:text-white"
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -94,23 +94,26 @@ export default function Header() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-blue-50/10 border-t border-blue-100/30 backdrop-blur-md">
-          <div className="px-4 py-6 space-y-4">
+        <div className="lg:hidden bg-slate-950/95 backdrop-blur-xl border-t border-slate-800 p-4 absolute w-full shadow-2xl">
+          <div className="flex flex-col space-y-4">
             {NAV_LINKS.map((link) => (
               <button
                 key={link.href}
                 onClick={() => handleNavClick(link.href)}
-                className="block w-full text-left text-gray-700 hover:text-black py-2 font-medium"
+                className="text-left text-lg font-medium text-slate-300 hover:text-white py-2"
               >
                 {link.label}
               </button>
             ))}
-            {/* Mobile CTA Button */}
-            <LetsChatButton calendlyUrl={CONTACT.calendly} className="w-full mt-4" />
+            <Button 
+              onClick={handleBookCall}
+              className="w-full bg-white text-slate-950 hover:bg-slate-200 font-bold mt-4"
+            >
+              Book Strategy Call
+            </Button>
           </div>
         </div>
       )}
     </header>
   );
 }
-

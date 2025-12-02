@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import LetsChatButton from "./LetsChatButton";
+import { Button } from "./ui/Button";
+import { Linkedin, Mail, Sparkles } from "lucide-react";
 
 interface TeamMember {
   name: string;
@@ -32,90 +33,102 @@ const teamMembers: TeamMember[] = [
 ];
 
 export default function Team() {
-  return (
-    <section id="team" className="relative bg-white overflow-hidden" style={{ paddingTop: '120px', paddingBottom: '160px' }}>
-      {/* Soft ambient glow - more present */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[130%] h-[60%]"
-          style={{
-            background: 'radial-gradient(ellipse, rgba(219, 234, 254, 0.4) 0%, rgba(239, 246, 255, 0.18) 45%, transparent 70%)',
-            filter: 'blur(75px)'
-          }}
-        />
-      </div>
-      <div className="w-full flex flex-col items-center justify-center px-6 relative z-10">
-        {/* Trust Badge */}
-        <div className="mb-20"></div>
+  const handleBookCall = () => {
+    window.open("https://calendly.com/trueinsightsai/30min", "_blank", "noopener,noreferrer");
+  }
 
-        {/* Header Section */}
+  return (
+    <section id="team" className="relative bg-slate-950 py-32 overflow-hidden border-t border-slate-800">
+      {/* Subtle Transition Gradient at top */}
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-slate-900/50 to-transparent pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20 max-w-4xl"
+          className="text-center mb-20"
         >
-          <h2 className="text-5xl font-bold text-black mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Meet the Team
           </h2>
-          <p className="text-xl text-gray-600">
-            Your True AI Presence Partner
+          <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+            Two obsessed founders dedicated to making your company rank first. We don't stop until you win.
           </p>
         </motion.div>
 
-        {/* Explicit spacing after header text */}
-        <div className="h-5"></div>
-
         {/* Team Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-5xl w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
           {teamMembers.map((member, index) => (
             <motion.div
               key={member.name}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              className="flex flex-col items-center text-center"
+              transition={{ delay: index * 0.2 }}
+              className="relative"
             >
-              {/* Profile Image */}
-              <div className="mb-6 group">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-40 h-40 rounded-full object-cover shadow-lg ring-4 ring-transparent group-hover:ring-blue-200 transition-all duration-300"
-                  loading="lazy"
-                />
-              </div>
+              <div className="bg-slate-900/50 border border-slate-800 rounded-2xl p-8 hover:border-slate-700 transition-all duration-300">
+                <div className="flex items-center gap-6 mb-6">
+                  <div className="relative">
+                    <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-slate-700">
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover grayscale-[20%]"
+                        loading="lazy"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-2xl font-bold text-white mb-1">
+                      {member.name}
+                    </h3>
+                    <div className="text-xs font-mono text-blue-400 uppercase tracking-wider">
+                      {member.role}
+                    </div>
+                  </div>
+                </div>
 
-              {/* Content */}
-              <div className="w-full">
-                <h3 className="text-4xl font-bold text-black mb-2">
-                  {member.name}
-                </h3>
-                <p className="text-sm text-gray-500 font-medium mb-5 uppercase tracking-wide">
-                  {member.role}
-                </p>
-                <p className="text-gray-700 leading-relaxed text-base">
+                <p className="text-slate-400 leading-relaxed mb-6 min-h-[80px]">
                   {member.bio}
                 </p>
+
+                <div className="flex gap-4 pt-6 border-t border-slate-800/50">
+                  {member.linkedin && (
+                    <a href={member.linkedin} target="_blank" className="text-slate-500 hover:text-white transition-colors">
+                      <Linkedin size={20} />
+                    </a>
+                  )}
+                  {member.email && (
+                    <a href={`mailto:${member.email}`} className="text-slate-500 hover:text-white transition-colors">
+                      <Mail size={20} />
+                    </a>
+                  )}
+                </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Explicit spacing before CTA */}
-        <div className="h-6"></div>
-
-        {/* Centered CTA */}
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center mt-24"
         >
-          <LetsChatButton calendlyUrl="https://calendly.com/trueinsightsai/30min" size="large" />
+          <Button 
+            onClick={handleBookCall} 
+            size="lg"
+            variant="primary"
+          >
+            <Sparkles className="w-4 h-4 mr-2 text-white/70" />
+            Work With Us
+          </Button>
         </motion.div>
       </div>
     </section>

@@ -1,47 +1,69 @@
-import { cn } from "@/lib/utils";
-import { ButtonHTMLAttributes, forwardRef } from "react";
+import React from 'react'
+import { Loader2 } from 'lucide-react'
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost";
-  size?: "sm" | "md" | "lg" | "xl";
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'glass' | 'white'
+    size?: 'sm' | 'md' | 'lg'
+    loading?: boolean
+    icon?: React.ReactNode
 }
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "primary", size = "md", children, ...props }, ref) => {
+export function Button({
+    children,
+    className = '',
+    variant = 'primary',
+    size = 'md',
+    loading = false,
+    icon,
+    disabled,
+    ...props
+}: ButtonProps) {
+    const variants = {
+        // Electric Blue Gradient (The "Pro" Action)
+        primary: 'bg-gradient-to-r from-blue-600 to-blue-500 text-white hover:from-blue-500 hover:to-blue-400 shadow-[0_0_30px_rgba(37,99,235,0.3)] border border-blue-400/20',
+        
+        // Dark Slate (Secondary Actions)
+        secondary: 'bg-slate-800 text-slate-200 hover:bg-slate-700 border border-slate-700',
+        
+        // Transparent Outline
+        outline: 'border border-slate-700 bg-transparent hover:bg-slate-800 hover:text-white',
+        
+        // Ghost (Text only)
+        ghost: 'hover:bg-slate-800 hover:text-white',
+        
+        // Glass (Blurry)
+        glass: 'glass-button',
+
+        // Clean White (High Contrast against Dark)
+        white: 'bg-white text-slate-950 hover:bg-slate-100 shadow-[0_0_20px_rgba(255,255,255,0.2)] font-bold'
+    }
+
+    const sizes = {
+        sm: 'h-9 px-4 text-xs',
+        md: 'h-11 px-6 text-sm',
+        lg: 'h-14 px-10 text-base',
+    }
+
     return (
-      <button
-        ref={ref}
-        className={cn(
-          "inline-flex items-center justify-center font-medium transition-all duration-300",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300",
-          "disabled:opacity-50 disabled:cursor-not-allowed",
-          
-          // Variants
-          {
-            "bg-black text-white hover:bg-gray-800 hover:shadow-blue-200 hover:shadow-lg active:scale-95": variant === "primary",
-            "bg-blue-50 text-black border border-blue-200 hover:bg-blue-100 hover:border-blue-300 active:scale-95": variant === "secondary",
-            "border-2 border-blue-300 text-blue-600 hover:bg-blue-300 hover:text-white": variant === "outline",
-            "text-gray-700 hover:text-blue-600 hover:bg-blue-50": variant === "ghost",
-          },
-          
-          // Sizes
-          {
-            "px-4 py-2 text-sm rounded-lg": size === "sm",
-            "px-6 py-3 text-base rounded-lg": size === "md",
-            "px-8 py-4 text-lg rounded-xl": size === "lg",
-          },
-          
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </button>
-    );
-  }
-);
-
-Button.displayName = "Button";
-
-export default Button;
-
+        <button
+            className={`
+        inline-flex items-center justify-center rounded-full font-medium transition-all duration-300
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 
+        disabled:pointer-events-none disabled:opacity-50
+        active:scale-95
+        ${variants[variant]}
+        ${sizes[size]}
+        ${className}
+      `}
+            disabled={disabled || loading}
+            {...props}
+        >
+            {loading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : icon ? (
+                <span className="mr-2">{icon}</span>
+            ) : null}
+            {children}
+        </button>
+    )
+}

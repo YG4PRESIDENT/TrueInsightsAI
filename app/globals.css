@@ -1,313 +1,86 @@
 @import "tailwindcss";
 
-:root {
-  /* Primary Colors */
-  --primary-black: #000000;
-  --primary-white: #FFFFFF;
-  --background-cream: #F5F1E8;
-  --background-dark: #1A1A1A;
+@theme {
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 
-  /* Accent Colors */
-  --accent-purple: #8B5CF6;
-  /* Agencies */
-  --accent-green: #10B981;
-  /* Brands */
-  --accent-blue: #60A5FA;
-  /* Links - Updated to softer blue */
+  /* Define custom colors manually to ensure availability */
+  --color-background: #0f172a; /* slate-900 */
+  --color-foreground: #f8fafc; /* slate-50 */
+  
+  --color-primary: #3b82f6; /* blue-500 */
+  --color-primary-foreground: #0f172a;
 
-  /* Blue Palette - Subtle Pastel Blues */
-  --blue-50: #EFF6FF;
-  /* Lightest blue tint */
-  --blue-100: #DBEAFE;
-  /* Very light pastel blue */
-  --blue-200: #BFDBFE;
-  /* Soft blue */
-  --blue-300: #93C5FD;
-  /* Medium blue */
-  --blue-400: #60A5FA;
-  /* Link blue */
-  --blue-500: #3B82F6;
-  /* Standard blue */
+  --color-secondary: #8b5cf6; /* violet-500 */
+  --color-secondary-foreground: #f8fafc;
 
-  /* Neutral Colors */
-  --gray-50: #F9FAFB;
-  --gray-100: #F3F4F6;
-  --gray-200: #E5E7EB;
-  --gray-300: #D1D5DB;
-  --gray-400: #9CA3AF;
-  --gray-500: #6B7280;
-  --gray-600: #4B5563;
-  --gray-700: #374151;
-  --gray-800: #1F2937;
-  --gray-900: #111827;
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
 
-  /* Spacing (8px grid) */
-  --space-1: 0.25rem;
-  /* 4px */
-  --space-2: 0.5rem;
-  /* 8px */
-  --space-3: 0.75rem;
-  /* 12px */
-  --space-4: 1rem;
-  /* 16px */
-  --space-5: 1.25rem;
-  /* 20px */
-  --space-6: 1.5rem;
-  /* 24px */
-  --space-8: 2rem;
-  /* 32px */
-  --space-10: 2.5rem;
-  /* 40px */
-  --space-12: 3rem;
-  /* 48px */
-  --space-16: 4rem;
-  /* 64px */
-  --space-20: 5rem;
-  /* 80px */
-  --space-24: 6rem;
-  /* 96px */
-  --space-32: 8rem;
-  /* 128px */
+  /* Animations */
+  --animate-fade-in: fadeIn 0.5s ease-out;
+  --animate-slide-up: slideUp 0.5s ease-out;
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
-  /* Border Radius */
-  --radius-sm: 0.25rem;
-  /* 4px */
-  --radius-md: 0.5rem;
-  /* 8px */
-  --radius-lg: 0.75rem;
-  /* 12px */
-  --radius-xl: 1rem;
-  /* 16px */
-  --radius-2xl: 1.5rem;
-  /* 24px */
-  --radius-full: 9999px;
-  /* Circular */
-
-  /* Animation Timing */
-  --duration-fast: 150ms;
-  --duration-normal: 300ms;
-  --duration-slow: 500ms;
-  --duration-slower: 700ms;
-
-  /* Easing Functions */
-  --ease-in: cubic-bezier(0.4, 0, 1, 1);
-  --ease-out: cubic-bezier(0, 0, 0.2, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
 }
 
-@theme inline {
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-/* Custom radial gradient utility for atmospheric effects */
-.bg-gradient-radial {
-  background-image: radial-gradient(circle, var(--tw-gradient-stops));
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
+/* Base Styles - Using CSS Variables instead of @apply to avoid lookup errors */
 body {
+  background-color: var(--color-slate-950);
+  color: var(--color-slate-50);
   font-family: var(--font-sans);
-  background: var(--primary-white);
-  color: var(--gray-900);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
+  background-attachment: fixed;
 }
 
-/* Reduced motion for accessibility */
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-
-  html {
-    scroll-behavior: auto;
-  }
+/* Utility Classes */
+@utility glass-panel {
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(30, 41, 59, 0.5);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-/* Focus visible styles */
-*:focus-visible {
-  outline: 2px solid var(--blue-300);
-  outline-offset: 2px;
+@utility glass-card {
+  background-color: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition-property: all;
+  transition-duration: 300ms;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 10px;
+@utility glass-button {
+  background-color: rgba(37, 99, 235, 0.9);
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
+  backdrop-filter: blur(4px);
+  transition-property: all;
+  transition-duration: 300ms;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--blue-50);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--blue-200);
-  border-radius: var(--radius-full);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--blue-300);
-}
-
-/* Quiz slider styling */
-input[type="range"].slider::-webkit-slider-thumb {
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #000;
-  cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease;
-}
-
-input[type="range"].slider::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
-}
-
-input[type="range"].slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #000;
-  cursor: pointer;
-  border: 2px solid white;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-/* Mobile-specific optimizations */
-@media (max-width: 640px) {
-
-  /* Ensure minimum touch targets */
-  button,
-  a,
-  input[type="submit"],
-  input[type="button"] {
-    min-height: 44px;
-    min-width: 44px;
-  }
-
-  /* Improve text readability on mobile */
-  body {
-    font-size: 16px;
-    /* Prevent zoom on iOS */
-  }
-
-  /* Better spacing for mobile */
-  .mobile-spacing-sm {
-    margin-bottom: 1rem;
-  }
-
-  .mobile-spacing-md {
-    margin-bottom: 1.5rem;
-  }
-
-  .mobile-spacing-lg {
-    margin-bottom: 2rem;
-  }
-
-  .mobile-spacing-xl {
-    margin-bottom: 3rem;
-  }
-
-  /* Mobile typography utilities */
-  .mobile-text-xs {
-    font-size: 0.75rem;
-  }
-
-  .mobile-text-sm {
-    font-size: 0.875rem;
-  }
-
-  .mobile-text-base {
-    font-size: 1rem;
-  }
-
-  .mobile-text-lg {
-    font-size: 1.125rem;
-  }
-
-  .mobile-text-xl {
-    font-size: 1.25rem;
-  }
-
-  .mobile-text-2xl {
-    font-size: 1.5rem;
-  }
-
-  .mobile-text-3xl {
-    font-size: 1.875rem;
-  }
-
-  .mobile-text-4xl {
-    font-size: 2.25rem;
-  }
-
-  /* Mobile padding utilities */
-  .mobile-px-4 {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  .mobile-px-6 {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-
-  .mobile-py-4 {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-  }
-
-  .mobile-py-6 {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-  }
-}
-
-/* Performance optimizations */
-
-/* GPU acceleration for animations */
-.will-change-transform {
-  will-change: transform;
-}
-
-.will-change-opacity {
-  will-change: opacity;
-}
-
-/* Optimize off-screen content rendering */
-section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 500px;
-}
-
-/* Isolate components to prevent layout thrashing */
-.isolated-component {
-  contain: layout style paint;
-}
-
-/* Force GPU compositing for smooth animations */
-@media (prefers-reduced-motion: no-preference) {
-  .smooth-animation {
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    perspective: 1000px;
-  }
+@utility text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, #60a5fa, #c084fc);
 }
