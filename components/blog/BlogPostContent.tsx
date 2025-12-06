@@ -137,7 +137,7 @@ export default function BlogPostContent({ post }: { post: BlogPostData }) {
         >
                 <Sparkles className="w-4 h-4 mr-2" />
                 Book a Call
-              </Button>
+              </button>
             </div>
           </motion.div>
         </article>

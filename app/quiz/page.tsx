@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -65,9 +65,9 @@ const questions = [
       "Dominate the market (be #1)"
     ]
   }
-]; // Removed email question from here
+];
 
-export default function Quiz() {
+function QuizContent() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<string | number>("");
@@ -306,5 +306,17 @@ export default function Quiz() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function Quiz() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white">
+        Loading...
+      </div>
+    }>
+      <QuizContent />
+    </Suspense>
   );
 }

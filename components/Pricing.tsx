@@ -276,7 +276,7 @@ export default function Pricing() {
             >
                     <Calendar className="w-4 h-4 sm:w-5 sm:h-5 group-hover:text-blue-300 transition-colors duration-200" />
                     <span>{tier.cta}</span>
-                  </motion.a>
+                  </a>
                 </div>
 
                 {/* Explicit Bottom Gap After Button */}
