@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,  // Required for static export
   },
-  // Using custom domain (trueinsightsai.com) so no basePath needed
+  // Using custom domain (rankett.com) so no basePath needed
 };
 
 export default nextConfig;

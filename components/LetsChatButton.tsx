@@ -8,12 +8,11 @@ interface LetsChatButtonProps {
   size?: "default" | "large";
 }
 
-export default function LetsChatButton({ 
-  calendlyUrl = "https://calendly.com/trueinsightsai/30min",
+export default function LetsChatButton({
+  calendlyUrl = "https://calendly.com/rankett/30min",
   className = "",
   size = "default"
-}: LetsChatButtonProps) {
-  return (
+}: LetsChatButtonProps) {  return (
     <a
       href={calendlyUrl}
       target="_blank"

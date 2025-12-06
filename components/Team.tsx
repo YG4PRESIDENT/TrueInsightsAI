@@ -20,7 +20,7 @@ const teamMembers: TeamMember[] = [
     bio: "Sales and marketing pro who's helped real estate brands win big. Now applying that drive to AI search.",
     image: "/team/Elijah.JPG",
     linkedin: "https://www.linkedin.com/in/elijah-leach",
-    email: "elijah@trueinsightsai.com"
+    email: "elijah@rankett.com"
   },
   {
     name: "Yahir Gonzalez",
@@ -28,13 +28,13 @@ const teamMembers: TeamMember[] = [
     bio: "AI search expert bridging traditional SEO and the new era of Generative Engine Optimization.",
     image: "/team/Yahir.png",
     linkedin: "https://www.linkedin.com/in/yahir-gonzalez",
-    email: "yahir@trueinsightsai.com"
+    email: "yahir@rankett.com"
   }
 ];
 
 export default function Team() {
   const handleBookCall = () => {
-    window.open("https://calendly.com/trueinsightsai/30min", "_blank", "noopener,noreferrer");
+    window.open("https://calendly.com/rankett/30min", "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -122,7 +122,9 @@ export default function Team() {
           className="text-center mt-24"
         >
           <Button 
-            onClick={handleBookCall} 
+            onClick={() => {
+              window.open("https://calendly.com/rankett/30min", "_blank", "noopener,noreferrer");
+            }} 
             size="lg"
             variant="primary"
           >

@@ -1,5 +1,5 @@
 // Company Information
-export const COMPANY_NAME = "TrueInsightsAI.com";
+export const COMPANY_NAME = "Rankett.com";
 export const COMPANY_TAGLINE = "GEO SEO & Local Search Intelligence";
 
 // Navigation Links
@@ -25,17 +25,17 @@ export const PLATFORMS = [
 
 // Social Media Links
 export const SOCIAL_LINKS = {
-  tiktok: "https://tiktok.com/@trueinsightsai",
-  linkedin: "https://linkedin.com/company/trueinsightsai",
-  email: "mailto:trueinsightsai@gmail.com",
+  tiktok: "https://tiktok.com/@rankett",
+  linkedin: "https://linkedin.com/company/rankett",
+  email: "mailto:hello@rankett.com",
 };
 
 // Contact Information
 export const CONTACT = {
-  email: "trueinsightsai@gmail.com",
-  supportEmail: "team@trueinsightsai.com",
+  email: "hello@rankett.com",
+  supportEmail: "team@rankett.com",
   phone: "", // Optional
-  calendly: "https://calendly.com/trueinsightsai/30min",
+  calendly: "https://calendly.com/rankett/30min",
 };
 
 // Footer Content
@@ -52,7 +52,7 @@ export const FOOTER_LINKS = {
   company: [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
-    { label: "Contact Us", href: "https://calendly.com/trueinsightsai/30min" },
+    { label: "Contact Us", href: "https://calendly.com/rankett/30min" },
   ],
 };
 

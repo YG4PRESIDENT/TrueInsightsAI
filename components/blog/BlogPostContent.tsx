@@ -131,11 +131,10 @@ export default function BlogPostContent({ post }: { post: BlogPostData }) {
               <p className="text-lg text-slate-400 mb-8 max-w-2xl mx-auto">
                 Get a free AI visibility audit and discover exactly how we can help your business rank #1.
               </p>
-              <Button
-                onClick={() => window.open("https://calendly.com/trueinsightsai/30min", "_blank")}
-                size="lg"
-                className="shadow-[0_0_30px_rgba(37,99,235,0.2)]"
-              >
+        <button 
+          onClick={() => window.open("https://calendly.com/rankett/30min", "_blank")}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-full transition-colors duration-200"
+        >
                 <Sparkles className="w-4 h-4 mr-2" />
                 Book a Call
               </Button>

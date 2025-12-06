@@ -3,7 +3,7 @@
 // =====================================================
 // Client library for integrating main site with tool subdomain
 
-const TOOL_API_URL = process.env.NEXT_PUBLIC_TOOL_API_URL || 'https://tool.trueinsightsai.com'
+const TOOL_API_URL = process.env.NEXT_PUBLIC_TOOL_API_URL || 'https://tool.rankett.com'
 
 // =====================================================
 // Types

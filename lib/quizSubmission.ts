@@ -36,8 +36,8 @@ export async function submitQuizToWeb3Forms(
   // Prepare the payload for Web3Forms
   const payload = {
     access_key: accessKey,
-    subject: "New Quiz Submission - TrueInsightsAI",
-    from_name: "TrueInsightsAI Quiz",
+    subject: "New Quiz Submission - Rankett",
+    from_name: "Rankett Quiz",
     email: data.email,
     message: `
 New quiz submission received!
@@ -53,7 +53,7 @@ ${formattedAnswers}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-This submission was captured from: https://trueinsightsai.com/quiz
+This submission was captured from: https://rankett.com/quiz
     `.trim(),
   };
 

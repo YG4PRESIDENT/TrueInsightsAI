@@ -50,7 +50,7 @@ GEO focuses on:
 
 The good news? You don't need to choose between SEO and GEO. They complement each other. But you do need specialized expertise to succeed in both.
 
-At TrueInsightsAI, we help businesses navigate this transition and dominate both traditional search and AI-powered results.
+At Rankett, we help businesses navigate this transition and dominate both traditional search and AI-powered results.
 
 Ready to get started? [Book a consultation](#pricing) today.
     `,
@@ -113,7 +113,7 @@ Unlike ChatGPT, Perplexity includes citations and sources. This makes it a prime
 
 ## Measuring Success
 
-Track your Perplexity visibility score over time and correlate it with traffic and leads. At TrueInsightsAI, we provide comprehensive monitoring across all major AI platforms.
+Track your Perplexity visibility score over time and correlate it with traffic and leads. At Rankett, we provide comprehensive monitoring across all major AI platforms.
 
 [Get your free AI visibility audit](#pricing)
     `,

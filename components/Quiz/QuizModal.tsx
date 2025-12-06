@@ -67,7 +67,7 @@ export default function QuizModal({ isOpen, onClose, websiteUrl }: QuizModalProp
 
   const handleBookCall = () => {
     // TODO: Implement booking calendar or redirect
-    window.open('https://calendly.com/trueinsightsai', '_blank');
+    window.open('https://calendly.com/rankett', '_blank');
   };
 
   const isAnswered = () => {

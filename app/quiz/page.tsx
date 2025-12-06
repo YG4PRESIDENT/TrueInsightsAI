@@ -79,7 +79,7 @@ export default function Quiz() {
   const totalSteps = questions.length;
   const progress = ((currentStep + 1) / totalSteps) * 100;
 
-  const handleNext = () => {
+  const handleNext = async () => {
     // Save answer
     const newAnswer: QuizAnswer = {
       step: currentStep + 1,
@@ -89,20 +89,48 @@ export default function Quiz() {
 
     const updatedAnswers = [...answers, newAnswer];
     setAnswers(updatedAnswers);
-    
+
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
       setSelectedAnswer(currentQuestion.type === "slider" ? sliderValue : ""); // Reset or set default
       setSliderValue(5); // Reset slider
     } else {
-      // Quiz Complete: Redirect to Tool with URL (NO Email from Quiz)
-      const toolBaseUrl = process.env.NEXT_PUBLIC_TOOL_URL || 'http://localhost:3001';
-      
-      const redirectUrl = new URL(toolBaseUrl);
-      if (websiteUrl) redirectUrl.searchParams.append('url', websiteUrl);
-      
-      console.log("Quiz completion detected. Redirecting to:", redirectUrl.toString()); // DEBUG LOG
-      window.location.href = redirectUrl.toString();
+      // Quiz Complete: Submit to API before redirecting
+      console.log("Quiz completion detected. Submitting answers...");
+
+      try {
+        // Call tool API to store quiz data
+        const toolApiUrl = process.env.NEXT_PUBLIC_TOOL_API_URL || 'https://tool.rankett.com';
+
+        const response = await fetch(`${toolApiUrl}/api/quiz/submit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            websiteUrl: websiteUrl,
+            quizAnswers: updatedAnswers
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.toolUrl) {
+          // Redirect to tool with session token
+          console.log("Quiz submitted successfully. Redirecting to:", data.toolUrl);
+          window.location.href = data.toolUrl;
+        } else {
+          throw new Error(data.error || 'Failed to submit quiz');
+        }
+      } catch (error) {
+        console.error('Failed to submit quiz:', error);
+
+        // Fallback: Redirect without session token
+        const toolBaseUrl = process.env.NEXT_PUBLIC_TOOL_URL || 'https://tool.rankett.com';
+        const redirectUrl = new URL(toolBaseUrl);
+        if (websiteUrl) redirectUrl.searchParams.append('url', websiteUrl);
+
+        console.log("Fallback redirect to:", redirectUrl.toString());
+        window.location.href = redirectUrl.toString();
+      }
     }
   };
 

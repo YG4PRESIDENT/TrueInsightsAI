@@ -268,13 +268,12 @@ export default function Pricing() {
 
                 {/* CTA Button */}
                 <div className="px-2 sm:px-6 flex justify-center">
-                  <motion.a
-                    href="https://calendly.com/trueinsightsai/30min"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.02 }}
-                    className="group inline-flex items-center justify-center gap-3 sm:gap-4 bg-black text-white rounded-full font-bold transition-all duration-200 hover:bg-gray-800 hover:shadow-xl hover:shadow-blue-200 px-6 sm:px-8 py-3 sm:py-4 text-sm sm:text-base min-h-[48px] w-full sm:w-auto"
-                  >
+            <a 
+              href="https://calendly.com/rankett/30min" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:text-blue-700 font-medium flex items-center justify-center gap-2 group"
+            >
                     <Calendar className="w-4 h-4 sm:w-5 sm:h-5 group-hover:text-blue-300 transition-colors duration-200" />
                     <span>{tier.cta}</span>
                   </motion.a>

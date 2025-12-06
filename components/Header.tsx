@@ -36,7 +36,7 @@ export default function Header() {
   };
 
   const handleBookCall = () => {
-    window.open("https://calendly.com/trueinsightsai/30min", "_blank", "noopener,noreferrer");
+    window.open("https://calendly.com/rankett/30min", "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -54,7 +54,7 @@ export default function Header() {
         <a href="/" className="flex-shrink-0 flex items-center gap-2 hover:opacity-80 transition-opacity">
           <img 
             src="/images/Official logo.png" 
-            alt="True Insights AI" 
+            alt="Rankett" 
             className="h-10 w-auto brightness-0 invert" 
           />
         </a>

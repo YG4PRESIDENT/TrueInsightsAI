@@ -21,7 +21,7 @@ const authorInfo: Record<string, {
     bio: "AI search optimization expert specializing in helping businesses dominate AI-driven search results.",
     image: "/team/Yahir.png",
     linkedin: "https://www.linkedin.com/in/yahir-gonzalez",
-    email: "yahir@trueinsightsai.com"
+    email: "yahir@rankett.com"
   },
   "Elijah Leach": {
     name: "Elijah Leach",
@@ -29,7 +29,7 @@ const authorInfo: Record<string, {
     bio: "Experienced in sales and digital marketing, helping businesses succeed in AI Search visibility.",
     image: "/team/Elijah.JPG",
     linkedin: "https://www.linkedin.com/in/elijah-leach",
-    email: "elijah@trueinsightsai.com"
+    email: "elijah@rankett.com"
   }
 };
 

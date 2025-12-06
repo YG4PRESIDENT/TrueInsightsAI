@@ -20,13 +20,13 @@ export default function TermsOfServicePage() {
             </div>
 
             <p>
-              These Terms and Conditions ("Terms") govern your access to and use of TrueInsightsAI.com (the "Service"), operated by Think Outside The Box Ventures, LLC, a Wyoming limited liability company ("Company," "we," "us," or "our"). By accessing or using the Service, you agree to be bound by these Terms.
+              These Terms and Conditions ("Terms") govern your access to and use of Rankett.com (the "Service"), operated by Think Outside The Box Ventures, LLC, a Wyoming limited liability company ("Company," "we," "us," or "our"). By accessing or using the Service, you agree to be bound by these Terms.
             </p>
 
             <section>
               <h2 className="text-2xl font-semibold text-black mb-3">1. Contracting Entity</h2>
               <p>
-                TrueInsightsAI.com is a trade name of Think Outside The Box Ventures, LLC. When you use the Service, you are entering into a contract with Think Outside The Box Ventures, LLC, located at 30 N Gould St Ste R, Sheridan, WY 82801.
+                Rankett.com is a trade name of Think Outside The Box Ventures, LLC. When you use the Service, you are entering into a contract with Think Outside The Box Ventures, LLC, located at 30 N Gould St Ste R, Sheridan, WY 82801.
               </p>
             </section>
 
@@ -40,7 +40,7 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold text-black mb-3">3. Description of Service</h2>
               <p>
-                TrueInsightsAI.com is a subscription-based analytics platform designed to measure and monitor brand visibility within AI-generated search results from AI search engines, including but not limited to ChatGPT, Gemini, and Perplexity. The Service provides GEO (Generative Engine Optimization) insights, local search intelligence, and helps businesses track and optimize their presence across AI platforms. The Service identifies whether and how a brand appears in AI outputs, analyzes the sources cited by large language models (LLMs), and tracks changes to visibility over time.
+                Rankett.com is a subscription-based analytics platform designed to measure and monitor brand visibility within AI-generated search results from AI search engines, including but not limited to ChatGPT, Gemini, and Perplexity. The Service provides GEO (Generative Engine Optimization) insights, local search intelligence, and helps businesses track and optimize their presence across AI platforms. The Service identifies whether and how a brand appears in AI outputs, analyzes the sources cited by large language models (LLMs), and tracks changes to visibility over time.
               </p>
             </section>
 
@@ -70,7 +70,7 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold text-black mb-3">7. API Access</h2>
               <p>
-                API access is available only to paid customers on a custom enterprise plan, subject to additional terms provided separately. Contact team@trueinsightsai.com for details.
+                API access is available only to paid customers on a custom enterprise plan, subject to additional terms provided separately. Contact team@rankett.com for details.
               </p>
             </section>
 
@@ -139,7 +139,7 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold text-black mb-3">16. DMCA & IP Infringement</h2>
               <p>
-                If you believe content within the Service infringes your intellectual property rights, please notify us at team@trueinsightsai.com with sufficient details, and we will respond in accordance with applicable law, including the Digital Millennium Copyright Act (DMCA).
+                If you believe content within the Service infringes your intellectual property rights, please notify us at team@rankett.com with sufficient details, and we will respond in accordance with applicable law, including the Digital Millennium Copyright Act (DMCA).
               </p>
             </section>
 
@@ -202,7 +202,7 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold text-black mb-3">25. Contact</h2>
               <p>
-                📩 <a href="mailto:team@trueinsightsai.com" className="text-blue-600 hover:underline">team@trueinsightsai.com</a>
+                📩 <a href="mailto:team@rankett.com" className="text-blue-600 hover:underline">team@rankett.com</a>
               </p>
             </section>
           </div>

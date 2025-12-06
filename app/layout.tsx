@@ -15,7 +15,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TrueInsightsAI - Dominate AI Search",
+  title: "Rankett - Dominate AI Search",
   description: "The Search Console for the AI Era. Audit your visibility on ChatGPT, Claude, and Gemini for free.",
 };
 
