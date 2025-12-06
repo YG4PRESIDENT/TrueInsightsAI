@@ -84,7 +84,7 @@ export default function Hero() {
         {/* Footer / Trust */}
         <div className="text-center">
           <p className="text-xs text-slate-500 uppercase tracking-widest mb-6">Powered By</p>
-          <div className="flex justify-center items-center gap-8">
+          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">
             <div className="flex items-center gap-2">
                <BrandLogo platform="chatgpt" size={24} />
                <span className="text-sm font-medium text-slate-300">OpenAI</span>
@@ -95,7 +95,23 @@ export default function Hero() {
             </div>
             <div className="flex items-center gap-2">
                <BrandLogo platform="gemini" size={24} />
+               <span className="text-sm font-medium text-slate-300">Gemini</span>
+            </div>
+            <div className="flex items-center gap-2">
+               <BrandLogo platform="google" size={24} />
                <span className="text-sm font-medium text-slate-300">Google Overviews</span>
+            </div>
+            <div className="flex items-center gap-2">
+               <BrandLogo platform="perplexity" size={24} />
+               <span className="text-sm font-medium text-slate-300">Perplexity</span>
+            </div>
+            <div className="flex items-center gap-2">
+               <BrandLogo platform="grok" size={24} />
+               <span className="text-sm font-medium text-slate-300">Grok</span>
+            </div>
+            <div className="flex items-center gap-2">
+               <BrandLogo platform="deepseek" size={24} />
+               <span className="text-sm font-medium text-slate-300">DeepSeek</span>
             </div>
           </div>
         </div>
