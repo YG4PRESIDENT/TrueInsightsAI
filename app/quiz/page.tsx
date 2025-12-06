@@ -196,11 +196,6 @@ export default function Quiz() {
                 <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight">
                   {currentQuestion.question}
                 </h2>
-                 {currentQuestion.subtitle && ( // Render subtitle for email question
-                   <p className="text-lg text-slate-400">
-                     {currentQuestion.subtitle}
-                   </p>
-                 )}
               </div>
 
               {/* Answer Options */}
