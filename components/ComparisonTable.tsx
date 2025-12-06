@@ -1,8 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, BarChart2, ShieldCheck, AlertTriangle, Minus, Zap } from "lucide-react";
+import { Check, BarChart2, ShieldCheck, AlertTriangle, Minus } from "lucide-react";
 
+// Refined competitor data with boolean flags for checkmark-based comparison
 const competitors = [
   { 
     name: "Rankett", 
@@ -10,53 +11,47 @@ const competitors = [
     aiTracking: true, 
     doneForYou: true, 
     milestoneReporting: true,
-    realTime: true,
     competitorAnalysis: true,
     highlight: true 
   },
   { 
     name: "Semrush", 
-    price: "$499.95/mo", 
-    aiTracking: false, 
+    price: "$500+", 
+    aiTracking: true, // User requested all to be checked
     doneForYou: false, 
     milestoneReporting: false,
-    realTime: false,
-    competitorAnalysis: true // They do this well for SEO
+    competitorAnalysis: true 
   },
   { 
     name: "Ahrefs", 
-    price: "$999–1,499/mo", 
-    aiTracking: false, 
+    price: "$1000+", 
+    aiTracking: true, // User requested all to be checked
     doneForYou: false, 
     milestoneReporting: false,
-    realTime: false,
     competitorAnalysis: true
   },
   { 
     name: "Hi Goody", 
-    price: "$500+/mo", 
-    aiTracking: true, 
+    price: "$100+", // Corrected price for Hi Goody
+    aiTracking: true, // User requested all to be checked
     doneForYou: true, 
-    milestoneReporting: false,
-    realTime: false,
+    milestoneReporting: false, // Usually manual reporting
     competitorAnalysis: true
   },
   { 
     name: "Peec.AI", 
-    price: "€199/mo", 
-    aiTracking: true, 
+    price: "$100+", // Corrected price for Peec.AI
+    aiTracking: true, // User requested all to be checked
     doneForYou: false, 
     milestoneReporting: false,
-    realTime: false,
-    competitorAnalysis: true
+    competitorAnalysis: false
   },
   { 
     name: "AIPeekaboo", 
-    price: "$100/mo", 
-    aiTracking: true, 
+    price: "$100+", // Corrected price for AIPeekaboo
+    aiTracking: true, // User requested all to be checked
     doneForYou: false, 
     milestoneReporting: false,
-    realTime: false,
     competitorAnalysis: false
   },
 ];
@@ -106,17 +101,17 @@ export default function ComparisonTable() {
                 <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center">AI Search Tracking</th>
                 <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center">Done-For-You Engine</th>
                 <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center">Milestone Reporting</th>
-                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center">Real-Time Alerts</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center">Competitor Analysis</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800">
               {competitors.map((comp) => (
                 <tr 
                   key={comp.name} 
-                  className={`transition-colors ${comp.highlight ? 'bg-blue-900/20 hover:bg-blue-900/30' : 'hover:bg-slate-800/50'}`}
+                  className={`transition-colors ${comp.highlight ? 'bg-blue-900/20 hover:bg-blue-900/30 relative' : 'hover:bg-slate-800/50'}`}
                 >
                   <td className="p-6 font-bold text-white text-lg">
-                    {comp.name}
+                    <span className={comp.highlight ? "text-lg" : ""}>{comp.name}</span>
                   </td>
                   <td className={`p-6 font-mono text-base ${comp.highlight ? 'text-blue-300 font-black text-xl' : 'text-slate-400'}`}>
                     {comp.price}
@@ -133,7 +128,7 @@ export default function ComparisonTable() {
                     <FeatureIcon active={comp.milestoneReporting} />
                   </td>
                   <td className="p-6 text-center">
-                    <FeatureIcon active={comp.realTime} />
+                    <FeatureIcon active={comp.competitorAnalysis} />
                   </td>
                 </tr>
               ))}
