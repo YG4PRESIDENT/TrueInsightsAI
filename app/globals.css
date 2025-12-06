@@ -31,6 +31,7 @@
   --animate-slide-up: slideUp 0.5s ease-out;
   --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee-fast: marquee 25s linear infinite;
 
   @keyframes fadeIn {
     from { opacity: 0; }

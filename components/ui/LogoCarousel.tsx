@@ -14,8 +14,14 @@ const platforms = [
 
 export default function LogoCarousel() {
   return (
-    <div className="w-full overflow-hidden">
-      <div className="flex animate-marquee will-change-transform">
+    <div
+      className="w-full overflow-hidden"
+      style={{
+        maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+        WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+      }}
+    >
+      <div className="flex animate-marquee-fast will-change-transform">
         {/* Duplicate content for seamless infinite loop */}
         {[...platforms, ...platforms].map((platform, index) => (
           <div
