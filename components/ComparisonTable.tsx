@@ -1,52 +1,63 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, X, BarChart2, ShieldCheck, Zap, AlertTriangle, Minus } from "lucide-react";
+import { Check, BarChart2, ShieldCheck, AlertTriangle, Minus, Zap } from "lucide-react";
 
-// Refined competitor data with boolean flags for checkmark-based comparison
 const competitors = [
   { 
-    name: "Rankett (True Insights)", 
-    price: "Custom / Free Audit", 
-    aiFirst: true, 
+    name: "Rankett", 
+    price: "FREE", 
+    aiTracking: true, 
     doneForYou: true, 
+    milestoneReporting: true,
     realTime: true,
+    competitorAnalysis: true,
     highlight: true 
   },
   { 
     name: "Semrush", 
     price: "$499.95/mo", 
-    aiFirst: false, 
+    aiTracking: false, 
     doneForYou: false, 
-    realTime: false 
+    milestoneReporting: false,
+    realTime: false,
+    competitorAnalysis: true // They do this well for SEO
   },
   { 
     name: "Ahrefs", 
     price: "$999–1,499/mo", 
-    aiFirst: false, 
+    aiTracking: false, 
     doneForYou: false, 
-    realTime: false 
+    milestoneReporting: false,
+    realTime: false,
+    competitorAnalysis: true
   },
   { 
-    name: "Goodie / higoodie", 
+    name: "Hi Goody", 
     price: "$500+/mo", 
-    aiFirst: true, 
+    aiTracking: true, 
     doneForYou: true, 
-    realTime: false // Usually manual reporting
+    milestoneReporting: false,
+    realTime: false,
+    competitorAnalysis: true
   },
   { 
-    name: "Peec AI", 
+    name: "Peec.AI", 
     price: "€199/mo", 
-    aiFirst: true, 
+    aiTracking: true, 
     doneForYou: false, 
-    realTime: false 
+    milestoneReporting: false,
+    realTime: false,
+    competitorAnalysis: true
   },
   { 
-    name: "Peekaboo", 
+    name: "AIPeekaboo", 
     price: "$100/mo", 
-    aiFirst: true, 
+    aiTracking: true, 
     doneForYou: false, 
-    realTime: false 
+    milestoneReporting: false,
+    realTime: false,
+    competitorAnalysis: false
   },
 ];
 
@@ -90,66 +101,39 @@ export default function ComparisonTable() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-800 bg-slate-900/80">
-                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider w-1/4">Platform</th>
-                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider w-1/4">Monthly Cost</th>
-                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center w-1/6">AI First?</th>
-                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center w-1/6">Done-For-You?</th>
-                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center w-1/6">Real-Time Data?</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider min-w-[200px]">Platform</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider min-w-[150px]">Monthly Cost</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center">AI Search Tracking</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center">Done-For-You Engine</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center">Milestone Reporting</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center">Real-Time Alerts</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800">
               {competitors.map((comp) => (
                 <tr 
                   key={comp.name} 
-                  className={`transition-colors ${comp.highlight ? 'bg-blue-900/20 hover:bg-blue-900/30 relative' : 'hover:bg-slate-800/50'}`}
+                  className={`transition-colors ${comp.highlight ? 'bg-blue-900/20 hover:bg-blue-900/30' : 'hover:bg-slate-800/50'}`}
                 >
-                  <td className="p-6 font-medium text-white flex items-center gap-3">
-                    {comp.highlight && <Zap className="w-5 h-5 text-yellow-400 fill-yellow-400 flex-shrink-0" />}
-                    <span className={comp.highlight ? "text-lg" : ""}>{comp.name}</span>
+                  <td className="p-6 font-bold text-white text-lg">
+                    {comp.name}
                   </td>
-                  <td className={`p-6 ${comp.highlight ? 'text-blue-300 font-bold text-lg' : 'text-slate-400 font-mono'}`}>
+                  <td className={`p-6 font-mono text-base ${comp.highlight ? 'text-blue-300 font-black text-xl' : 'text-slate-400'}`}>
                     {comp.price}
                   </td>
                   
-                  {/* Feature Columns - Checkmark Based */}
+                  {/* Feature Columns */}
                   <td className="p-6 text-center">
-                    {comp.aiFirst ? (
-                      <div className="flex justify-center">
-                        <div className="p-1 bg-green-500/10 rounded-full">
-                          <Check className="w-6 h-6 text-green-500" strokeWidth={3} />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex justify-center">
-                        <Minus className="w-6 h-6 text-slate-600" />
-                      </div>
-                    )}
+                    <FeatureIcon active={comp.aiTracking} />
                   </td>
                   <td className="p-6 text-center">
-                    {comp.doneForYou ? (
-                      <div className="flex justify-center">
-                        <div className="p-1 bg-green-500/10 rounded-full">
-                          <Check className="w-6 h-6 text-green-500" strokeWidth={3} />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex justify-center">
-                        <X className="w-6 h-6 text-slate-600" />
-                      </div>
-                    )}
+                    <FeatureIcon active={comp.doneForYou} />
                   </td>
                   <td className="p-6 text-center">
-                    {comp.realTime ? (
-                      <div className="flex justify-center">
-                        <div className="p-1 bg-green-500/10 rounded-full">
-                          <Check className="w-6 h-6 text-green-500" strokeWidth={3} />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex justify-center">
-                        <X className="w-6 h-6 text-slate-600" />
-                      </div>
-                    )}
+                    <FeatureIcon active={comp.milestoneReporting} />
+                  </td>
+                  <td className="p-6 text-center">
+                    <FeatureIcon active={comp.realTime} />
                   </td>
                 </tr>
               ))}
@@ -240,5 +224,22 @@ export default function ComparisonTable() {
 
       </div>
     </section>
+  );
+}
+
+function FeatureIcon({ active }: { active: boolean }) {
+  if (active) {
+    return (
+      <div className="flex justify-center">
+        <div className="p-1.5 bg-green-500/10 rounded-full">
+          <Check className="w-5 h-5 text-green-500" strokeWidth={3} />
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="flex justify-center">
+      <Minus className="w-5 h-5 text-slate-600" />
+    </div>
   );
 }
