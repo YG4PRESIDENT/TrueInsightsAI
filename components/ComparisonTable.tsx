@@ -1,17 +1,53 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, X, BarChart2, ShieldCheck, Zap, AlertTriangle } from "lucide-react";
+import { Check, X, BarChart2, ShieldCheck, Zap, AlertTriangle, Minus } from "lucide-react";
 
+// Refined competitor data with boolean flags for checkmark-based comparison
 const competitors = [
-  { name: "Rankett (True Insights)", price: "Custom / Free Audit", type: "Done-for-you AI Engine", aiFocus: true, highlight: true },
-  { name: "Semrush", price: "$499.95/mo", type: "DIY SEO Tool", aiFocus: false },
-  { name: "Ahrefs", price: "$999–1,499/mo", type: "DIY SEO Tool", aiFocus: false },
-  { name: "Clearscope", price: "$399/mo", type: "Content Optimization", aiFocus: false },
-  { name: "Goodie / higoodie", price: "$500+/mo", type: "Service", aiFocus: true },
-  { name: "Peec AI", price: "€199/mo", type: "AI Tool", aiFocus: true },
-  { name: "Peekaboo", price: "$100/mo", type: "AI Tool", aiFocus: true },
-  { name: "GrowthBar", price: "$199/mo", type: "AI Writing Tool", aiFocus: true },
+  { 
+    name: "Rankett (True Insights)", 
+    price: "Custom / Free Audit", 
+    aiFirst: true, 
+    doneForYou: true, 
+    realTime: true,
+    highlight: true 
+  },
+  { 
+    name: "Semrush", 
+    price: "$499.95/mo", 
+    aiFirst: false, 
+    doneForYou: false, 
+    realTime: false 
+  },
+  { 
+    name: "Ahrefs", 
+    price: "$999–1,499/mo", 
+    aiFirst: false, 
+    doneForYou: false, 
+    realTime: false 
+  },
+  { 
+    name: "Goodie / higoodie", 
+    price: "$500+/mo", 
+    aiFirst: true, 
+    doneForYou: true, 
+    realTime: false // Usually manual reporting
+  },
+  { 
+    name: "Peec AI", 
+    price: "€199/mo", 
+    aiFirst: true, 
+    doneForYou: false, 
+    realTime: false 
+  },
+  { 
+    name: "Peekaboo", 
+    price: "$100/mo", 
+    aiFirst: true, 
+    doneForYou: false, 
+    realTime: false 
+  },
 ];
 
 export default function ComparisonTable() {
@@ -39,7 +75,7 @@ export default function ComparisonTable() {
             transition={{ delay: 0.1 }}
             className="text-xl text-slate-400 max-w-3xl mx-auto"
           >
-            Traditional SEO tools weren&apos;t built for AI. We were.
+            See why brands choose our AI Visibility Engine over traditional tools.
           </motion.p>
         </div>
 
@@ -49,38 +85,70 @@ export default function ComparisonTable() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="overflow-x-auto rounded-2xl border border-slate-800 shadow-2xl mb-32"
+          className="overflow-x-auto rounded-2xl border border-slate-800 shadow-2xl mb-32 bg-slate-900/50 backdrop-blur-sm"
         >
-          <table className="w-full text-left border-collapse bg-slate-900/50 backdrop-blur-sm">
+          <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-800 bg-slate-900/80">
-                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider">Platform</th>
-                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider">Monthly Cost</th>
-                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider">Service Model</th>
-                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center">AI First?</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider w-1/4">Platform</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider w-1/4">Monthly Cost</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center w-1/6">AI First?</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center w-1/6">Done-For-You?</th>
+                <th className="p-6 text-sm font-bold text-slate-300 uppercase tracking-wider text-center w-1/6">Real-Time Data?</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800">
               {competitors.map((comp) => (
                 <tr 
                   key={comp.name} 
-                  className={`transition-colors ${comp.highlight ? 'bg-blue-900/20 hover:bg-blue-900/30' : 'hover:bg-slate-800/50'}`}
+                  className={`transition-colors ${comp.highlight ? 'bg-blue-900/20 hover:bg-blue-900/30 relative' : 'hover:bg-slate-800/50'}`}
                 >
                   <td className="p-6 font-medium text-white flex items-center gap-3">
-                    {comp.highlight && <Zap className="w-5 h-5 text-yellow-400 fill-yellow-400" />}
-                    {comp.name}
+                    {comp.highlight && <Zap className="w-5 h-5 text-yellow-400 fill-yellow-400 flex-shrink-0" />}
+                    <span className={comp.highlight ? "text-lg" : ""}>{comp.name}</span>
                   </td>
-                  <td className={`p-6 ${comp.highlight ? 'text-blue-300 font-bold' : 'text-slate-400'}`}>
+                  <td className={`p-6 ${comp.highlight ? 'text-blue-300 font-bold text-lg' : 'text-slate-400 font-mono'}`}>
                     {comp.price}
                   </td>
-                  <td className="p-6 text-slate-300">
-                    {comp.type}
+                  
+                  {/* Feature Columns - Checkmark Based */}
+                  <td className="p-6 text-center">
+                    {comp.aiFirst ? (
+                      <div className="flex justify-center">
+                        <div className="p-1 bg-green-500/10 rounded-full">
+                          <Check className="w-6 h-6 text-green-500" strokeWidth={3} />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex justify-center">
+                        <Minus className="w-6 h-6 text-slate-600" />
+                      </div>
+                    )}
                   </td>
                   <td className="p-6 text-center">
-                    {comp.aiFocus ? (
-                      <Check className="w-6 h-6 text-green-500 mx-auto" />
+                    {comp.doneForYou ? (
+                      <div className="flex justify-center">
+                        <div className="p-1 bg-green-500/10 rounded-full">
+                          <Check className="w-6 h-6 text-green-500" strokeWidth={3} />
+                        </div>
+                      </div>
                     ) : (
-                      <X className="w-6 h-6 text-slate-600 mx-auto" />
+                      <div className="flex justify-center">
+                        <X className="w-6 h-6 text-slate-600" />
+                      </div>
+                    )}
+                  </td>
+                  <td className="p-6 text-center">
+                    {comp.realTime ? (
+                      <div className="flex justify-center">
+                        <div className="p-1 bg-green-500/10 rounded-full">
+                          <Check className="w-6 h-6 text-green-500" strokeWidth={3} />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex justify-center">
+                        <X className="w-6 h-6 text-slate-600" />
+                      </div>
                     )}
                   </td>
                 </tr>
