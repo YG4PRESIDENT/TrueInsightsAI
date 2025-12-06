@@ -1,9 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, BarChart2, ShieldCheck, AlertTriangle, Minus } from "lucide-react";
+import { Check, BarChart2, ShieldCheck, AlertTriangle, Minus, BrainCircuit, Hourglass, LineChart } from "lucide-react";
 
-// Refined competitor data with boolean flags for checkmark-based comparison
 const competitors = [
   { 
     name: "Rankett", 
@@ -17,7 +16,7 @@ const competitors = [
   { 
     name: "Semrush", 
     price: "$500+", 
-    aiTracking: true, // User requested all to be checked
+    aiTracking: true, 
     doneForYou: false, 
     milestoneReporting: false,
     competitorAnalysis: true 
@@ -25,31 +24,31 @@ const competitors = [
   { 
     name: "Ahrefs", 
     price: "$1000+", 
-    aiTracking: true, // User requested all to be checked
+    aiTracking: true, 
     doneForYou: false, 
     milestoneReporting: false,
     competitorAnalysis: true
   },
   { 
     name: "Hi Goody", 
-    price: "$100+", // Corrected price for Hi Goody
-    aiTracking: true, // User requested all to be checked
+    price: "$100+", 
+    aiTracking: true, 
     doneForYou: true, 
-    milestoneReporting: false, // Usually manual reporting
+    milestoneReporting: false, 
     competitorAnalysis: true
   },
   { 
     name: "Peec.AI", 
-    price: "$100+", // Corrected price for Peec.AI
-    aiTracking: true, // User requested all to be checked
+    price: "$100+", 
+    aiTracking: true, 
     doneForYou: false, 
     milestoneReporting: false,
     competitorAnalysis: false
   },
   { 
     name: "AIPeekaboo", 
-    price: "$100+", // Corrected price for AIPeekaboo
-    aiTracking: true, // User requested all to be checked
+    price: "$100+", 
+    aiTracking: true, 
     doneForYou: false, 
     milestoneReporting: false,
     competitorAnalysis: false
@@ -137,69 +136,64 @@ export default function ComparisonTable() {
         </motion.div>
 
         {/* Info Grid / Copy Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-24">
           
-          {/* Left Column: The Core Value */}
-          <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="space-y-8"
+          {/* Card 1: AI Systems */}
+          <InfoCard 
+            icon={<BrainCircuit className="w-8 h-8 text-blue-400" />}
+            title="AI Visibility Systems"
+            delay={0}
           >
-            <div className="bg-slate-900/50 p-8 rounded-2xl border border-slate-800 border-l-4 border-l-blue-500">
-              <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                <ShieldCheck className="w-6 h-6 text-blue-500" />
-                AI Visibility Systems
-              </h3>
-              <p className="text-slate-400 leading-relaxed mb-4">
-                We get you cited by ChatGPT, Perplexity, and Gemini when your ideal customers ask for recommendations, generating leads that convert <span className="text-white font-semibold">5-25X better than Google</span>, at a fraction of the ad cost.
-              </p>
-              <p className="text-slate-400 leading-relaxed">
-                We build AI Visibility Systems that influence how models identify, trust, and recommend businesses. We engineer how AI models interpret and prioritize your company in real customer searches.
-              </p>
-            </div>
+            <p className="mb-4">
+              We get you cited by ChatGPT, Perplexity, and Gemini when your ideal customers ask for recommendations, generating leads that convert <span className="text-white font-semibold">5-25X better than Google</span>.
+            </p>
+            <p>
+              We build systems that influence how models identify, trust, and recommend businesses, engineering how AI prioritizes your company.
+            </p>
+          </InfoCard>
 
-            <div className="bg-slate-900/50 p-8 rounded-2xl border border-slate-800 border-l-4 border-l-purple-500">
-              <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                <AlertTriangle className="w-6 h-6 text-purple-500" />
-                The Window of Opportunity
-              </h3>
-              <p className="text-slate-400 leading-relaxed">
-                AI search is free right now. That won&apos;t last forever. And while it&apos;s open, there&apos;s a window where the businesses that show up first will lock in the advantage. AI doesn&apos;t guess who to recommend. It looks at signals online to decide who&apos;s trusted, active, and relevant.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Right Column: Reporting & Trust */}
-          <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="space-y-8"
+          {/* Card 2: Window of Opportunity */}
+          <InfoCard 
+            icon={<Hourglass className="w-8 h-8 text-purple-400" />}
+            title="The Window of Opportunity"
+            delay={0.1}
           >
-            <div className="bg-slate-900/50 p-8 rounded-2xl border border-slate-800 border-l-4 border-l-green-500">
-              <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
-                <BarChart2 className="w-6 h-6 text-green-500" />
-                Real-Time Milestone Reporting
-              </h3>
-              <p className="text-slate-400 leading-relaxed mb-4">
-                Milestone Reporting isn&apos;t some boring monthly PDF you&apos;ll never open. It&apos;s your progress, tracked in real time. We show you exactly how your AI visibility is moving across search engines and AI platforms, where your business is showing up (and where it&apos;s not), what&apos;s improving, and how you stack up against competitors.
-              </p>
-              <p className="text-slate-400 leading-relaxed">
-                Simple, transparent, and focused on what actually matters: getting you seen more and bringing in more leads.
-              </p>
-            </div>
+            <p>
+              AI search is free right now, but that won&apos;t last. There&apos;s a critical window where businesses that show up first will lock in the advantage.
+            </p>
+            <p className="mt-4">
+              AI doesn&apos;t guess; it decides based on signals. We make sure your business sends the right signals so your name is the one it keeps choosing.
+            </p>
+          </InfoCard>
 
-            <div className="p-8">
-              <h3 className="text-2xl font-bold text-white mb-4">Trust & Safety</h3>
-              <p className="text-slate-400 leading-relaxed mb-6">
-                AI recommends based on trust. We make sure your business looks like the safest choice. It&apos;s not about gaming the system. It&apos;s about becoming the obvious answer, and we got it down to a science.
-              </p>
-              <div className="pl-6 border-l-2 border-slate-700 italic text-slate-500">
-                &quot;We operate AI Visibility Infrastructure for high-competition markets. If you&apos;re small, AI only shows the best choice. We make sure you look like the obvious one.&quot;
-              </div>
+          {/* Card 3: Milestone Reporting */}
+          <InfoCard 
+            icon={<LineChart className="w-8 h-8 text-green-400" />}
+            title="Milestone Reporting"
+            delay={0.2}
+          >
+            <p className="mb-4">
+              Forget boring PDFs. We track your progress in real time. See exactly how your AI Visibility Score moves, where you appear, and how you stack up against competitors.
+            </p>
+            <p>
+              Simple, transparent updates focused on what matters: getting you seen more and bringing in more leads.
+            </p>
+          </InfoCard>
+
+          {/* Card 4: Trust & Safety */}
+          <InfoCard 
+            icon={<ShieldCheck className="w-8 h-8 text-teal-400" />}
+            title="Trust & Safety"
+            delay={0.3}
+          >
+            <p className="mb-4">
+              AI recommends based on trust. We ensure your business looks like the safest, most obvious choice. It&apos;s not about gaming the system; it&apos;s about becoming the authority.
+            </p>
+            <div className="mt-4 pt-4 border-t border-slate-800/50 italic text-slate-500 text-sm">
+              &quot;If you&apos;re small, AI only shows the best choice. We make sure you look like the obvious one.&quot;
             </div>
-          </motion.div>
+          </InfoCard>
+
         </div>
 
         {/* Closing Quote */}
@@ -219,6 +213,27 @@ export default function ComparisonTable() {
 
       </div>
     </section>
+  );
+}
+
+function InfoCard({ icon, title, children, delay }: { icon: React.ReactNode, title: string, children: React.ReactNode, delay: number }) {
+  return (
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay }}
+      whileHover={{ y: -5 }}
+      className="bg-slate-900/40 backdrop-blur-md border border-slate-800 p-8 rounded-2xl hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.1)] transition-all duration-300 group"
+    >
+      <div className="mb-6 p-3 bg-slate-950 rounded-full inline-block border border-slate-800 group-hover:border-blue-500/30 transition-colors">
+        {icon}
+      </div>
+      <h3 className="text-2xl font-bold text-white mb-4">{title}</h3>
+      <div className="text-slate-400 leading-relaxed">
+        {children}
+      </div>
+    </motion.div>
   );
 }
 
