@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Globe, Search } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
-import BrandLogo from '@/components/ui/BrandLogo'
+import LogoCarousel from '@/components/ui/LogoCarousel'
 
 export default function Hero() {
   const [url, setUrl] = useState('')
@@ -84,36 +84,7 @@ export default function Hero() {
         {/* Footer / Trust */}
         <div className="text-center">
           <p className="text-xs text-slate-500 uppercase tracking-widest mb-6">Powered By</p>
-          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">
-            <div className="flex items-center gap-2">
-               <BrandLogo platform="chatgpt" size={24} />
-               <span className="text-sm font-medium text-slate-300">OpenAI</span>
-            </div>
-            <div className="flex items-center gap-2">
-               <BrandLogo platform="claude" size={24} />
-               <span className="text-sm font-medium text-slate-300">Anthropic</span>
-            </div>
-            <div className="flex items-center gap-2">
-               <BrandLogo platform="gemini" size={24} />
-               <span className="text-sm font-medium text-slate-300">Gemini</span>
-            </div>
-            <div className="flex items-center gap-2">
-               <BrandLogo platform="google" size={24} />
-               <span className="text-sm font-medium text-slate-300">Google Overviews</span>
-            </div>
-            <div className="flex items-center gap-2">
-               <BrandLogo platform="perplexity" size={24} />
-               <span className="text-sm font-medium text-slate-300">Perplexity</span>
-            </div>
-            <div className="flex items-center gap-2">
-               <BrandLogo platform="grok" size={24} />
-               <span className="text-sm font-medium text-slate-300">Grok</span>
-            </div>
-            <div className="flex items-center gap-2">
-               <BrandLogo platform="deepseek" size={24} />
-               <span className="text-sm font-medium text-slate-300">DeepSeek</span>
-            </div>
-          </div>
+          <LogoCarousel />
         </div>
 
       </div>
