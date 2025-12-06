@@ -95,7 +95,7 @@ export default function Hero() {
             </div>
             <div className="flex items-center gap-2">
                <BrandLogo platform="gemini" size={24} />
-               <span className="text-sm font-medium text-slate-300">Google</span>
+               <span className="text-sm font-medium text-slate-300">Google Overviews</span>
             </div>
           </div>
         </div>

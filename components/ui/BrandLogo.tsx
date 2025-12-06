@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 
-export type PlatformKey = 'chatgpt' | 'claude' | 'gemini' | 'perplexity'
+export type PlatformKey = 'chatgpt' | 'claude' | 'gemini' | 'perplexity' | 'grok' | 'google' | 'deepseek'
 
 interface BrandLogoProps {
   platform: PlatformKey | string
@@ -14,6 +14,10 @@ const LOGO_MAP: Record<string, string> = {
   chatgpt: '/logos/openai.svg',
   claude: '/logos/claude-color.svg',
   gemini: '/logos/gemini-color.png',
+  perplexity: '/logos/perplexity.svg',
+  grok: '/logos/grok.svg',
+  google: '/logos/google.svg',
+  deepseek: '/logos/deepseek.svg',
 }
 
 // Default export for ease of use, but also named export if needed
