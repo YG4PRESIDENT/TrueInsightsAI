@@ -11,6 +11,8 @@ import QuizAnswerCard from "./QuizAnswerCard";
 import QuizAnswerSlider from "./QuizAnswerSlider";
 import QuizResults from "./QuizResults";
 
+type QuizAnswerValue = string | number | string[] | undefined;
+
 interface QuizModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -44,7 +46,7 @@ export default function QuizModal({ isOpen, onClose, websiteUrl }: QuizModalProp
     };
   }, [isOpen, onClose]);
 
-  const handleAnswer = (questionId: string, value: any) => {
+  const handleAnswer = (questionId: string, value: QuizAnswerValue) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
   };
 
@@ -197,8 +199,8 @@ export default function QuizModal({ isOpen, onClose, websiteUrl }: QuizModalProp
 // Question renderer component
 interface QuestionRendererProps {
   question: QuizQuestion;
-  answer: any;
-  onAnswer: (questionId: string, value: any) => void;
+  answer: QuizAnswerValue;
+  onAnswer: (questionId: string, value: QuizAnswerValue) => void;
 }
 
 function QuestionRenderer({ question, answer, onAnswer }: QuestionRendererProps) {
@@ -252,7 +254,7 @@ function QuestionRenderer({ question, answer, onAnswer }: QuestionRendererProps)
           <QuizAnswerSlider
             min={question.min || 1}
             max={question.max || 10}
-            value={answer || question.min || 1}
+            value={answer ? (answer as number) : (question.min || 1)}
             onChange={(value) => onAnswer(question.id, value)}
           />
         )}

@@ -3,10 +3,15 @@
 import { COMPANY_NAME, FOOTER_DESCRIPTION, FOOTER_LINKS, SOCIAL_LINKS } from "@/lib/constants";
 import { Mail, Linkedin, ArrowRight } from "lucide-react";
 import { Button } from "./ui/Button";
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Footer() {
+  const router = useRouter();
+
   const handleNavClick = (href: string) => {
     if (href.startsWith("mailto:")) {
+      // eslint-disable-next-line react-hooks/immutability
       window.location.href = href;
     } else if (href.startsWith("https://calendly.com")) {
       window.open(href, "_blank", "noopener,noreferrer");
@@ -18,16 +23,16 @@ export default function Footer() {
           element.scrollIntoView({ behavior: "smooth" });
         }
       } else {
-        window.location.href = `/${href}`;
+        router.push(`/${href}`); // Use router.push for hash links on other pages
       }
     } else {
-      window.location.href = href;
+      router.push(href); // Use router.push for internal navigation
     }
   };
 
   const handleRunAudit = () => {
     const toolBaseUrl = process.env.NEXT_PUBLIC_TOOL_URL || 'http://localhost:3001'
-    window.location.href = toolBaseUrl
+    router.push(toolBaseUrl); // Use router.push for navigation
   }
 
   return (
@@ -48,13 +53,13 @@ export default function Footer() {
           
           {/* Brand Column */}
           <div className="lg:col-span-5 space-y-6">
-            <a href="/" className="inline-block hover:opacity-80 transition-opacity">
+            <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
               <img
                 src="/images/Official logo.png"
                 alt="True Insights AI"
                 className="h-10 w-auto brightness-0 invert"
               />
-            </a>
+            </Link>
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
               {FOOTER_DESCRIPTION}
             </p>
@@ -136,8 +141,8 @@ export default function Footer() {
             © 2025 {COMPANY_NAME}. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <button className="text-xs text-slate-500 hover:text-slate-300">Privacy Policy</button>
-            <button className="text-xs text-slate-500 hover:text-slate-300">Terms of Service</button>
+            <Link href="/privacy" className="text-xs text-slate-500 hover:text-slate-300">Privacy Policy</Link>
+            <Link href="/terms" className="text-xs text-slate-500 hover:text-slate-300">Terms of Service</Link>
           </div>
         </div>
       </div>

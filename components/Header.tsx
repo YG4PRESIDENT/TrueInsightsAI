@@ -5,10 +5,14 @@ import { Menu, X, ArrowRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/Button";
 import { COMPANY_NAME, NAV_LINKS, CONTACT } from "@/lib/constants";
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,10 +32,12 @@ export default function Header() {
           setIsMobileMenuOpen(false);
         }
       } else {
-        window.location.href = `/${href}`;
+        router.push(`/${href}`); // Use router.push for hash links on other pages
       }
+    } else if (href.startsWith("http")) { // Assume external link if it starts with http
+      window.open(href, "_blank", "noopener,noreferrer");
     } else {
-      window.location.href = href;
+      router.push(href); // Use router.push for internal navigation
     }
   };
 
@@ -51,13 +57,13 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         {/* Logo */}
-        <a href="/" className="flex-shrink-0 flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <Link href="/" className="flex-shrink-0 flex items-center gap-2 hover:opacity-80 transition-opacity">
           <img 
             src="/images/Official logo.png" 
             alt="Rankett" 
             className="h-10 w-auto brightness-0 invert" 
           />
-        </a>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex items-center gap-8">

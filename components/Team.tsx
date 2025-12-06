@@ -55,7 +55,7 @@ export default function Team() {
             Meet the Team
           </h2>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-            Two obsessed founders dedicated to making your company rank first. We don't stop until you win.
+            Two obsessed founders dedicated to making your company rank first. We don&apos;t stop until you win.
           </p>
         </motion.div>
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import { motion } from "framer-motion";
@@ -94,15 +95,15 @@ export default function QuizResults({ recommendation, userName, onBookCall }: Qu
       </motion.div>
 
       {/* Email confirmation message */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-        className="text-sm text-gray-500"
-      >
-        ✨ Your personalized audit report has been sent to your email
-      </motion.p>
-    </div>
+              { }
+              <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="text-sm text-gray-500"
+            >
+              Your personalized audit report has been sent to your email
+            </motion.p>    </div>
   );
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -20,7 +21,7 @@ export default function TermsOfServicePage() {
             </div>
 
             <p>
-              These Terms and Conditions ("Terms") govern your access to and use of Rankett.com (the "Service"), operated by Think Outside The Box Ventures, LLC, a Wyoming limited liability company ("Company," "we," "us," or "our"). By accessing or using the Service, you agree to be bound by these Terms.
+              These Terms and Conditions (&quot;Terms&quot;) govern your access to and use of Rankett.com (the &quot;Service&quot;), operated by Think Outside The Box Ventures, LLC, a Wyoming limited liability company (&quot;Company,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;). By accessing or using the Service, you agree to be bound by these Terms.
             </p>
 
             <section>
@@ -54,7 +55,7 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold text-black mb-3">5. Free AI Visibility Report</h2>
               <p>
-                We may offer a free AI Visibility Report in exchange for providing your email address. This report is provided "as is," without warranty of any kind.
+                We may offer a free AI Visibility Report in exchange for providing your email address. This report is provided &quot;as is,&quot; without warranty of any kind.
               </p>
             </section>
 
@@ -95,7 +96,7 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold text-black mb-3">10. Service Availability & Beta Features</h2>
               <p>
-                The Service is provided on an "as is" and "as available" basis. We do not guarantee uninterrupted or error-free availability. Certain features may be offered as beta, preview, or trial services. These are provided without warranty and may be modified or discontinued at any time.
+                The Service is provided on an &quot;as is&quot; and &quot;as available&quot; basis. We do not guarantee uninterrupted or error-free availability. Certain features may be offered as beta, preview, or trial services. These are provided without warranty and may be modified or discontinued at any time.
               </p>
             </section>
 
@@ -109,7 +110,7 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold text-black mb-3">12. AI Accuracy Disclaimer</h2>
               <p>
-                Reports and analytics are generated using third-party AI providers. Results may not be accurate or complete, and are provided for informational purposes only.
+                Reports and analytics are generated using third-party AI providers. Results may not be &quot;accurate or complete,&quot; and are provided for informational purposes only.
               </p>
             </section>
 
@@ -146,7 +147,7 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-2xl font-semibold text-black mb-3">17. Confidentiality</h2>
               <p>
-                Each party agrees to protect the other's confidential information and not disclose it except as necessary to perform under these Terms or as required by law.
+                Each party agrees to protect the other&apos;s confidential information and not disclose it except as necessary to perform under these Terms or as required by law.
               </p>
             </section>
 

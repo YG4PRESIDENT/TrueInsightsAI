@@ -35,6 +35,8 @@ export interface AnalysisStatusResponse {
   error?: string
 }
 
+type QuizAnswerValue = string | number | string[] | undefined;
+
 // =====================================================
 // API Functions
 // =====================================================
@@ -67,7 +69,7 @@ export async function startOnboarding(websiteUrl: string): Promise<StartOnboardi
 export async function saveQuizAnswer(
   sessionToken: string,
   questionId: string,
-  answer: any
+  answer: QuizAnswerValue
 ): Promise<boolean> {
   try {
     const response = await fetch(`${TOOL_API_URL}/api/onboarding/quiz-response`, {
@@ -143,77 +145,78 @@ export async function getAnalysisStatus(sessionToken: string): Promise<AnalysisS
 // =====================================================
 
 /**
- * Map quiz answers from main site format to tool API format
+ * TODO: This function is outdated as the quiz questions have been revamped.
+ * It needs to be rewritten to map the new quiz answers from the main site to the tool API format.
  */
-export async function mapQuizAnswer(questionNumber: number, answer: any): Promise<{ questionId: string; apiAnswer: any }> {
-  const mappings: Record<number, { questionId: string; transform: (val: any) => any }> = {
-    // Q1: "Do you have a business website?" → has_website (boolean)
-    1: {
-      questionId: 'has_website',
-      transform: (val: string) => val.toLowerCase() === 'yes'
-    },
+// export async function mapQuizAnswer(questionNumber: number, answer: QuizAnswerValue): Promise<{ questionId: string; apiAnswer: string | number | boolean }> {
+//   const mappings: Record<number, { questionId: string; transform: (val: QuizAnswerValue) => string | number | boolean }> = {
+//     // Q1: "Do you have a business website?" → has_website (boolean)
+//     1: {
+//       questionId: 'has_website',
+//       transform: (val: QuizAnswerValue) => (val as string).toLowerCase() === 'yes'
+//     },
 
-    // Q2: "Do you have profiles on Google Business, Yelp, or BBB?" → has_business_profiles (boolean)
-    2: {
-      questionId: 'has_business_profiles',
-      transform: (val: string) => val.toLowerCase() === 'yes'
-    },
+//     // Q2: "Do you have profiles on Google Business, Yelp, or BBB?" → has_business_profiles (boolean)
+//     2: {
+//       questionId: 'has_business_profiles',
+//       transform: (val: QuizAnswerValue) => (val as string).toLowerCase() === 'yes'
+//     },
 
-    // Q3: "How often do you ask customers for reviews?" → review_request_frequency (1-10)
-    // Simplified: Yes = 7, No = 1
-    3: {
-      questionId: 'review_request_frequency',
-      transform: (val: string) => val.toLowerCase() === 'yes' ? 7 : 1
-    },
+//     // Q3: "How often do you ask customers for reviews?" → review_request_frequency (1-10)
+//     // Simplified: Yes = 7, No = 1
+//     3: {
+//       questionId: 'review_request_frequency',
+//       transform: (val: QuizAnswerValue) => (val as string).toLowerCase() === 'yes' ? 7 : 1
+//     },
 
-    // Q4: "How important is your online presence?" → online_presence_importance (1-10)
-    4: {
-      questionId: 'online_presence_importance',
-      transform: (val: number) => val  // Direct number mapping
-    },
+//     // Q4: "How important is your online presence?" → online_presence_importance (1-10)
+//     4: {
+//       questionId: 'online_presence_importance',
+//       transform: (val: QuizAnswerValue) => val as number  // Direct number mapping
+//     },
 
-    // Q5: "What do you want to achieve in the next 90 days?" → primary_goal
-    5: {
-      questionId: 'primary_goal',
-      transform: (val: string) => {
-        const goalMap: Record<string, string> = {
-          'Get found by more customers online': 'increase_visibility',
-          'Increase positive reviews': 'get_more_reviews',
-          'Show up when people ask AI about my industry': 'appear_in_ai',
-          'Outrank my competitors': 'beat_competitors'
-        }
-        return goalMap[val] || 'appear_in_ai'
-      }
-    },
+//     // Q5: "What do you want to achieve in the next 90 days?" → primary_goal
+//     5: {
+//       questionId: 'primary_goal',
+//       transform: (val: QuizAnswerValue) => {
+//         const goalMap: Record<string, string> = {
+//           'Get found by more customers online': 'increase_visibility',
+//           'Increase positive reviews': 'get_more_reviews',
+//           'Show up when people ask AI about my industry': 'appear_in_ai',
+//           'Outrank my competitors': 'beat_competitors'
+//         }
+//         return goalMap[val as string] || 'appear_in_ai'
+//       }
+//     },
 
-    // Q6: "Which solution best fits your needs?" → preferred_solution
-    6: {
-      questionId: 'preferred_solution',
-      transform: (val: string) => {
-        if (val.includes('analytics reports')) return 'analytics'
-        if (val.includes('Done-for-you')) return 'done_for_you'
-        if (val.includes('AI search')) return 'ai_first'
-        return 'done_for_you'
-      }
-    },
+//     // Q6: "Which solution best fits your needs?" → preferred_solution
+//     6: {
+//       questionId: 'preferred_solution',
+//       transform: (val: QuizAnswerValue) => {
+//         if ((val as string).includes('analytics reports')) return 'analytics'
+//         if ((val as string).includes('Done-for-you')) return 'done_for_you'
+//         if ((val as string).includes('AI search')) return 'ai_first'
+//         return 'done_for_you'
+//       }
+//     },
 
-    // Q7: Email → Handled separately by captureEmail()
-    7: {
-      questionId: 'email',
-      transform: (val: string) => val  // Direct string
-    }
-  }
+//     // Q7: Email → Handled separately by captureEmail()
+//     7: {
+//       questionId: 'email',
+//       transform: (val: QuizAnswerValue) => val as string  // Direct string
+//     }
+//   }
 
-  const mapping = mappings[questionNumber]
-  if (!mapping) {
-    return { questionId: `question_${questionNumber}`, apiAnswer: answer }
-  }
+//   const mapping = mappings[questionNumber]
+//   if (!mapping) {
+//     return { questionId: `question_${questionNumber}`, apiAnswer: answer }
+//   }
 
-  // Await the transform in case it's async (e.g., ZIP code lookup)
-  const transformedAnswer = await mapping.transform(answer)
+//   // Await the transform in case it's async (e.g., ZIP code lookup)
+//   const transformedAnswer = await mapping.transform(answer)
 
-  return {
-    questionId: mapping.questionId,
-    apiAnswer: transformedAnswer
-  }
-}
+//   return {
+//     questionId: mapping.questionId,
+//     apiAnswer: transformedAnswer
+//   }
+// }

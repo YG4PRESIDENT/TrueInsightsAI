@@ -20,7 +20,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             <p>
-              Think Outside The Box Ventures, LLC ("Company," "we," "us," or "our") operates Rankett.com ("Service"). This Privacy Policy explains how we collect, use, and protect your personal data.
+              Think Outside The Box Ventures, LLC (&quot;Company,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) operates Rankett.com (&quot;Service&quot;). This Privacy Policy explains how we collect, use, and protect your personal data.
             </p>
 
             <p>
@@ -109,7 +109,7 @@ export default function PrivacyPolicyPage() {
             <section>
               <h2 className="text-2xl font-semibold text-black mb-3">8. Your Rights</h2>
               <p className="mb-2"><strong className="text-black">GDPR:</strong> Right to access, correct, delete, restrict, port, and object.</p>
-              <p className="mb-2"><strong className="text-black">CCPA:</strong> Right to know, delete, and opt out of "sale" (we do not sell data).</p>
+              <p className="mb-2"><strong className="text-black">CCPA:</strong> Right to know, delete, and opt out of &quot;sale&quot; (we do not sell data).</p>
               <p className="mb-2"><strong className="text-black">Requests:</strong> 📩 team@rankett.com</p>
               <p>We will respond within the required timeframe (generally 30 days).</p>
             </section>
@@ -136,7 +136,7 @@ export default function PrivacyPolicyPage() {
             </section>
 
             <section>
-              <h2 className="text-2xl font-semibold text-black mb-3">12. Children's Data</h2>
+              <h2 className="text-2xl font-semibold text-black mb-3">12. Children&apos;s Data</h2>
               <p>
                 The Service is not directed to individuals under 18.
               </p>
