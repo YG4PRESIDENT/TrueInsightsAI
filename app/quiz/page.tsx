@@ -2,10 +2,9 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useSearchParams } from "next/navigation";
-import { Input } from "@/components/ui/Input"; // Assuming you have a reusable Input component
 
 interface QuizAnswer {
   step: number;
@@ -234,7 +233,7 @@ function QuizContent() {
                       >
                         <div className="flex items-center justify-between">
                            <span>{option}</span>
-                           {selectedAnswer === option && <CheckCircle2 className="text-blue-500" size={20} />}
+                           {selectedAnswer === option && <Check className="text-blue-500" size={20} />}
                         </div>
                       </button>
                     ))}
