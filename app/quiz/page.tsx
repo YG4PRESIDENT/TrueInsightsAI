@@ -16,53 +16,79 @@ interface QuizAnswer {
 const questions = [
   {
     id: 1,
-    question: "Do you have a website?",
-    type: "yesno",
-    options: ["Yes", "No"]
+    question: "If a potential client asked AI today for your service, who would show up first, you or your competitor?",
+    type: "multiple",
+    options: [
+      "I appear first every time (I’m confident)",
+      "Competitor appears first most of the time",
+      "Sometimes me, sometimes competitor",
+      "I have no idea / don’t track"
+    ]
   },
   {
     id: 2,
-    question: "Do you have profiles on Google Business, Yelp, or BBB?",
-    type: "yesno",
-    options: ["Yes", "No"]
+    question: "How many clients do you think you’re missing each month because AI can’t find you?",
+    type: "multiple",
+    options: [
+      "Almost none / 0–5",
+      "A few (6–20)",
+      "Some (21–50)",
+      "Many (50+)"
+    ]
   },
   {
     id: 3,
-    question: "Do you ask customers to leave reviews?",
-    type: "yesno",
-    options: ["Yes", "No"]
+    question: "How much do you currently spend on marketing or SEO each month?",
+    type: "multiple",
+    options: [
+      "<$500",
+      "$500–2,000",
+      "$2,000–10,000",
+      "$10,000+"
+    ]
   },
   {
     id: 4,
-    question: "How much impact would 1st place in AI recommendations have on your business?", // NEW Q4
-    type: "slider",
-    min: 1,
-    max: 10,
-    labels: {
-      1: "Minimal",
-      5: "Significant",
-      10: "Game-changing"
-    }
+    question: "How would your business change if AI search drove 30–50% more qualified leads in the next 90 days?",
+    type: "multiple",
+    options: [
+      "Not much, we’re already maxed out",
+      "Some increase, but we could handle it",
+      "Significant impact — would grow revenue / reach",
+      "Game-changing — could dominate our market"
+    ]
   },
   {
     id: 5,
-    question: "What is your primary goal for improving AI visibility?", // NEW Q5
+    question: "Have you noticed competitors appearing for AI searches that you’re invisible in?",
     type: "multiple",
     options: [
-      "Increase customer acquisition",
-      "Improve brand reputation",
-      "Outrank competitors",
-      "Reduce ad spend"
+      "No, we dominate search visibility",
+      "Occasionally, yes",
+      "Frequently — they outrank us",
+      "I don’t know"
     ]
   },
   {
     id: 6,
-    question: "How aggressively are you looking to grow your AI presence?", // NEW Q6
+    question: "How confident are you that your website and content are optimized for the questions potential clients actually ask AI platforms?",
     type: "multiple",
     options: [
-      "Test the waters (explore options)",
-      "Stay competitive (match rivals)",
-      "Dominate the market (be #1)"
+      "Very confident — everything’s optimized",
+      "Somewhat confident — could be better",
+      "Not confident — probably not optimized",
+      "No idea / haven’t checked"
+    ]
+  },
+  {
+    id: 7,
+    question: "If we could guarantee visibility in AI searches before your competitor does, how quickly would you want to start?",
+    type: "multiple",
+    options: [
+      "Immediately — we want to move fast",
+      "Within the next 30 days",
+      "Within 90 days",
+      "Not sure / would wait"
     ]
   }
 ];
@@ -71,7 +97,6 @@ function QuizContent() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [selectedAnswer, setSelectedAnswer] = useState<string | number>("");
-  const [sliderValue, setSliderValue] = useState(5);
   const searchParams = useSearchParams();
   const websiteUrl = searchParams.get("url") || "";
 
@@ -84,7 +109,7 @@ function QuizContent() {
     const newAnswer: QuizAnswer = {
       step: currentStep + 1,
       question: currentQuestion.question,
-      answer: currentQuestion.type === "slider" ? sliderValue : selectedAnswer
+      answer: selectedAnswer
     };
 
     const updatedAnswers = [...answers, newAnswer];
@@ -92,8 +117,7 @@ function QuizContent() {
 
     if (currentStep < totalSteps - 1) {
       setCurrentStep(currentStep + 1);
-      setSelectedAnswer(currentQuestion.type === "slider" ? sliderValue : ""); // Reset or set default
-      setSliderValue(5); // Reset slider
+      setSelectedAnswer(""); // Reset answer
     } else {
       // Quiz Complete: Submit to API before redirecting
       console.log("Quiz completion detected. Submitting answers...");
@@ -140,17 +164,12 @@ function QuizContent() {
       // Optional: Restore previous answer if needed
       const previousAnswer = answers[currentStep - 1];
       if (previousAnswer) {
-        if (questions[currentStep - 1].type === "slider") {
-          setSliderValue(previousAnswer.answer as number);
-        } else {
-          setSelectedAnswer(previousAnswer.answer as string);
-        }
+        setSelectedAnswer(previousAnswer.answer as string);
       }
     }
   };
 
   const canProceed = () => {
-    if (currentQuestion.type === "slider") return true; // Slider always has a value
     return selectedAnswer !== "";
   };
 
@@ -200,25 +219,6 @@ function QuizContent() {
 
               {/* Answer Options */}
               <div>
-                {/* Yes/No Questions */}
-                {currentQuestion.type === "yesno" && (
-                  <div className="grid grid-cols-2 gap-6">
-                    {currentQuestion.options?.map((option) => (
-                      <button
-                        key={option}
-                        onClick={() => setSelectedAnswer(option)}
-                        className={`p-8 rounded-2xl border-2 text-xl font-bold transition-all duration-200 ${
-                          selectedAnswer === option
-                            ? "border-blue-500 bg-blue-500/10 text-white shadow-[0_0_30px_rgba(59,130,246,0.2)]"
-                            : "border-slate-800 bg-slate-900/50 text-slate-400 hover:border-slate-600 hover:text-white hover:bg-slate-800"
-                        }`}
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
                 {/* Multiple Choice */}
                 {currentQuestion.type === "multiple" && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -238,40 +238,6 @@ function QuizContent() {
                         </div>
                       </button>
                     ))}
-                  </div>
-                )}
-
-                {/* Slider */}
-                {currentQuestion.type === "slider" && (
-                  <div className="space-y-12 py-8">
-                    <div className="text-center">
-                      <span className="text-8xl font-black text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">
-                        {sliderValue}
-                      </span>
-                      <p className="text-blue-400 mt-4 text-lg font-medium uppercase tracking-widest">
-                        {sliderValue <= 3 && "Minimal"}
-                        {sliderValue >= 4 && sliderValue <= 6 && "Significant"}
-                        {sliderValue >= 7 && sliderValue <= 9 && "High"}
-                        {sliderValue === 10 && "Game-changing"}
-                      </p>
-                    </div>
-                    <div className="px-8">
-                      <input
-                        type="range"
-                        min={currentQuestion.min}
-                        max={currentQuestion.max}
-                        value={sliderValue}
-                        onChange={(e) => setSliderValue(parseInt(e.target.value))}
-                        className="w-full h-3 bg-slate-800 rounded-lg appearance-none cursor-pointer"
-                        style={{
-                           accentColor: '#3b82f6'
-                        }}
-                      />
-                      <div className="flex justify-between text-xs text-slate-500 mt-4 font-mono uppercase tracking-wider">
-                        <span>Not at all</span>
-                        <span>Extremely</span>
-                      </div>
-                    </div>
                   </div>
                 )}
               </div>
